@@ -1,0 +1,147 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { axiosInstance } from "../../lib/axios";
+import { toast } from "react-toastify";
+
+// submit project proposal
+export const submitProjectProposal = createAsyncThunk(
+  "student/submitProjectProposal",
+  async (data, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post("/student/project-proposal", data);
+      toast.success("Project proposal submitted successfully");
+      return res.data.data?.project || res.data.data || res.data;
+    } catch (error) {
+      if (error) {
+        toast.error(
+          error.response.data.message || "Failed to submit project proposal",
+        );
+        return thunkAPI.rejectWithValue(error.response.data.message);
+      }
+    }
+  },
+);
+
+// fetch project
+export const fetchProject = createAsyncThunk(
+  "student/fetchProject",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get("/student/project");
+      return res.data.data?.project;
+    } catch (error) {
+      toast.error(error.response.data.message || "Failed to fetch project");
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
+);
+
+// get supervisor
+export const getSupervisor = createAsyncThunk(
+  "student/getSupervisor",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get("/student/supervisor");
+      return res.data.data?.supervisor;
+    } catch (error) {
+      toast.error(error.response.data.message || "Failed to fetch supervisor");
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
+);
+
+// fetch all supervisor
+export const fetchAllSupervisor = createAsyncThunk(
+  "student/fetchAllSupervisor",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get("/student/fetch-supervisors");
+      return res.data.data?.supervisors;
+    } catch (error) {
+      toast.error(
+        error.response.data.message || "Failed to fetch avaiable supervisors",
+      );
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
+);
+
+// request supervisor
+export const requestSupervisor = createAsyncThunk(
+  "student/requestSupervisor",
+  async (data, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post("/student/request-supervisor", data);
+      thunkAPI.dispatch(getSupervisor());
+      return res.data.data?.request;
+    } catch (error) {
+      toast.error(
+        error.response.data.message || "Failed to request supervisors",
+      );
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
+);
+
+// upload file
+export const uploadFiles = createAsyncThunk(
+  "student/uploadFiles",
+  async ({ projectId, files }, thunkAPI) => {
+    try {
+      const form = new FormData();
+      for (const file of files) form.append("files", file);
+      const res = await axiosInstance.post(
+        `/student/upload/${projectId}`,
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      toast.success(res.data.message || "Files uploaded successfully");
+      return res.data.data.project || res.data;
+    } catch (error) {
+      toast.error(error.response.data.message || "Failed to upload files");
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
+);
+
+const studentSlice = createSlice({
+  name: "student",
+  initialState: {
+    project: null,
+    files: [],
+    supervisors: [],
+    dashboardStats: [],
+    supervisor: null,
+    deadlines: [],
+    feedback: [],
+    status: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(submitProjectProposal.fulfilled, (state, action) => {
+      state.project = action.payload?.project || action.payload;
+    });
+
+    builder.addCase(fetchProject.fulfilled, (state, action) => {
+      state.project = action.payload?.project || action.payload || null;
+    });
+
+    builder.addCase(getSupervisor.fulfilled, (state, action) => {
+      state.supervisor = action.payload?.supervisor || action.payload || null;
+    });
+
+    builder.addCase(fetchAllSupervisor.fulfilled, (state, action) => {
+      state.supervisors = action.payload?.supervisors || action.payload || [];
+    });
+
+    builder.addCase(uploadFiles.fulfilled, (state, action) => {
+      const newFiles = action.payload?.project?.files || action.payload || [];
+      state.files = [...state.files, ...newFiles];
+    });
+  },
+});
+
+export default studentSlice.reducer;
