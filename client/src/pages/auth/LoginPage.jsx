@@ -106,7 +106,7 @@ const LoginPage = () => {
               <BookOpen className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-slate-800">
-              Educational Project Management
+              Research Link
             </h1>
             <p className="text-[#17a2b8] mt-2">Sign in to your account</p>
           </div>
