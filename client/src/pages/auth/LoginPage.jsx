@@ -36,7 +36,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (authUser) {
-      // switch (formData.role) change switch (formData.role) to  authUser.role 
+      // switch (formData.role) change switch (formData.role) to  authUser.role
       switch (authUser.role) {
         case "Student":
           navigate("/student");
@@ -53,6 +53,17 @@ const LoginPage = () => {
       }
     }
   }, [authUser]);
+
+  // login Continue with Google
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+
+    if (token) {
+      localStorage.setItem("token", token);
+      navigate("/");
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,6 +106,10 @@ const LoginPage = () => {
 
     dispatch(login(data));
   };
+  // handleGoogleLogin
+  // const handleGoogleLogin = () => {
+  //   window.location.href = "http://localhost:5000/api/auth/google";
+  // };
 
   return (
     <>
@@ -105,9 +120,7 @@ const LoginPage = () => {
             <div className="inline-flex items-center justify-center w-14 h-14 bg-[#17a2b8] rounded-full mb-2">
               <BookOpen className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-800">
-              Research Link
-            </h1>
+            <h1 className="text-2xl font-bold text-slate-800">Research Link</h1>
             <p className="text-[#17a2b8] mt-2">Sign in to your account</p>
           </div>
 
@@ -189,7 +202,6 @@ const LoginPage = () => {
               </div>
 
               {/* Password */}
-              {/* Password */}
               <div>
                 <label className="label text-base font-medium text-slate-700 mb-1 mt-1">
                   Password
@@ -247,6 +259,22 @@ const LoginPage = () => {
                 {isLoggingIn ? "Signing in..." : "Sign In"}
               </button>
             </form>
+
+            <div className="mt-4">
+              <button
+                type="button"
+                // onClick={handleGoogleLogin}
+                className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-100 shadow-sm"
+              >
+                <img
+                  src="https://www.svgrepo.com/show/475656/google-color.svg"
+                  className="w-5 h-5"
+                />
+                Continue with Google
+              </button>
+
+              {/* <button onClick={handleGoogleLogin}>Continue with Google</button> */}
+            </div>
           </div>
         </div>
       </div>
