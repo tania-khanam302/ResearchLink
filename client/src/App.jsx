@@ -129,7 +129,7 @@ const App = () => {
           <Route path="students" element={<ManageStudents />} />
           <Route path="teachers" element={<ManageTeachers />} />
           <Route path="assign-supervisor" element={<AssignSupervisor />} />
-          <Route path="dedlines" element={<DeadlinesPage />} />
+          <Route path="deadlines" element={<DeadlinesPage />} />
           <Route path="projects" element={<ProjectsPage />} />
         </Route>
 
@@ -147,7 +147,7 @@ const App = () => {
           <Route path="upload-files" element={<UploadFiles />} />
           <Route path="supervisor" element={<SupervisorPage />} />
           <Route path="feedback" element={<FeedbackPage />} />
-          <Route path="notification" element={<NotificationsPage />} />
+          <Route path="notifications" element={<NotificationsPage />} />
         </Route>
       </Routes>
       <ToastContainer theme="dark" />
