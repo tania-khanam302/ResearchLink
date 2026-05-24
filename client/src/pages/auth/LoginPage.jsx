@@ -16,7 +16,7 @@ const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role: "Student",
+    role: "Select",
   });
 
   const [errors, setErrors] = useState({});
@@ -136,7 +136,7 @@ const LoginPage = () => {
                   onClick={() => setIsSelectOpen(!isSelectOpen)}
                   className={`w-full px-3 py-2 border rounded-md flex justify-between items-center cursor-pointer transition-all duration-200 outline-none ${
                     isSelectOpen
-                      ? "border-[#17a2b8] ring-0 ring-[#17a2b8]" // ক্লিক করলে এই বর্ডার এবং রিং কালার আসবে
+                      ? "border-[#17a2b8] ring-0 ring-[#17a2b8]"  
                       : "border-slate-300"
                   }`}
                 >
