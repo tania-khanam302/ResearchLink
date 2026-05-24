@@ -25,7 +25,7 @@ const LoginPage = () => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const roles = ["Student", "Teacher", "Admin"];
 
-  // useEffect always top level এ hobe
+
   // useEffect(() => {
   //   if (authUser) {
   //     if (formData.role === "Student") navigate("/student");
@@ -273,7 +273,6 @@ const LoginPage = () => {
                 Continue with Google
               </button>
 
-              {/* <button onClick={handleGoogleLogin}>Continue with Google</button> */}
             </div>
           </div>
         </div>
