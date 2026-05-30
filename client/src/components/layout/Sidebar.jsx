@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 const Sidebar = ({ open, setOpen, userRole }) => {
@@ -6,6 +5,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
 
   const getNavigationItems = () => {
     switch (userRole) {
+      // Student sidebar
       case "Student":
         return [
           { name: "Home", path: "/student", icon: "home" },
@@ -27,6 +27,8 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             icon: "bell",
           },
         ];
+
+      // Teacher sidebar
       case "Teacher":
         return [
           { name: "Home", path: "/teacher", icon: "home" },
@@ -42,32 +44,82 @@ const Sidebar = ({ open, setOpen, userRole }) => {
           },
           { name: "Files", path: "/teacher/files", icon: "folder" },
         ];
+
+      // Admin sidebar
       case "Admin":
         return [
-          { name: "Home", path: "/admin", icon: "home" },
-          { name: "Manage Students", path: "/admin/students", icon: "users" },
           {
-            name: "Manage Teachers",
+            name: "Dashboard",
+            path: "/admin",
+            icon: "home",
+          },
+
+          {
+            name: "Manage Student",
+            path: "/admin/students",
+            icon: "users",
+          },
+
+          {
+            name: "Manage Teacher",
             path: "/admin/teachers",
             icon: "academic",
           },
+
+          {
+            name: "Manage Co-Admin",
+            path: "/admin/co-admin",
+            icon: "users",
+          },
+
           {
             name: "Assign Supervisor",
             path: "/admin/assign-supervisor",
             icon: "link",
           },
-          { name: "Deadlines", path: "/admin/deadlines", icon: "calendar" },
-          { name: "Projects", path: "/admin/projects", icon: "folder" },
+
+          {
+            name: "Project",
+            path: "/admin/projects",
+            icon: "folder",
+          },
+
+          {
+            name: "Deadline",
+            path: "/admin/deadlines",
+            icon: "calendar",
+          },
         ];
+
+      // Co-Admin sidebar
+      case "Co-Admin":
+        return [
+          {
+            name: "Dashboard",
+            path: "/co-admin",
+            icon: "home",
+          },
+          {
+            name: "Student",
+            path: "/co-admin/students",
+            icon: "users",
+          },
+          {
+            name: "Teachers",
+            path: "/co-admin/teachers",
+            icon: "academic",
+          },
+        ];
+
       default:
         return [];
     }
   };
 
-
   const getIcon = (iconName, isActive = false) => {
-    const className = `w-5 h-5 ${isActive ? "bg-transparent" : "text-slate-600"
-      }`;
+    const className = `w-5 h-5 ${
+      isActive ? "text-[#17a2b8]" : "text-slate-600"
+    }`;
 
     switch (iconName) {
       case "home":
@@ -86,6 +138,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
+
       case "document":
         return (
           <svg
@@ -102,6 +155,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
+
       case "upload":
         return (
           <svg
@@ -118,6 +172,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
+
       case "user":
         return (
           <svg
@@ -134,6 +189,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
+
       case "chat":
         return (
           <svg
@@ -150,6 +206,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
+
       case "bell":
         return (
           <svg
@@ -166,6 +223,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
+
       case "clock":
         return (
           <svg
@@ -182,6 +240,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
+
       case "users":
         return (
           <svg
@@ -198,6 +257,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
+
       case "folder":
         return (
           <svg
@@ -214,22 +274,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
-      case "check":
-        return (
-          <svg
-            className={className}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        );
+
       case "academic":
         return (
           <svg
@@ -244,14 +289,9 @@ const Sidebar = ({ open, setOpen, userRole }) => {
               strokeWidth={2}
               d="M12 14l9-5-9-5-9 5 9 5z"
             />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-            />
           </svg>
         );
+
       case "link":
         return (
           <svg
@@ -268,6 +308,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
+
       case "calendar":
         return (
           <svg
@@ -284,22 +325,9 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             />
           </svg>
         );
+
       default:
-        return (
-          <svg
-            className={className}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7h16z"
-            />
-          </svg>
-        );
+        return null;
     }
   };
 
@@ -309,149 +337,102 @@ const Sidebar = ({ open, setOpen, userRole }) => {
     <>
       {/* Desktop Sidebar */}
       <div
-        className={`fixed -left-full lg:left-0 top-16 h-[calc(100vh-4rem)] bg-slate-50 border-r border-slate-200  shadow-[0px_8px_15px_-3px_rgba(0,0,0,0.15)] transition-all duration-300 z-30 ${open ? "w-64" : "w-20"
-          }`}
+        className={`fixed -left-full lg:left-0 top-16 h-[calc(100vh-4rem)] bg-slate-50 border-r border-slate-200 shadow-[0px_8px_15px_-3px_rgba(0,0,0,0.15)] transition-all duration-300 z-30 ${
+          open ? "w-64" : "w-20"
+        }`}
       >
         <div className="flex flex-col h-full">
-          <nav className="flex-1 px-4 py-6 space-y-2">
-            {navigationItems.map((item) => {
-              const isActive = location.pathname === item.path;
+          <nav className="flex-1 px-4 py-2 space-y-2">
+            {navigationItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.path === `/${userRole.toLowerCase()}`}
+                className={({ isActive }) => `
+                  flex items-center px-4 py-3 rounded-lg transition-all duration-200
+                  ${
+                    isActive
+                      ? "bg-[#17a2b8]/10 text-[#17a2b8] border-r-4 border-[#17a2b8]"
+                      : "text-slate-700 hover:bg-[#17a2b8]/5 hover:text-[#17a2b8]"
+                  }
+                `}
+                onClick={() => {
+                  if (window.innerWidth < 1024) {
+                    setOpen(false);
+                  }
+                }}
+              >
+                <div className="flex-shrink-0">
+                  {getIcon(item.icon, location.pathname === item.path)}
+                </div>
 
-              return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  className={({ isActive }) => `
-                    flex items-center px-4 py-3 rounded-lg transition-all duration-200
-                    ${isActive
-                      ? "bg-[#17a2b8]/5 text-[#17a2b8] border-r-4 border-[#17a2b8]"
-                      : "text-slate-700 hover:[#17a2b8]/5 hover:text-[#17a2b8]"
-                    }
-                  `}
-                  onClick={() => {
-                    // Close sidebar on mobile after navigation
-                    if (window.innerWidth < 1024) {
-                      setOpen(false);
-                    }
-                  }}
+                <span
+                  className={`ml-3 font-medium whitespace-nowrap transition-all duration-300 overflow-hidden ${
+                    open ? "opacity-100 w-auto" : "opacity-0 w-0"
+                  }`}
                 >
-                  <div className="flex-shrink-0">
-                    {getIcon(item.icon, isActive)}
-                  </div>
-                  <span
-                    className={`ml-3 font-medium transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 lg:opacity-0"
-                      } ${open ? "block" : "hidden lg:hidden"}`}
-                  >
-                    {item.name}
-                  </span>
-                </NavLink>
-              );
-            })}
+                  {item.name}
+                </span>
+              </NavLink>
+            ))}
           </nav>
 
-          {/* Sidebar footer */}
+          {/* Footer */}
           <div className="p-4 border-t border-slate-200">
             <div
-              className={`transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 lg:opacity-0"
-                } ${open ? "block" : "hidden lg:hidden"}`}
+              className={`transition-all duration-300 overflow-hidden ${
+                open ? "opacity-100 max-h-20" : "opacity-0 max-h-0"
+              }`}
             >
-              <p className="text-xs text-slate-500 text-center">
-                Educational Project Management
-              </p>
+              <p className="text-xs text-slate-500 text-start">Research Link</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile Sidebar Overlay */}
-      {/* <div className={`fixed inset-0 bg-white z-40 lg:hidden transition-transform duration-300 ${
-        open ? 'translate-x-0' : '-translate-x-full'
-      }`}> */}
-      {/* <div className="flex flex-col h-full pt-16"> */}
-      {/* Mobile navigation */}
-      {/* <nav className="flex-1 px-4 py-6 space-y-2">
-            {navigationItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              
-              return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  className={({ isActive }) => `
-                    flex items-center px-4 py-3 rounded-lg transition-all duration-200
-                    ${isActive 
-                      ? 'bg-blue-50 text-blue-700' 
-                      : 'text-slate-700 hover:bg-slate-100 hover:text-blue-600'
-                    }
-                  `}
-                  onClick={() => setOpen(false)}
-                >
-                  <div className="flex-shrink-0">
-                    {getIcon(item.icon, isActive)}
-                  </div>
-                  <span className="ml-3 font-medium">
-                    {item.name}
-                  </span>
-                </NavLink>
-              );
-            })}
-          </nav> */}
-
-      {/* Mobile footer */}
-      {/* <div className="p-4 border-t border-slate-200">
-            <p className="text-xs text-slate-500 text-center">
-              Educational Project Management v1.0
-            </p>
-          </div> */}
-      {/* </div> */}
-      {/* </div> */}
-
-      {/* Mobile Sidebar Overlay */}
+      {/* Mobile Overlay */}
       {open && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden"
-          onClick={() => setOpen(false)} // click backdrop to close
-        ></div>
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          onClick={() => setOpen(false)}
+        />
       )}
 
-      {/* Mobile Sidebar Drawer */}
+      {/* Mobile Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 w-64 bg-white z-50 lg:hidden transform transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed inset-y-0 left-0 w-64 bg-white z-50 lg:hidden transform transition-transform duration-300 ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="flex flex-col h-full pt-16">
-          {/* Mobile navigation */}
           <nav className="flex-1 px-4 py-6 space-y-2">
-            {navigationItems.map((item) => {
-              const isActive = location.pathname === item.path;
+            {navigationItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.path === `/${userRole.toLowerCase()}`}
+                className={({ isActive }) => `
+                  flex items-center px-4 py-3 rounded-lg transition-all duration-200
+                  ${
+                    isActive
+                      ? "bg-[#17a2b8]/10 text-[#17a2b8]"
+                      : "text-slate-700 hover:bg-slate-100 hover:text-[#17a2b8]"
+                  }
+                `}
+                onClick={() => setOpen(false)}
+              >
+                <div className="flex-shrink-0">
+                  {getIcon(item.icon, location.pathname === item.path)}
+                </div>
 
-              return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  className={({ isActive }) => `
-              flex items-center px-4 py-3 rounded-lg transition-all duration-200
-              ${isActive
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-slate-700 hover:bg-slate-100 hover:text-blue-600"
-                    }
-            `}
-                  onClick={() => setOpen(false)}
-                >
-                  <div className="flex-shrink-0">
-                    {getIcon(item.icon, isActive)}
-                  </div>
-                  <span className="ml-3 font-medium">{item.name}</span>
-                </NavLink>
-              );
-            })}
+                <span className="ml-3 font-medium">{item.name}</span>
+              </NavLink>
+            ))}
           </nav>
 
-          {/* Mobile footer */}
+          {/* Mobile Footer */}
           <div className="p-4 border-t border-slate-200">
-            <p className="text-xs text-slate-500 text-center">
-              Educational Project Management
-            </p>
+            <p className="text-xs text-slate-500 text-center">Research Link</p>
           </div>
         </div>
       </div>
