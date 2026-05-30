@@ -112,7 +112,7 @@ const ForgotPasswordPage = () => {
           </div>
 
           {/* forgot password form */}
-          <div className="bg-white p-5 rounded-lg shadow-sm border shadow-[0px_0px_40px_rgba(0,0,0,0.35)]">
+          <div className="bg-white p-5 rounded-lg shadow-sm border ">
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
                 <div className="p-3 bg-red-50 border-red-200 rounded-lg">
