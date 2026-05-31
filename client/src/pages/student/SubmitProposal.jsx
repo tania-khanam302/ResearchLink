@@ -31,7 +31,9 @@ const SubmitProposal = () => {
       <div className="space-y-6">
         <div className="card shadow-lg rounded-md">
           <div className="card-header">
-            <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">Submit Proposal</h1>
+            <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">
+              Submit Proposal
+            </h1>
             <p className="card-subtitle text-[#17a2b8]">
               Please fill out all sections of your project proposal. Make sure
               to be detailed and cleared about your project goals.{""}
@@ -46,8 +48,23 @@ const SubmitProposal = () => {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="input  placeholder-gray-400 focus:ring-1 focus:ring-[#17a2b8]"
                 placeholder="Enter your project title"
+                className="
+                  w-full
+                  px-3
+                  py-3
+                  rounded-xl
+                  border
+                  border-slate-300
+                  bg-slate-50
+                  focus:bg-white
+                  focus:border-[#17a2b8]
+                  focus:ring-4
+                  focus:ring-[#17a3b811]
+                  outline-none
+                  transition-all
+                  duration-200
+                "
                 required
               />
             </div>
@@ -58,15 +75,46 @@ const SubmitProposal = () => {
                 name="description"
                 value={formData.Description}
                 onChange={handleChange}
-                className="input placeholder-gray-400 focus:ring-1 focus:ring-[#17a2b8] min-h-[120px]"
                 placeholder="Provide a detailed description of your project..."
+                className="
+                  input
+                  min-h-[120px]
+                  w-full
+                  px-3
+                  py-3
+                  rounded-xl
+                  border
+                  border-slate-300
+                  bg-slate-50
+                  focus:bg-white
+                  focus:border-[#17a2b8]
+                  focus:ring-4
+                  focus:ring-[#17a3b811]
+                  outline-none
+                  transition-all
+                  duration-200
+                "
                 required
               />
             </div>
 
             <div className="flex justify-end space-x-4 pt-4 border-t border-slate-200">
               <button
-                className="btn-primary bg-[#17a2b8] hover:bg-[#138496] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 mt-4 md:mt-0  disabled:opacity-50"
+                className="
+                    bg-[#17a2b8]
+                    hover:bg-[#138496]
+                    text-white
+                    px-6
+                    py-3
+                    rounded-md
+                    font-medium
+                    shadow-md
+                    hover:shadow-lg
+                    transition-all
+                    duration-200
+                    disabled:opacity-50
+                    disabled:cursor-not-allowed
+                    "
                 type="submit"
                 disabled={isLoading}
               >
