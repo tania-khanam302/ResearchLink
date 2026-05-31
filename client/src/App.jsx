@@ -37,6 +37,10 @@ import { getUser } from "./store/slices/authSlice";
 import { all } from "axios";
 import { getAllUsers } from "./store/slices/adminSlice";
 
+
+// co-admin
+import CoAdminDashboard from "./pages/coadmin/CoAdminDashboard";
+
 const App = () => {
   const { authUser, isCheckingAuth } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -62,12 +66,14 @@ const App = () => {
       authUser?.role &&
       !allowedRoles.includes(authUser.role)
     ) {
-      const redirectPath =
+      const redirectPath =      
         authUser.role === "Admin"
           ? "/admin"
-          : authUser.role === "Teacher"
-            ? "/teacher"
-            : "/student";
+          : authUser.role === "Co-Admin"
+            ? "/co-admin"
+            : authUser.role === "Teacher"
+              ? "/teacher"
+              : "/student";
 
       return <Navigate to={redirectPath} replace />;
     }
@@ -109,13 +115,6 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-        {/* ata line ta na dile output asena */}
-        {/* <Route path="/" element={<Navigate to="/login" />} />
-
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} /> */}
-
         {/* Admin Routes */}
         <Route
           path="/admin"
@@ -132,6 +131,18 @@ const App = () => {
           <Route path="deadlines" element={<DeadlinesPage />} />
           <Route path="projects" element={<ProjectsPage />} />
         </Route>
+
+        {/* Co-Admin Routes */}
+        <Route
+          path="/co-admin"
+          element={
+            <ProtectedRoutes allowedRoles={["Co-Admin"]}>
+              <DashboardLayout userRole={"Co-Admin"} />
+            </ProtectedRoutes>
+          }
+        >
+          <Route index element={<CoAdminDashboard />} />
+   </Route>
 
         {/* Student Routes */}
         <Route

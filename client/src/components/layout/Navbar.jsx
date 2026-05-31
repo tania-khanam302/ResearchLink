@@ -28,7 +28,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
   }
 
   return (
-    <nav className="bg-slate-50 shadow-[0_0.1rem_0.1rem_rgba(0,0,0,0.15)] border-b border-slate-200 fixed w-full top-0 z-30">
+    <nav className="bg-slate-50 shadow-md border-b border-slate-200 fixed w-full top-0 z-30">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Left side */}
@@ -82,7 +82,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
                 </div>
                 <div className="ml-3 hidden sm:block">
                   <h1 className="text-lg font-semibold text-slate-800">
-                    Final Year Project Management System
+                    Research Link
                   </h1>
                 </div>
               </div>
@@ -167,6 +167,9 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
       
 
     </nav>
+
+
+
   );
 };
 

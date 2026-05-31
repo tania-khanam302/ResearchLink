@@ -23,7 +23,7 @@ const LoginPage = () => {
 
   // Dropdown open/close state
   const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const roles = ["Student", "Teacher", "Admin"];
+  const roles = ["Admin", "Co-Admin", "Teacher","Student"];
 
 
   // useEffect(() => {
@@ -47,7 +47,9 @@ const LoginPage = () => {
         case "Admin":
           navigate("/admin");
           break;
-
+        case "Co-Admin":
+          navigate("/co-admin");
+          break;
         default:
           navigate("/login");
       }
@@ -166,22 +168,6 @@ const LoginPage = () => {
                   </div>
                 )}
               </div>
-
-              {/* <div>
-                <label className="label">Select Role</label>
-                
-                <select
-                
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-  className="input focus:outline-none focus:ring-1 focus:ring-[#17a2b8]"
->
-                  <option value="Student bg-white hover:bg-[#17a2b8]">Student</option>
-                  <option value="Teacher">Teacher</option>
-                  <option value="Admin">Admin</option>
-                </select>
-              </div> */}
 
               {/* Email Address*/}
               <div>
