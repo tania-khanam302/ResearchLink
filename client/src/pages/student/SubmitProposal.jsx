@@ -105,7 +105,7 @@ const SubmitProposal = () => {
                     hover:bg-[#138496]
                     text-white
                     px-6
-                    py-3
+                    py-2.5
                     rounded-md
                     font-medium
                     shadow-md
