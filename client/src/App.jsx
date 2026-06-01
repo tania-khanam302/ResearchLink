@@ -80,28 +80,11 @@ const App = () => {
     return children;
   };
 
-  // loading page condition
+  // loading page 
   if (isCheckingAuth && !authUser) {
     return (
       <div className="flex justify-center items-center m-auto h-screen">
-        <div className="flex gap-2 justify-center items-center">
-          <div className="w-3 h-3 bg-[#17a2b8] rounded-full animate-bounce"></div>
-          <div className="w-3 h-3 bg-[#17a2b8] rounded-full animate-bounce [animation-delay:0.2s]"></div>
-          <div className="w-3 h-3 bg-[#17a2b8] rounded-full animate-bounce [animation-delay:0.4s]"></div>
-        </div>
-
-        {/* <Loader2 className="animate-spin size-20 text-[#17a2b8]" /> */}
-
-        {/* <div className="w-12 h-12 bg-[#17a2b8] rounded-full animate-ping"></div> */}
-
-        {/* <p className="text-[#17a2b8] text-xl animate-pulse">Loading...</p> */}
-
-        {/* <div className="w-12 h-12 border-4 border-gray-200 border-t-[#17a2b8] rounded-full animate-spin"></div> */}
-
-        {/* <div className="w-12 h-12 border-4 border-gray-200 border-t-[#17a2b8] rounded-full animate-spin"></div>
-        <p className="text-xl text-gray-500 animate-pulse">Loading...</p> */}
-
-        {/* <Loader className="size-20 animate-spin text-[#17a2b8]" /> */}
+       <Loader className="size-20 animate-spin text-[#17a2b8]" />
       </div>
     );
   }
