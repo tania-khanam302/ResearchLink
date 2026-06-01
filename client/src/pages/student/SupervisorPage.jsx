@@ -193,8 +193,10 @@ const SupervisorPage = () => {
                     <label className="text-sm font-medium text-slate-500 uppercase tracking-wide">
                       Created
                     </label>
-                    <p className="text-lg font-semibold text-slate-800 mt-1
-                    ">
+                    <p
+                      className="text-lg font-semibold text-slate-800 mt-1
+                    "
+                    >
                       {project.createdAt
                         ? formatDeadline(project.createdAt)
                         : "Unknown"}
@@ -235,7 +237,6 @@ const SupervisorPage = () => {
         )}
 
         {/* available supervisors- only when project exists and no supervisor assigned */}
-
         {hasProject && !hasSupervisor && (
           <div className="card shadow-lg rounded-md">
             <div className="Card-header">
@@ -243,131 +244,160 @@ const SupervisorPage = () => {
                 Available Supervisors
               </h2>
               <p className="card-subtitle">
-                Browse and request supervision from available faculty members.
+                Explore faculty members and request supervision based on their
+                expertise and research interests.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5 sh">
-              {
-                //supervisor &&
-                supervisors.map((sup) => (
-                  <div
-                    key={sup._id}
-                    className="border border-slate-200 rounded-lg p-4 hover:shadow-lg shadow-md transition-shadow"
-                  >
-                    <div className="flex items-center space-x-3 mb-3">
-                      <div className="w-auto  bg-slate-300 mb-3">
-                        <div className="w-12 h-12 bg-slate-300 rounded-full flex items-center justify-center">
-                          <span className="text-sm font-bold text-slate-600">
-                            {sup.name || "Anonymous"}
-                          </span>
-                        </div>
-
-                        <div className="flex-1">
-                          <h4 className="font-medium text-slate-800">
-                            {sup.name}
-                          </h4>
-                          <p className="text-sm text-slate-600">
-                            {sup.department}
-                          </p>
-                        </div>
-                      </div>
+              {supervisors.map((sup) => (
+                <div
+                  key={sup._id}
+                  className="group bg-white border border-slate-200 rounded-xl p-5 shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500 to-sky-700 flex items-center justify-center text-white text-lg font-bold uppercase shadow-md">
+                      {sup?.name?.charAt(0) || "A"}
                     </div>
 
-                    <div className="space-y-2 mb-4">
-                      <div>
-                        <label className="text-xs font-medium text-slate-500">
-                          E-mail
-                        </label>
-                        <p className="text-sm font-medium text-slate-700">
-                          {sup.email || "-"}
-                        </p>
-                      </div>
-
-                      <div>
-                        <label className="text-xs font-medium text-slate-500">
-                          Expertise
-                        </label>
-                        <p className="text-sm font-medium text-slate-700">
-                          {Array.isArray(sup?.expertise)
-                            ? sup.expertise.join(",")
-                            : sup?.expertise || "-"}
-                        </p>
-                      </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-slate-800">
+                        {sup.name || "Anonymous"}
+                      </h4>
+                      <p className="text-sm text-slate-500">
+                        {sup.department || "Department Not Available"}
+                      </p>
                     </div>
-                    <button
-                      onClick={() => handleOpenRequest(sup)}
-                      className="btn-primary w-full bg-[#17a2b8] hover:bg-[#138496] text-white text-center font-medium p-0 h-9 rounded-md items-center space-x-2 mt-4 md:mt-0"
-                    >
-                      Request Supervisor
-                    </button>
                   </div>
-                ))
-              }
+
+                  {/* Details */}
+                  <div className="space-y-2 mb-4">
+                    {/* E-mail */}
+                    <div>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                        E-mail
+                      </label>
+                      <p className="text-sm font-medium text-slate-700">
+                        {sup.email || "-"}
+                      </p>
+                    </div>
+
+                    {/* Expertise */}
+                    <div>
+                      <label className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">
+                        Expertise
+                      </label>
+                      <p className="text-sm font-medium text-slate-700">
+                        {Array.isArray(sup?.expertise)
+                          ? sup.expertise.join(",")
+                          : sup?.expertise || "-"}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleOpenRequest(sup)}
+                    className="w-full mt-6 bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-700 hover:to-sky-700 text-white font-semibold py-2 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
+                  >
+                    Request Supervisor
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         )}
 
         {/* Request Modal*/}
         {showRequestModal && selectedSupervisor && (
-          <div className="modal-overlay  !mt-0 !pt-0">
-            <div className="modal-content mt-0">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-slate-800">
-                    Request Supervision{" "}
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
+            <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-cyan-600 to-sky-700 px-6 py-5 flex items-center justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold text-white">
+                    Request Supervision
                   </h3>
+                  <p className="text-sm text-slate-100 mt-1">
+                    Send a professional supervision request to your preferred
+                    faculty member.
+                  </p>
+                </div>
 
+                <button
+                  onClick={() => {
+                    setShowRequestModal(false);
+                    setSelectedSupervisor(null);
+                    setRequestMessage("");
+                  }}
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition duration-200"
+                >
+                  <X className="w-5 h-5 text-white" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-6">
+                {/* Selected Supervisor */}
+                <div className="flex items-center gap-4 bg-slate-50 border border-slate-200 rounded-xl p-4">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500 to-sky-700 flex items-center justify-center text-white text-lg font-bold shadow-md">
+                    {selectedSupervisor?.name?.charAt(0) || "S"}
+                  </div>
+
+                  <div>
+                    <h4 className="text-lg font-semibold text-slate-800">
+                      {selectedSupervisor?.name}
+                    </h4>
+
+                    <p className="text-sm text-slate-500">
+                      {selectedSupervisor?.department ||
+                        "Department Not Available"}
+                    </p>
+
+                    <p className="text-sm text-slate-500">
+                      {selectedSupervisor?.email}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Message Box */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    Message to Supervisor
+                  </label>
+
+                  <textarea
+                    required
+                    value={requestMessage}
+                    onChange={(e) => setRequestMessage(e.target.value)}
+                    placeholder="Introduce yourself, describe your project interests, and explain why you'd like this professor to supervise your work..."
+                    className="w-full min-h-[150px] rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-200 resize-none"
+                  />
+                </div>
+
+                {/* Footer Buttons */}
+                <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-slate-200">
                   <button
-                    className="text-slate-400 hover:text-slate-600"
                     onClick={() => {
                       setShowRequestModal(false);
                       setSelectedSupervisor(null);
                       setRequestMessage("");
                     }}
+                    className="px-5 py-2.5 rounded-xl border border-cyan-600 text-cyan-700 font-medium hover:bg-cyan-50 transition duration-200"
                   >
-                    <X className="w-5 h-5  text-[#17a2b8]" />
+                    Cancel
                   </button>
-                </div>
 
-                <div className="space-y-4">
-                  <div className="p-4 bg-[#17a2b8]/5 rounded-md">
-                    <p className="text-sm text-slate-700">
-                      {selectedSupervisor?.name}{" "}
-                    </p>
-                  </div>
-
-                  <div>
-                    <label className="label">Message to Supervisor</label>
-                    <textarea
-                      className="input min-h-[120px] placeholder-gray-400 focus:ring-1 focus:ring-[#17a2b8]"
-                      required
-                      value={requestMessage}
-                      onChange={(e) => setRequestMessage(e.target.value)}
-                      placeholder="Introduce yourself and explain why you'd like this professor to supervise your project. . ."
-                    />
-                  </div>
-
-                  <div className="flex justify-end space-x-3 pt-4 border-t border-slate-200">
-                    <button
-                      onClick={() => {
-                        setShowRequestModal(false);
-                        setSelectedSupervisor(null);
-                        setRequestMessage("");
-                      }}
-                      className="border-2 border-[#17a2b8] text-[#17a2b8] px-4 rounded-lg hover:bg-[#17a3b81c] transition-colors duration-200 font-medium"
-                    >
-                      Cancel
-                    </button>
-
-                    <button
-                      onClick={submitRequest}
-                      className="btn-primary bg-[#17a2b8] hover:bg-[#138496] text-white px-4 font-medium rounded-md flex items-center space-x-2 mt-4 md:mt-0"
-                      disabled={!requestMessage.trim()}
-                    >
-                      Send Request
-                    </button>
-                  </div>
+                  <button
+                    onClick={submitRequest}
+                    disabled={!requestMessage.trim()}
+                    className={`px-5 py-2.5 rounded-xl text-white font-semibold shadow-md transition duration-200
+            ${
+              requestMessage.trim()
+                ? "bg-gradient-to-r from-cyan-600 to-sky-700 hover:from-cyan-700 hover:to-sky-800"
+                : "bg-slate-300 cursor-not-allowed"
+            }`}
+                  >
+                    Send Request
+                  </button>
                 </div>
               </div>
             </div>
