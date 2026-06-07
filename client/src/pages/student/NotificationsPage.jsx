@@ -2,12 +2,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const NotificationsPage = () => {
-  return <>
-  
-  <div className="space-y-6">
-    </div>
-    <div className="card">
-   {/* Card Header */}
+  return (
+    <>
+      <div className="space-y-6">
+        <div className="card">
+          {/* header  */}
           <div className="card-header">
             <div className="flex items-center justify-between">
               <div>
@@ -18,21 +17,21 @@ const NotificationsPage = () => {
                   Stay updated with your project progress and deadlines
                 </p>
               </div>
-     
+
+              <button className="btn-outline btn-small">
+                Mark all as read
+              </button>
             </div>
           </div>
 
-
-        {/* Notification Stats */}
-         <div className="gird gird-cols-1 md:gird-cols-4
-        gap-4 mb-6">
-
+          {/* No notifications yet */}
+          <div className="text-center py-8">
+            <p className="text-slate-500">No notifications yet</p>
+          </div>
         </div>
-
-    </div>
-    
-    
-    </>;
+      </div>
+    </>
+  );
 };
 
 export default NotificationsPage;
