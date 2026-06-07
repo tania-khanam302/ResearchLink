@@ -75,68 +75,71 @@ const SupervisorPage = () => {
     <>
       <div className="space-y-6">
         {/* Current Supervisor */}
-        <div className="card shadow-lg rounded-md">
-          <div className="card-header">
-            <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">
-              Current Supervisor
-            </h1>
-            {hasSupervisor && (
-              <span className="badge badge-approved">Assigned</span>
-            )}
+      <div className="card shadow-lg rounded-md">
+  <div className="card-header">
+    <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">
+      Current Supervisor
+    </h1>
+
+    <span className="badge badge-approved">Assigned</span>
+  </div>
+
+  <div className="space-y-6">
+    <div className="flex items-start space-x-3">
+      <img
+        src="/placeholder.jpg"
+        alt="Supervisor Avatar"
+        className="w-20 h-20 rounded-full object-cover shadow-md"
+      />
+
+      <div className="flex-1 space-y-4">
+        <div>
+          <h3 className="text-2xl font-bold text-slate-800">
+            Dr. John Smith
+          </h3>
+          <p className="text-lg text-slate-600">
+            Computer Science Department
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-medium text-slate-500 uppercase tracking-wide">
+              Email
+            </label>
+            <p className="text-slate-800 font-medium">
+              john.smith@example.com
+            </p>
           </div>
 
-          {/* Supervisor Details */}
-          {hasSupervisor ? (
-            <div className="space-y-6">
-              <div className="flex items-start space-x-3">
-                <img
-                  src="/placeholder.jpg"
-                  alt="Supervisor Avatar"
-                  className="w-20 h-20 rounded-full object-cover shadow-md"
-                />
-
-                <div className="flex-1 space-y-4">
-                  <div>
-                    <h3 className="text-2xl font-bold text-slate-800">
-                      {supervisor?.name || "-"}
-                    </h3>
-                    <p className="text-lg text-slate-600">
-                      {supervisor?.department || "-"}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-slate-500 uppercase tracking-wide">
-                        Email
-                      </label>
-                      <p className="text-slate-800 font-medium">
-                        {supervisor?.email || "-"}
-                      </p>
-                    </div>
-
-                    <div>
-                      <label className="text-sm font-medium text-slate-500 uppercase tracking-wide">
-                        Expertise
-                      </label>
-                      <p className="text-slate-800 font-medium">
-                        {Array.isArray(supervisor?.expertise)
-                          ? supervisor.expertise.join(",")
-                          : supervisor?.expertise || "-"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="p-6 text-center">
-              <p className="text-slate-600 text-lg">
-                Supervisor not assigned yet.
-              </p>
-            </div>
-          )}
+          <div>
+            <label className="text-sm font-medium text-slate-500 uppercase tracking-wide">
+              Expertise
+            </label>
+            <p className="text-slate-800 font-medium">
+              AI, Machine Learning, Data Science
+            </p>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{/* Supervisor not assigned yet  */}
+<div className="card shadow-lg rounded-md">
+  <div className="card-header">
+    <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">
+      Current Supervisor
+    </h1>
+  </div>
+
+  <div className="p-6 text-center">
+    <p className="text-slate-600 text-lg">
+      Supervisor not assigned yet.
+    </p>
+  </div>
+</div>
 
         {/* Project Details -Only show if project exit */}
         {hasProject && (
