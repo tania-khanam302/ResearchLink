@@ -115,30 +115,32 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed bg-slate-50 flex items-center justify-center px-4">
+ <div className="min-h-screen bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed bg-slate-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full">
+          <div className="bg-white px-6 py-6 rounded-lg border shadow-[0px_0px_40px_rgba(0,0,0,0.35)]">
           {/* Header */}
-          <div className="text-center mb-4">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-[#17a2b8] rounded-full mb-2">
-              <BookOpen className="w-6 h-6 text-white" />
+            <div className="text-center mb-2">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-[#17a2b8] rounded-full">
+                <BookOpen className="w-5 h-5 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-slate-800">
+                Research Link
+              </h1>
+              <p className="text-[#17a2b8] mb-1">Sign in to your account</p>
             </div>
-            <h1 className="text-2xl font-bold text-slate-800">Research Link</h1>
-            <p className="text-[#17a2b8] mt-2">Sign in to your account</p>
-          </div>
 
-          {/* Form */}
-          <div className="bg-white p-7 rounded-lg border shadow-[0px_0px_40px_rgba(0,0,0,0.35)]">
+            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Role - custom dropdown*/}
               <div className="relative">
-                <label className="block text-base font-medium text-slate-700 mb-1">
+                <label className="label block text-base font-medium text-slate-700">
                   Select Role
                 </label>
                 <div
                   onClick={() => setIsSelectOpen(!isSelectOpen)}
                   className={`w-full px-3 py-2 border rounded-md flex justify-between items-center cursor-pointer transition-all duration-200 outline-none ${
                     isSelectOpen
-                      ? "border-[#17a2b8] ring-0 ring-[#17a2b8]"  
+                      ? "border-[#17a2b8] ring-0 ring-[#17a2b8]"
                       : "border-slate-300"
                   }`}
                 >
@@ -169,9 +171,25 @@ const LoginPage = () => {
                 )}
               </div>
 
+              {/* <div>
+                <label className="label">Select Role</label>
+                
+                <select
+                
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+  className="input focus:outline-none focus:ring-1 focus:ring-[#17a2b8]"
+>
+                  <option value="Student bg-white hover:bg-[#17a2b8]">Student</option>
+                  <option value="Teacher">Teacher</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </div> */}
+
               {/* Email Address*/}
               <div>
-                <label className="label text-base font-medium text-slate-700 mb-1 mt-1">
+                <label className="label text-base font-medium text-slate-700">
                   E-mail
                 </label>
                 <input
@@ -183,13 +201,13 @@ const LoginPage = () => {
                   placeholder="Enter your E-mail"
                 />
                 {errors.email && (
-                  <p className="text-sm text-red-600 mt-1">{errors.email}</p>
+                  <p className="text-sm text-red-600">{errors.email}</p>
                 )}
               </div>
 
               {/* Password */}
               <div>
-                <label className="label text-base font-medium text-slate-700 mb-1 mt-1">
+                <label className="label text-base font-medium text-slate-700">
                   Password
                 </label>
 
@@ -219,7 +237,7 @@ const LoginPage = () => {
                 </div>
 
                 {errors.password && (
-                  <p className="text-red-600 text-sm mt-1">{errors.password}</p>
+                  <p className="text-red-600 text-sm ">{errors.password}</p>
                 )}
               </div>
 
@@ -246,7 +264,7 @@ const LoginPage = () => {
               </button>
             </form>
 
-            <div className="mt-4">
+            <div className="mt-2">
               <button
                 type="button"
                 // onClick={handleGoogleLogin}
@@ -259,6 +277,7 @@ const LoginPage = () => {
                 Continue with Google
               </button>
 
+              {/* <button onClick={handleGoogleLogin}>Continue with Google</button> */}
             </div>
           </div>
         </div>
