@@ -98,6 +98,29 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
 
+
+{/* login  */}
+        <Route
+          path="/"
+          element={
+            authUser ? (
+              <Navigate
+                to={
+                  authUser.role === "Admin"
+                    ? "/admin"
+                    : authUser.role === "Teacher"
+                      ? "/teacher"
+                      : "/student"
+                }
+                replace
+              />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+
         {/* Admin Routes */}
         <Route
           path="/admin"

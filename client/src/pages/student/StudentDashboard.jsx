@@ -109,7 +109,8 @@ const StudentDashboard = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <label classname="text-sm font-medium text-slate-600">
+             
+                <label className="text-sm font-medium text-slate-600">
                   Status
                 </label>
                 {/* <span classname={`inline-flex items-center px-2 py-[2px] rounded-full text-sm
@@ -144,7 +145,9 @@ const StudentDashboard = () => {
               className="card-header flex
                  items-center justify-between"
             >
-              <h2 classname="card-title">Latest Feedback</h2>
+               <div className="card-header">
+              <h2 className="card-title">Latest Feedback</h2>
+            </div>
               {/* <Link to={"/student/feedback"}
                      classname="text-sm bg-blue-500 text-white
                      px-3 py-1 rounded-full font-medium
