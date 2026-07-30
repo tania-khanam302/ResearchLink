@@ -100,12 +100,12 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             icon: "home",
           },
           {
-            name: "Student",
+            name: "Manage Student",
             path: "/co-admin/students",
             icon: "users",
           },
           {
-            name: "Teachers",
+            name: "Manage Teacher",
             path: "/co-admin/teachers",
             icon: "academic",
           },

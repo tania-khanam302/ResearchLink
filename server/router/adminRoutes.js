@@ -15,29 +15,28 @@ import {
 } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
-
-// create-student
+// create student
 router.post(
   "/create-student",
   isAuthenticated,
-  isAuthorized("Admin"),
-  createStudent,
+  isAuthorized("Admin", "Co-Admin"),
+  createStudent
 );
 
-// update-student
+// update student
 router.put(
   "/update-student/:id",
   isAuthenticated,
-  isAuthorized("Admin"),
-  updateStudent,
+  isAuthorized("Admin", "Co-Admin"),
+  updateStudent
 );
 
-// delete-student
+// delete student
 router.delete(
   "/delete-student/:id",
   isAuthenticated,
-  isAuthorized("Admin"),
-  deleteStudent,
+  isAuthorized("Admin", "Co-Admin"),
+  deleteStudent
 );
 
 // create-teacher
@@ -65,6 +64,12 @@ router.delete(
 );
 
 // get
-router.get("/users", isAuthenticated, isAuthorized("Admin"), getAllUsers);
+// router.get("/users", isAuthenticated, isAuthorized("Admin"), getAllUsers);
+router.get(
+  "/users",
+  isAuthenticated,
+  isAuthorized("Admin", "Co-Admin"),
+  getAllUsers
+);
 
 export default router;
