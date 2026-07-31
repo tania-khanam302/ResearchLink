@@ -53,37 +53,31 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             path: "/admin",
             icon: "home",
           },
-
-          {
-            name: "Manage Student",
-            path: "/admin/students",
-            icon: "users",
-          },
-
-          {
-            name: "Manage Teacher",
-            path: "/admin/teachers",
-            icon: "academic",
-          },
-
           {
             name: "Manage Co-Admin",
             path: "/admin/co-admin",
             icon: "users",
           },
-
+          {
+            name: "Manage Teacher",
+            path: "/admin/teachers",
+            icon: "academic",
+          },
+          {
+            name: "Manage Student",
+            path: "/admin/students",
+            icon: "users",
+          },
           {
             name: "Assign Supervisor",
             path: "/admin/assign-supervisor",
             icon: "link",
           },
-
           {
             name: "Project",
             path: "/admin/projects",
             icon: "folder",
           },
-
           {
             name: "Deadline",
             path: "/admin/deadlines",
