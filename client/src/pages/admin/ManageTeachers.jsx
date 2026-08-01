@@ -110,7 +110,28 @@ const ManageTeachers = () => {
 
   return (
     <>
-
+  <div className="space-y-6 bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed">
+        {/*header */}
+        <div className="card shadow-lg rounded-md">
+          <div className="card-header flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">
+                Manage Teachers
+              </h1>
+              <p className="card-subtitle text-[#17a2b8]">
+                Add, edit, and manage teacher accounts
+              </p>
+            </div>
+            <button
+              onClick={() => dispatch(toggleTeacherModal())}
+              className="btn-primary bg-[#17a2b8] hover:bg-[#138496] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 mt-4 md:mt-0"
+            >
+              <UserPlus className="w-5 h-5" />
+              <span>Add New Teacher</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
