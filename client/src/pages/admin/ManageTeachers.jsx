@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddTeacher from "../../components/modal/AddTeacher";
 import { deleteTeacher, getAllUsers, updateTeacher } from "../../store/slices/adminSlice";
-import { AlertTriangle, BadgeCheck, Plus, TriangleAlert, Users, X } from "lucide-react";
+import { AlertTriangle, BadgeCheck, Plus, TriangleAlert, UserPlus, Users, X } from "lucide-react";
 import { toggleTeacherModal } from "../../store/slices/popupSlice";
 
 const ManageTeachers = () => {
