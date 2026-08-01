@@ -26,7 +26,8 @@ const AdminDashboard = () => {
             Manage the entire project management system and oversee all
             activities.
           </p>
-          <p>p tag add</p>
+          <p> oversee all
+            activities.</p>
         </div>
       </div>
     </>
