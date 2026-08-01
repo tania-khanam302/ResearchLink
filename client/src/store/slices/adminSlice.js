@@ -107,6 +107,51 @@ export const deleteTeacher = createAsyncThunk(
   },
 );
 
+// create co-admin
+export const createCoAdmin = createAsyncThunk(
+  "createCoAdmin",
+  async (data, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post("/admin/create-coadmin", data);
+      toast.success(res.data.message || "Co-Admin created successfully");
+      return res.data.data.user;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to create Co-Admin");
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+  },
+);
+
+// update co-admin
+export const updateCoAdmin = createAsyncThunk(
+  "updateCoAdmin",
+  async ({ id, data }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.put(`/admin/update-coadmin/${id}`, data);
+      toast.success(res.data.message || "Co-Admin updated successfully");
+      return res.data.data.user;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update Co-Admin");
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+  },
+);
+
+// delete co-admin
+export const deleteCoAdmin = createAsyncThunk(
+  "deleteCoAdmin",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axiosInstance.delete(`/admin/delete-coadmin/${id}`);
+      toast.success(res.data.message || "Co-Admin deleted successfully");
+      return id;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to delete Co-Admin");
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+  },
+);
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
@@ -144,11 +189,12 @@ const adminSlice = createSlice({
         state.users = action.payload.users;
       })
 
-      // teacher
+      // create teacher
       .addCase(createTeacher.fulfilled, (state, action) => {
         if (state.users) state.users.unshift(action.payload);
       })
 
+      // update teacher
       .addCase(updateTeacher.fulfilled, (state, action) => {
         if (state.users) {
           state.users = state.users.map((u) =>
@@ -157,10 +203,26 @@ const adminSlice = createSlice({
         }
       })
 
+      // delete teacher
       .addCase(deleteTeacher.fulfilled, (state, action) => {
         if (state.users) {
           state.users = state.users.filter((u) => u._id !== action.payload);
         }
+      })
+
+      // create co-admin
+      .addCase(createCoAdmin.fulfilled, (state, action) => {
+        state.users.unshift(action.payload);
+      })
+      // update co-admin
+      .addCase(updateCoAdmin.fulfilled, (state, action) => {
+        state.users = state.users.map((u) =>
+          u._id === action.payload._id ? action.payload : u,
+        );
+      })
+      // delete co-admin
+      .addCase(deleteCoAdmin.fulfilled, (state, action) => {
+        state.users = state.users.filter((u) => u._id !== action.payload);
       });
   },
 });
