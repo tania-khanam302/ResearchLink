@@ -128,7 +128,7 @@ export const deleteTeacher = asyncHandler(async (req, res, next) => {
   });
 });
 
-
+// getAllUsers
 export const getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await userServices.getAllUsers();
   // console.log(users);
@@ -139,6 +139,40 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
   });
 });
 
+// updateCoAdmin
+export const updateCoAdmin = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await userServices.updateUser(id, req.body);
+
+  if (!user) {
+    return next(new ErrorHandler("Co-Admin not found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Co-Admin updated successfully",
+    data: { user },
+  });
+});
+
+// deleteCoAdmin
+export const deleteCoAdmin = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await userServices.getUserById(id);
+
+  if (!user) {
+    return next(new ErrorHandler("Co-Admin not found", 404));
+  }
+
+  await userServices.deleteUser(id);
+
+  res.status(200).json({
+    success: true,
+    message: "Co-Admin deleted successfully",
+  });
+});
 
 export const assignSupervisor = asyncHandler (async(req, res, next) =>{});
 export const getAllProject = asyncHandler (async(req, res, next) =>{});
