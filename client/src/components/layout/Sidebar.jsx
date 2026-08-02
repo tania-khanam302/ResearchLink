@@ -103,6 +103,23 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             path: "/co-admin/teachers",
             icon: "academic",
           },
+          
+          {
+            name: "Assign Supervisor",
+            path: "/co-admin/assign-supervisor",
+            icon: "link",
+          },
+          
+          {
+            name: "Project",
+            path: "/co-admin/projects",
+            icon: "folder",
+          },
+          {
+            name: "Deadline",
+            path: "/co-admin/deadlines",
+            icon: "calendar",
+          },
         ];
 
       default:

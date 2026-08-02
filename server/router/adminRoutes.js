@@ -43,7 +43,7 @@ router.delete(
 router.post(
   "/create-teacher",
   isAuthenticated,
-  isAuthorized("Admin"),
+  isAuthorized("Admin", "Co-Admin"),
   createTeacher,
 );
 
@@ -51,7 +51,7 @@ router.post(
 router.put(
   "/update-teacher/:id",
   isAuthenticated,
-  isAuthorized("Admin"),
+  isAuthorized("Admin" , "Co-Admin"),
   updateTeacher,
 );
 
@@ -59,7 +59,7 @@ router.put(
 router.delete(
   "/delete-teacher/:id",
   isAuthenticated,
-  isAuthorized("Admin"),
+  isAuthorized("Admin", "Co-Admin"),
   deleteTeacher,
 );
 
