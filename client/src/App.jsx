@@ -42,6 +42,7 @@ import { getAllUsers } from "./store/slices/adminSlice";
 // co-admin
 import CoAdminDashboard from "./pages/coadmin/CoAdminDashboard";
 import CoAdminStudents from "./pages/coadmin/CoAdminStudents";
+import CoAdminTeachers from "./pages/coadmin/CoAdminTeachers";
 
 const App = () => {
   const { authUser, isCheckingAuth } = useSelector((state) => state.auth);
@@ -152,7 +153,8 @@ const App = () => {
         >
           <Route index element={<CoAdminDashboard />} />
           <Route path="students" element={<CoAdminStudents />} />
-   </Route>
+          <Route path="teachers" element={<CoAdminTeachers />} />
+        </Route>
 
         {/* Student Routes */}
         <Route
