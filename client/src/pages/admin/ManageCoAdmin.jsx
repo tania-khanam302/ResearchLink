@@ -138,6 +138,23 @@ const ManageCoAdmin = () => {
             </h2>
           </div>
         </div>
+
+        {/* Search Co-Admins Section */}
+        <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
+          <label className="block mb-2 card-title text-md font-semibold text-[#17a2b8]">
+            Search Co-Admins
+          </label>
+          <div className="bg-white p-3 rounded-xl shadow-sm flex items-center gap-2 border border-slate-200">
+            <Search className="w-4 h-4 text-[#17a2b8]" />
+            <input
+              className="w-full outline-none text-sm"
+              placeholder="Search co-admin..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+    
+        </div>
       </div>
     </>
   );
