@@ -154,6 +154,78 @@ const ManageCoAdmin = () => {
             />
           </div>
         </div>
+
+        {/* Co-Admin list section */}
+        <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)] overflow-hidden">
+          <div className="card-header">
+            <h2 className="card-title text-lg font-semibold text-[#17a2b8]">
+              Co-Admin List
+            </h2>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead className="bg-slate-100">
+                <tr className="text-[#138496] text-xs font-semibold uppercase">
+                  <th className="px-6 py-4">Co-Admin Info</th>
+                  <th className="px-6 py-4">Email</th>
+                  <th className="px-6 py-4">Department</th>
+                  <th className="px-6 py-4">Role</th>
+                  <th className="px-6 py-4">Action</th>
+                </tr>
+              </thead>
+
+              <tbody className="bg-white divide-y divide-slate-200">
+                {filteredAdmins.map((admin) => (
+                  <tr key={admin._id} className="hover:bg-slate-50">
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-medium text-slate-900">
+                        {admin.name}
+                      </div>
+                    </td>
+
+                    <td className="px-6 py-4 text-sm text-slate-900">
+                      {admin.email}
+                    </td>
+
+                    <td className="px-6 py-4 text-sm text-slate-900">
+                      {admin.department || "-"}
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        Co-Admin
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button
+                        onClick={() => handleEdit(admin)}
+                        className="text-[#17a2b8] hover:text-blue-900 pe-3"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        onClick={() => handleDelete(admin)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {filteredAdmins.length === 0 && (
+              <div className="text-center py-8 text-slate-500">
+                No co-admin found.
+              </div>
+            )}
+          </div>
+        </div>
+
       </div>
     </>
   );
