@@ -153,7 +153,6 @@ const ManageCoAdmin = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-    
         </div>
       </div>
     </>
