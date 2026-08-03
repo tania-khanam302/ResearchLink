@@ -25,11 +25,6 @@ const ManageTeachers = () => {
 
   const dispatch = useDispatch();
 
-  // NOTE ata remove kore dite hobe 
-  // useEffect(() => {
-  //   dispatch(getAllUsers());
-  // }, [dispatch]);
-
   // teachers get
   const teachers = useMemo(() => {
     return (users || []).filter((u) => u.role?.toLowerCase() === "teacher");
@@ -181,7 +176,7 @@ const ManageTeachers = () => {
                   Departments
                 </p>
                 <p className="text-lg font-semibold text-slate-800">
-                  {departments.length} {/* total department length */}
+                  {departments.length} 
                 </p>
               </div>
             </div>
@@ -191,9 +186,6 @@ const ManageTeachers = () => {
         {/* Filters */}
         <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)] flex flex-col md:flex-row gap-4">
           <div className="flex-1">
-            {/* <label className="block text-sm font-medium text-slate-700 mb-2 ">
-                Search Students
-              </label> */}
             <label className="block mb-2 card-title text-md font-semibold text-[#17a2b8]">
               Search Teachers
             </label>
@@ -238,9 +230,6 @@ const ManageTeachers = () => {
               <table className="w-full text-left border-collapse overflow-x-hidden">
                 <thead className="bg-slate-100">
                   <tr className=" text-[#138496] text-xs font-semibold uppercase">
-                    {/* <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 upercase tracking-wide">
-                        Student Info
-                      </th> */}
                     <th className="px-6 py-3 text-left tracking-wide">
                       Teacher Info
                     </th>

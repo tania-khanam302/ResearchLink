@@ -76,20 +76,7 @@ const ManageStudents = () => {
         filterDepartment === "all" || student.department === filterDepartment;
       return matchesSearch && matchesFilter;
     });
-  }, [students, searchTerm, filterDepartment]); // সার্চ ও ফিল্টারিং useMemo তে নেওয়া হয়েছে
-
-  // const handleDelete = (student) => {
-  //   setStudentToDelete(student);
-  //   setShowDeleteModal(true);
-  // };
-
-  // const confirmDelete = () => {
-  //   if (studentToDelete) {
-  //     dispatch(deleteStudent(studentToDelete._id));
-  //     setShowDeleteModal(false);
-  //     setStudentToDelete(null);
-  //   }
-  // };
+  }, [students, searchTerm, filterDepartment]); 
 
   const handleCloseModal = () => {
     setShowModal(false);
