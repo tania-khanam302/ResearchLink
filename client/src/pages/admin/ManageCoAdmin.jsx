@@ -226,6 +226,161 @@ const ManageCoAdmin = () => {
           </div>
         </div>
 
+        {/* edit co-admin model */}
+        {editingAdmin && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center ">
+            {/* overlay*/}
+            <div className="fixed inset-0 bg-black/40 backdrop-blur-sm  z-40"></div>
+
+            <div className="relative inset-0 z-50 w-full max-w-md mx-4 animate-fadeIn">
+              <div className="bg-white rounded-sm w-full max-w-md mx-4">
+                <div className="card-header rounded-t-lg py-4 p-3 mb-0 bg-blue-50 flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    Edit Co-Admin
+                  </h3>
+
+                  <button
+                    onClick={() => setEditingAdmin(null)}
+                    className="text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="w-6 h-6 text-[#17a2b8]" />
+                  </button>
+                </div>
+
+                <div className="p-6 mb-2">
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">
+                        Full Name
+                      </label>
+
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            name: e.target.value,
+                          })
+                        }
+                        className="w-full p-2 border-b border-slate-400 focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">
+                        Email
+                      </label>
+
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            email: e.target.value,
+                          })
+                        }
+                        className="w-full p-2 border-b border-slate-400 focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">
+                        Department
+                      </label>
+
+                      <input
+                        type="text"
+                        value={formData.department}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            department: e.target.value,
+                          })
+                        }
+                        className="w-full p-2 border-b border-slate-400 focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="flex justify-end space-x-3 pt-4">
+                      <button
+                        type="button"
+                        onClick={() => setEditingAdmin(null)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 font-medium h-11 rounded-md shadow-md"
+                      >
+                        Cancel
+                      </button>
+
+                      <button
+                        type="submit"
+                        className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-11 rounded-md shadow-md"
+                      >
+                        Update Co-Admin
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* show and delete */}
+        {showDeleteModal && adminToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            {/* overlay*/}
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+
+            <div className="relative inset-0 z-50 w-full max-w-md mx-4 animate-fadeIn">
+              <div className="card bg-white rounded-sm w-full max-w-md mx-4 shadow-xl">
+                <div className="grid items-center mb-4 p-6">
+                  <div className="flex-shrink-0 w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-red-100">
+                    <AlertTriangle className="w-6 h-6 text-red-600" />
+                  </div>
+
+                  <div className="text-center">
+                    <h3 className="text-lg font-medium text-slate-900 mb-2">
+                      Delete Co-Admin
+                    </h3>
+
+                    <p className="text-sm text-slate-500 mb-4">
+                      Are you sure you want to delete this co-admin{" "}
+                      <span className="font-semibold">
+                        {adminToDelete.name}
+                      </span>
+                      ? This action cannot be undone.
+                    </p>
+
+                    <div className="flex justify-center space-x-3">
+                      <button
+                        onClick={() => {
+                          setShowDeleteModal(false);
+                          setAdminToDelete(null);
+                        }}
+                        className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-11 rounded-md shadow-md"
+                      >
+                        Cancel
+                      </button>
+
+                      <button
+                        onClick={confirmDelete}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 font-medium h-11 rounded-md shadow-md"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* add model */}
+        {isCreateCoAdminModalOpen && <AddCoAdmin />}
       </div>
     </>
   );
