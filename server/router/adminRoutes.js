@@ -7,6 +7,9 @@ import {
   getAllUsers,
   updateStudent,
   updateTeacher,
+  createCoAdmin,
+  updateCoAdmin,
+  deleteCoAdmin,
 } from "../controllers/adminController.js";
 import multer from "multer";
 import {
@@ -15,6 +18,7 @@ import {
 } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
+
 // create student
 router.post(
   "/create-student",
@@ -63,8 +67,31 @@ router.delete(
   deleteTeacher,
 );
 
-// get
-// router.get("/users", isAuthenticated, isAuthorized("Admin"), getAllUsers);
+// create coadmin
+router.post(
+  "/create-coadmin",
+  isAuthenticated,
+  isAuthorized("Admin"),
+  createCoAdmin
+);
+
+// update coadmin
+router.put(
+  "/update-coadmin/:id",
+  isAuthenticated,
+  isAuthorized("Admin"),
+  updateCoAdmin
+);
+
+// delete coadmin
+router.delete(
+  "/delete-coadmin/:id",
+  isAuthenticated,
+  isAuthorized("Admin"),
+  deleteCoAdmin
+);
+
+// get users
 router.get(
   "/users",
   isAuthenticated,

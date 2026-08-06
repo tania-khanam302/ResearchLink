@@ -139,6 +139,30 @@ export const getAllUsers = asyncHandler(async (req, res, next) => {
   });
 });
 
+
+// createCoAdmin =====
+export const createCoAdmin = asyncHandler(async (req, res, next) => {
+  const { name, email, password, department } = req.body;
+
+  if (!name || !email || !password) {
+    return next(new ErrorHandler("Missing fields", 400));
+  }
+
+  const user = await userServices.createUser({
+    name,
+    email,
+    password,
+    department,
+    role: "Co-Admin",
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "Co-Admin created successfully",
+    data: { user },
+  });
+});
+
 // updateCoAdmin
 export const updateCoAdmin = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
