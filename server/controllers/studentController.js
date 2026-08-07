@@ -111,7 +111,7 @@ export const getSupervisor = asyncHandler(async (req, res, next) => {
   const studentId = req.user._id;
   const student = await User.findById(studentId).populate(
     "supervisor",
-    "name email department experties",
+    "name email department expertise",
   );
 
   if (!student.supervisor) {

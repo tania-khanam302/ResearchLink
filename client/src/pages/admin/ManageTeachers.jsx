@@ -233,7 +233,7 @@ const ManageTeachers = () => {
                     <th className="px-6 py-3 text-left tracking-wide">
                       Teacher Info
                     </th>
-                    <th className="px-6 py-5 text-left ">E-mail</th>
+                    {/* <th className="px-6 py-5 text-left ">E-mail</th> */}
                     <th className="px-6 py-5 text-left ">Department</th>
                     <th className="px-6 py-5 text-left ">Expertise</th>
                     <th className="px-6 py-5 text-left ">Join Date</th>
@@ -245,6 +245,7 @@ const ManageTeachers = () => {
                   {filteredTeachers.map((teacher) => {
                     return (
                       <tr key={teacher._id} className="hover:bg-slate-50">
+                        {/* Teacher Info */}
                         <td className="px-6 py-4">
                           <div>
                             <div className="text-sm font-medium text-slate-900">
@@ -256,23 +257,26 @@ const ManageTeachers = () => {
                           </div>
                         </td>
 
-                        {/* extra */}
-                        <td className="text-sm  text-slate-900">
+                        {/* email */}
+                        {/* <td className="text-sm  text-slate-900">
                           {teacher.email}
-                        </td>
+                        </td> */}
 
+                        {/* department */}
                         <td className="px-6 py-4 whitespace-nowrapp">
                           <div className="text-sm text-slate-900">
                             {teacher.department || "-"}
                           </div>
                         </td>
 
+                        {/* expertise */}
                         <td className="px-6 py-4 whitespace-nowrapp">
                           {Array.isArray(teacher.expertise)
                             ? teacher.expertise.join(", ")
                             : teacher.expertise}
                         </td>
 
+                        {/* join date */}
                         <td className="px-6 py-4">
                           <div className="text-sm text-slate-900">
                             {teacher.createdAt
@@ -281,6 +285,7 @@ const ManageTeachers = () => {
                           </div>
                         </td>
 
+                        {/* action */}
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <button
                             onClick={() => handleEdit(teacher)}
@@ -429,7 +434,7 @@ const ManageTeachers = () => {
                         <option value="Software Development">
                           Software Development
                         </option>
-                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="Cyber Security">Cyber Security</option>
                         <option value="Web Development">Web Development</option>
                         <option value="Computer Networking">
                           Computer Networking
