@@ -7,6 +7,7 @@ import * as requestServices from "../services/requestServices.js";
 import * as notificationServices from "../services/notificationServices.js";
 import { Project } from "../models/project.js";
 import { Notification } from "../models/notification.js";
+import * as fileServices from "../services/fileServices.js";
 
 // get student project =============
 export const getStudentProject = asyncHandler(async (req, res, next) => {
@@ -268,6 +269,6 @@ export const downloadFiles = asyncHandler(async (req, res, next) => {
   const file = project.files.id(fileId);
   if (!file) return next ( new ErrorHandler("File not found", 404));
 
-  streamDownload(file.filePath, res, file.originalName);
+  fileServices.streamDownload(file.filePath, res, file.originalName);
 
 })
