@@ -15,7 +15,6 @@ const UploadFiles = () => {
 
   useEffect(() => {
     if (!project) {
-      // dispatch(fetchProject);
       dispatch(fetchProject());
     }
   }, [dispatch]);
@@ -28,13 +27,6 @@ const UploadFiles = () => {
 
   const handleUpload = (e) => {
     const activeProject = project;
-    // if (!activeProject) {
-    //   const action = dispatch(fetchProject());
-    //   if (fetchProject.fulfilled.match(action)) {
-    //     activeProject = action.payload?.project || action.payload;
-    //   }
-    // }
-
     if (selectedFiles.length === 0) return;
     dispatch(uploadFiles({ projectId: project?._id, files: selectedFiles }));
     setSelectedFiles([]);
@@ -70,9 +62,9 @@ const UploadFiles = () => {
             </p>
           </div>
 
-          {/*UPLOAD SECTION */}
+          {/* upload section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {/* Report */}
+            {/* report */}
             <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
               <div className="mb-4">
                 <FileText className="w-12 h-12 text-slate-400 mx-auto" />
@@ -124,7 +116,7 @@ const UploadFiles = () => {
               </label>
             </div>
 
-            {/* Code Files */}
+            {/* code files */}
             <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
               <div className="mb-4">
                 <FileCode className="w-12 h-12 text-slate-400 mx-auto" />
@@ -162,7 +154,7 @@ const UploadFiles = () => {
           </div>
         </div>
 
-        {/* SELECTED FILES PREVIEW */}
+        {/* selected files review */}
         {selectedFiles.length > 0 && (
           <div className="card shadow-lg rounded-md">
             <div className="card-header">
@@ -202,7 +194,7 @@ const UploadFiles = () => {
           </div>
         )}
 
-        {/* UPLOAD FILES LIST */}
+        {/* upload files list */}
         <div className="card shadow-lg rounded-md">
           <div className="card-header">
             <h2 className="card-title">Upload Files</h2>
