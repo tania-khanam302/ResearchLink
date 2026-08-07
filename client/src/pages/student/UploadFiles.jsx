@@ -50,6 +50,24 @@ const UploadFiles = () => {
     return <Icon className={`w-8 h-8 ${color}`} />;
   };
 
+  const handleDownloadFile = async (file )=>{
+    if(!file?.projectId || !file.fileId) return;
+
+    const res = await dispatch(
+      downloadFiles({projectId:file.projectId, fileId:file.fileId})
+    );
+    if(res.meta.requestStatus !== "fulfilled") return;
+
+    const url= URL.createObjectURL(res.payload.blob);
+
+    const a = object.assign(document.createElement("a"),{
+      href:url,
+      download:file.name || "download",
+    });
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <>
       <div className="space-y-6">
@@ -229,7 +247,9 @@ const UploadFiles = () => {
                   </div>
 
                   <div className="flex items-center  space-x-2">
-                    <button className="btn-outline btn-small">Download</button>
+                    <button className="btn-outline btn-small" onClick={() => handleDownloadFile(file)}>
+                      Download
+                    </button>
                   </div>
                 </div>
               ))}

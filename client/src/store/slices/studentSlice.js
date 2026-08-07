@@ -139,6 +139,24 @@ error.response.data.message || "Failed to fetch feedback"
   }
 );
 
+// downloadFiles
+export const downloadFiles = createAsyncThunk(
+  "downloadFiles",
+  async({projectId, fileId}, thunkAPI)=>{
+    try{
+
+      const res = await axiosInstance.get(`/student/download/${projectId}/${fileId}`,{
+        responseType: "blob",
+      })
+      return {blob:res.data,projectId,fileId}
+    }catch(error){
+
+      toast.error(error.response?.data?.message|| "Failed to download file");
+      return thunkAPI.rejectWithValue(error.response?.data?.message)
+    }
+  }
+)
+
 const studentSlice = createSlice({
   name: "student",
   initialState: {
