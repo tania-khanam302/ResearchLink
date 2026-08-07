@@ -17,7 +17,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// ============ cors frontend backend connect============
+// cors frontend backend connect
 app.use(
   cors({
     origin: [process.env.FRONTEND_URL],
@@ -26,19 +26,14 @@ app.use(
   }),
 );
 
-// ============ create folders ============
+//  create folders 
 const uploadsDir = path.join(__dirname, "uploads");
 const tempDir = path.join(__dirname, "temp");
-
-// console.log("Uploads Path:", uploadsDir);
-// console.log("Temp Path:", tempDir);
 
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true });
 
-// ============ cookieParser /express.json ============
-// app.use(cookieParser());
-// app.use(express.json());
+// cookieParser or express json 
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

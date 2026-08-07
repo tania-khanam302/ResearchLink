@@ -1,6 +1,8 @@
 import express from "express";
 import {
   getAvailableSupervisors,
+  getDashboardStats,
+  getFeedback,
   getStudentProject,
   getSupervisor,
   requestSupervisor,
@@ -44,7 +46,7 @@ router.post(
   uploadFiles,
 );
 
-// fetch-supervisors
+// fetch supervisors
 router.get(
   "/fetch-supervisors",
   isAuthenticated,
@@ -66,6 +68,22 @@ router.post(
   isAuthenticated,
   isAuthorized("Student"),
   requestSupervisor,
+);
+
+// student feedback
+router.get(
+  "/feedback/:projectId",
+  isAuthenticated,
+  isAuthorized("Student"),
+  getFeedback,
+);
+
+// fetch dashboard stats
+router.get(
+  "/fetch-dashboard-stats",
+  isAuthenticated,
+  isAuthorized("Student"),
+  getDashboardStats,
 );
 
 export default router;

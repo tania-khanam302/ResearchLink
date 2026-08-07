@@ -44,6 +44,9 @@ import CoAdminDashboard from "./pages/coadmin/CoAdminDashboard";
 import CoAdminStudents from "./pages/coadmin/CoAdminStudents";
 import CoAdminTeachers from "./pages/coadmin/CoAdminTeachers";
 
+// not found
+import NotFound from "./pages/NotFound";
+
 const App = () => {
   const { authUser, isCheckingAuth } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -172,6 +175,7 @@ const App = () => {
           <Route path="feedback" element={<FeedbackPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer theme="dark" />
     </BrowserRouter>

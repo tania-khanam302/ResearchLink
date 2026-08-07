@@ -5,8 +5,10 @@ import * as userServices from "../services/userServices.js";
 import * as projectService from "../services/projectServices.js";
 import * as requestServices from "../services/requestServices.js";
 import * as notificationServices from "../services/notificationServices.js";
+import { Project } from "../models/project.js";
+import { Notification } from "../models/notification.js";
 
-// getStudentProject =============
+// get student project =============
 export const getStudentProject = asyncHandler(async (req, res, next) => {
   const studentId = req.user._id;
 
@@ -26,7 +28,7 @@ export const getStudentProject = asyncHandler(async (req, res, next) => {
   });
 });
 
-// submitProposal =============
+// submit proposal =============
 export const submitProposal = asyncHandler(async (req, res, next) => {
   const { title, description } = req.body;
   const studentId = req.user._id;
@@ -58,7 +60,7 @@ export const submitProposal = asyncHandler(async (req, res, next) => {
   });
 });
 
-// uploadFiles =============
+// upload files =============
 export const uploadFiles = asyncHandler(async (req, res, next) => {
   const { projectId } = req.params;
   const studentId = req.user._id;
@@ -86,7 +88,7 @@ export const uploadFiles = asyncHandler(async (req, res, next) => {
   });
 });
 
-// getAvailableSupervisors =============
+// get available supervisors =============
 export const getAvailableSupervisors = asyncHandler(async (req, res, next) => {
   const supervisors = await User.find({ role: "Teacher" })
     .select("name email department expertise")
@@ -99,7 +101,7 @@ export const getAvailableSupervisors = asyncHandler(async (req, res, next) => {
   });
 });
 
-// getSupervisor =============
+// get supervisor =============
 export const getSupervisor = asyncHandler(async (req, res, next) => {
   const studentId = req.user._id;
   const student = await User.findById(studentId).populate(
@@ -121,7 +123,7 @@ export const getSupervisor = asyncHandler(async (req, res, next) => {
   });
 });
 
-// requestSupervisor =============
+// request supervisor =============
 export const requestSupervisor = asyncHandler(async (req, res, next) => {
   const { teacherId, message } = req.body;
   const studentId = req.user._id;
@@ -164,8 +166,88 @@ export const requestSupervisor = asyncHandler(async (req, res, next) => {
   );
 
   res.status(201).json({
-    success:true,
-    data:{request},
-    message:"Supervisor request submitted successfully",
+    success: true,
+    data: { request },
+    message: "Supervisor request submitted successfully",
+  });
+});
+// get dashboard stats
+export const getDashboardStats = asyncHandler(async (req, res, next) => {
+  const studentId = req.user._id;
+
+  const project = await Project.findOne({ student: studentId })
+    .sort({ createdAt: -1 })
+    .populate("supervisor", "name")
+    .lean();
+
+  const now = new Date();
+  const upcomingDeadlines = await Project.find({
+    student: studentId,
+    deadline: { $gte: now },
   })
+    .select("title description")
+    .sort({ deadline: -1 })
+    .limit(3)
+    .lean();
+
+  const topNotifications = await Notification.find({ user: studentId })
+  .populate("user", "name")
+  .sort({ createdAt: -1 })
+   .limit(3)
+   .lean();
+
+  const feedbackNotifications = project?.feedback && project?.feedback.length>0? project?.feedback.sort((a, b)=>new Date(b.createdAt)- new Date(a.createdAt)).slice(0,2):[];
+
+  const supervisorName = project?.supervisor?.name || null;
+  res.status(200).json({
+    success:true,
+    message:"Dashboard stats fetched successfully",
+    data:{
+      project,
+      upcomingDeadlines,
+      topNotifications,
+      feedbackNotifications,
+      supervisorName,
+    }
+  })
+});
+
+// get feedback
+export const getFeedback = asyncHandler(async (req, res, next) => {
+  const { projectId } = req.params;
+  const studentId = req.user._id;
+
+  const project = await projectService.getProjectById(projectId);
+
+  if (!project) {
+    return next(new ErrorHandler("Project not found", 404));
+  }
+
+  if (project.student.toString() !== studentId.toString()) {
+    return next(
+      new ErrorHandler(
+        "Not authorized to view feedback for this project",
+        403
+      )
+    );
+  }
+
+  const feedbackList = project.feedback || [];
+
+  const sortedFeedback = feedbackList
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .map((f) => ({
+      _id: f._id,
+      title: f.title,
+      message: f.message,
+      type: f.type,
+      createdAt: f.createdAt,
+      supervisorName: f.supervisorId?.name,
+      supervisorEmail: f.supervisorId?.email,
+    }));
+
+  return res.status(200).json({
+    success: true,
+    data: { feedback: sortedFeedback },
+  });
 });

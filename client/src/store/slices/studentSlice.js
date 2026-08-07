@@ -82,7 +82,7 @@ export const requestSupervisor = createAsyncThunk(
   },
 );
 
-// upload file
+// upload files
 export const uploadFiles = createAsyncThunk(
   "student/uploadFiles",
   async ({ projectId, files }, thunkAPI) => {
@@ -105,6 +105,38 @@ export const uploadFiles = createAsyncThunk(
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   },
+);
+
+// fetch dashboard stats
+export const fetchDashboardStats = createAsyncThunk(
+  "fetchDashboardStats",
+  async (_, thunkAPI)=>{
+    try
+    {
+      const res = await axiosInstance.get("/student/fetch-dashboard-stats");
+      return res.data.data|| res.data;
+    }catch(error){
+      toast.error(error.response.data.message || "Failed to fetch dashboard stats");
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+)
+
+// get feedback
+export const getFeedback = createAsyncThunk(
+  "getFeedback",
+  async (projectId, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get(`/student/feedback/${projectId}`);
+      return res.data?.data?.feedback || res.data.data || res.data;
+    } catch (error) {
+      toast.error(
+error.response.data.message || "Failed to fetch feedback"
+      );
+    
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
 );
 
 const studentSlice = createSlice({
@@ -140,6 +172,14 @@ const studentSlice = createSlice({
     builder.addCase(uploadFiles.fulfilled, (state, action) => {
       const newFiles = action.payload?.project?.files || action.payload || [];
       state.files = [...state.files, ...newFiles];
+    });
+
+    builder.addCase(getFeedback.fulfilled, (state, action) => {
+      state.feedback= action.payload || [];
+    });
+
+    builder.addCase(fetchDashboardStats.fulfilled, (state, action) => {
+      state.dashboardStats = action.payload || [];
     });
   },
 });

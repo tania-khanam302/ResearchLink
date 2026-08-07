@@ -66,7 +66,7 @@ const ManageStudents = () => {
     return Array.from(set);
   }, [students]);
 
-  // search [ata change kora hoyeche]]
+  // search and filter students
   const filteredStudents = useMemo(() => {
     return students.filter((student) => {
       const matchesSearch =
@@ -200,7 +200,7 @@ const ManageStudents = () => {
           </div>
         </div>
 
-            {/* Search Students */}
+        {/* Search Students */}
         <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)] flex flex-col md:flex-row gap-4">
           <div className="flex-1">
              <label className="block mb-2 card-title text-md font-semibold text-[#17a2b8]">
