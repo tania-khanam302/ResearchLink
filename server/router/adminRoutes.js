@@ -10,6 +10,7 @@ import {
   createCoAdmin,
   updateCoAdmin,
   deleteCoAdmin,
+  getAllProjects,
 } from "../controllers/adminController.js";
 import multer from "multer";
 import {
@@ -89,6 +90,14 @@ router.delete(
   isAuthenticated,
   isAuthorized("Admin"),
   deleteCoAdmin
+);
+
+// projects
+router.get(
+  "/projects",
+  isAuthenticated,
+  isAuthorized("Admin", "Co-Admin"),
+  getAllProjects,
 );
 
 // get users

@@ -2,6 +2,7 @@ import { asyncHandler } from "../middlewares/asyncHandler.js";
 import ErrorHandler from "../middlewares/error.js";
 import { User } from "../models/user.js";
 import * as userServices from "../services/userServices.js";
+import * as projectServices from "../services/projectServices.js";
 
 // createStudent ===============
 export const createStudent = asyncHandler(async (req, res, next) => {
@@ -198,7 +199,14 @@ export const deleteCoAdmin = asyncHandler(async (req, res, next) => {
   });
 });
 
+export const getAllProjects = asyncHandler (async(req, res, next) =>{
+  const projects = await projectServices.getAllProjects();
+  res.json({
+    success:true,
+    message:"Project fetched successfully",
+    data:{projects},
+  })
+});
 export const assignSupervisor = asyncHandler (async(req, res, next) =>{});
-export const getAllProject = asyncHandler (async(req, res, next) =>{});
 export const getDashboardStats = asyncHandler (async(req, res, next) =>{});
 
