@@ -48,7 +48,7 @@ const ManageStudents = () => {
 
     return studentUsers.map((student) => {
       const studentProject = (projects || []).find(
-        (p) => p.student?._id === student._id,
+        (p) => p.student === student._id,
       );
       return {
         ...student,
@@ -178,7 +178,7 @@ const ManageStudents = () => {
                   Completed Projects
                 </p>
                 <p className="text-lg font-semibold text-slate-800">
-                  {students.filter((s) => s.status === "completed").length}
+                  {students.filter((s) => s.projectStatus === "completed").length}
                 </p>
               </div>
             </div>
@@ -235,19 +235,19 @@ const ManageStudents = () => {
           </div>
         </div>
 
-        {/* Students table */}
+        {/* Students List */}
         <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)] overflow-hidden">
           <div className="card-header">
-            <h2 className="card-title text-lg font-semibold text-[#17a2b8]">
+            <h2 className="card-title text-[20px] font-semibold text-[#17a2b8]">
               Students List
             </h2>
           </div>
           <div className="overflow-x-auto">
            
             {filteredStudents && filteredStudents.length > 0 ? (
-              <table className="w-full text-left border-collapse overflow-x-hidden">
-            <thead className="bg-slate-100">
-              <tr className="text-[#138496] text-[13px] font-semibold uppercase">
+              <table className="w-full text-left border-collapse overflow-x-hidden ">
+            <thead className="bg-slate-200">
+              <tr className="text-[#138496] text-[12px] font-semibold uppercase">
                 <th className="px-6 py-4">Student Info</th>
                 <th className="px-6 py-4">Department & Year</th>
                 <th className="px-6 py-4">Supervisor</th>
@@ -255,13 +255,14 @@ const ManageStudents = () => {
                 <th className="px-6 py-4">Action</th>
               </tr>
             </thead>
-                <tbody className="bg-white divide-y divide-slate-200">
+                <tbody className=" bg-slate-50 divide-y divide-slate-200">
                   {filteredStudents.map((student) => {
                     return (
-                      <tr key={student._id} className="hover:bg-slate-50">
+                      <tr key={student._id} className="hover:bg-white">
+                        {/* student info  */}
                         <td className="px-6 py-4 font-xl">
                           <div>
-                            <div className="text-md font-medium text-slate-900">
+                            <div className="text-[16px] font-medium text-slate-900">
                               {student.name}
                             </div>
                             <div className="text-sm font-medium text-slate-900">
@@ -270,8 +271,9 @@ const ManageStudents = () => {
                           </div>
                         </td>
 
+{/* department  */}
                         <td className="px-6 py-4 whitespace-nowrapp">
-                          <div className="text-md text-slate-900">
+                          <div className="text-[16px] text-slate-900">
                             {student.department || "-"}
                           </div>
 
@@ -282,12 +284,14 @@ const ManageStudents = () => {
                           </div>
                         </td>
 
+{/* supervisor  */}
                         <td className="px-6 py-4 whitespace-nowrapp">
                           {student.supervisor ? (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-green-800 bg-gray-100 text-xs font-medium">
-                              {typeof student.supervisor === "object"
-                                ? student.supervisor.name || "-"
-                                : student.supervisor}
+                            <span className="inline-flex items-center px-2 py-0.9 rounded-full text-green-800 bg-gray-200 text-[16px] font-medium">
+                            
+                                {users?.find(
+                                  (u)=>u._id === student?.supervisor
+                                )?.name}
                             </span>
                           ) : (
                             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-red-800 bg-red-100 text-xs font-medium">
@@ -298,8 +302,9 @@ const ManageStudents = () => {
                           )}
                         </td>
 
+{/* project title */}
                         <td className="px-6 py-4">
-                          <div className="text-sm text-slate-900">
+                          <div className="text-[16px] text-slate-900">
                             {student.projectTitle}
                           </div>
                         </td>

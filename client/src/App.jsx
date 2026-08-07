@@ -36,7 +36,7 @@ import { ToastContainer } from "react-toastify";
 import { Loader, Loader2 } from "lucide-react";
 import { getUser } from "./store/slices/authSlice";
 import { all } from "axios";
-import { getAllUsers } from "./store/slices/adminSlice";
+import { getAllProjects, getAllUsers } from "./store/slices/adminSlice";
 
 
 // co-admin
@@ -58,6 +58,7 @@ const App = () => {
   useEffect(() => {
     if (authUser?.role === "Admin") {
       dispatch(getAllUsers());
+      dispatch(getAllProjects());
     }
   }, [authUser]);
 

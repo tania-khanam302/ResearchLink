@@ -45,6 +45,10 @@ export const submitProposal = asyncHandler(async (req, res, next) => {
     );
   }
 
+  if(existingProject.status === "rejected"){
+    await Project.findByIdAndDelete(existingProject._id);
+  }
+
   const projectData = {
     student: studentId,
     title,
