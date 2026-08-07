@@ -251,3 +251,23 @@ export const getFeedback = asyncHandler(async (req, res, next) => {
     data: { feedback: sortedFeedback },
   });
 });
+
+// download files 
+export const downloadFiles = asyncHandler(async (req, res, next) => {
+  const {projectId, fileId}= req.params;
+  const studentId = req.user._id;
+
+  const project = await projectService.getProjectById(projectId);
+  if(!project ) return next (new ErrorHandler("Project not found", 404));
+
+  if (project.student .toString()!== studentId.toString()){
+    return next (
+      new ErrorHandler("Not authorized to download file")
+    )
+  }
+  const file = project.files.id(fileId);
+  if (!file) return next ( new ErrorHandler("File not found", 404));
+
+  streamDownload(file.filePath, res, file.originalName);
+
+})
