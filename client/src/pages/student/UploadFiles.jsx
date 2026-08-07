@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { fetchProject, uploadFiles } from "../../store/slices/studentSlice";
+import { downloadFiles, fetchProject, uploadFiles } from "../../store/slices/studentSlice";
 import { Archive, File, FileText, FileCode, FilePlus } from "lucide-react";
 
 const UploadFiles = () => {
@@ -36,19 +36,49 @@ const UploadFiles = () => {
     setSelectedFiles((prev) => prev.filter((f) => f.name !== name));
   };
 
-  const getFileIcon = (fileName) => {
-    const extension = fileName.split(".").pop().toLowerCase();
-    const Icon = ({ className }) => <File className={className} />;
-    const color =
-      extension === "pdf"
-        ? "text-red-500"
-        : ["doc", "docx"].includes(extension)
-          ? "text-blue-500"
-          : ["ppt", "pptx"].includes(extension)
-            ? "text-orange-500"
-            : "text-slate-500";
-    return <Icon className={`w-8 h-8 ${color}`} />;
-  };
+  // const getFileIcon = (fileName) => {
+  //   const extension = fileName.split(".").pop().toLowerCase();
+  //   const Icon = ({ className }) => <File className={className} />;
+  //   const color =
+  //     extension === "pdf"
+  //       ? "text-red-500"
+  //       : ["doc", "docx"].includes(extension)
+  //         ? "text-blue-500"
+  //         : ["ppt", "pptx"].includes(extension)
+  //           ? "text-orange-500"
+  //           : "text-slate-500";
+  //   return <Icon className={`w-8 h-8 ${color}`} />;
+  // };
+
+const getFileIcon = (fileName) => {
+  const extension = fileName.split(".").pop().toLowerCase();
+
+  let Icon = File;
+
+  if (extension === "pdf") {
+    Icon = FileText;
+  } 
+  else if (["doc", "docx"].includes(extension)) {
+    Icon = FileText;
+  } 
+  else if (["ppt", "pptx"].includes(extension)) {
+    Icon = Archive;
+  } 
+  else if (["zip", "rar", "tar", "gz"].includes(extension)) {
+    Icon = FileCode;
+  }
+
+  const color =
+    extension === "pdf"
+      ? "text-red-500"
+      : ["doc", "docx"].includes(extension)
+      ? "text-blue-500"
+      : ["ppt", "pptx"].includes(extension)
+      ? "text-orange-500"
+      : "text-slate-500";
+
+  return <Icon className={`w-8 h-8 ${color}`} />;
+};
 
   const handleDownloadFile = async (file )=>{
     if(!file?.projectId || !file.fileId) return;
@@ -60,7 +90,7 @@ const UploadFiles = () => {
 
     const url= URL.createObjectURL(res.payload.blob);
 
-    const a = object.assign(document.createElement("a"),{
+    const a = Object.assign(document.createElement("a"),{
       href:url,
       download:file.name || "download",
     });

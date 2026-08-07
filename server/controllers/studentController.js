@@ -45,7 +45,7 @@ export const submitProposal = asyncHandler(async (req, res, next) => {
     );
   }
 
-  if(existingProject.status === "rejected"){
+  if(existingProject && existingProject.status === "rejected"){
     await Project.findByIdAndDelete(existingProject._id);
   }
 
@@ -71,7 +71,7 @@ export const uploadFiles = asyncHandler(async (req, res, next) => {
   const studentId = req.user._id;
   const project = await projectService.getProjectById(projectId);
 
-  if (!project || project.student.toString() !== studentId.toString()) {
+  if (!project || project.student._id.toString() !== studentId.toString()) {
     return next(
       new ErrorHandler("Not authorized to upload files for this project", 403),
     );
@@ -167,7 +167,7 @@ export const requestSupervisor = asyncHandler(async (req, res, next) => {
     `${student.name} has request ${supervisor.name} to be their supervisor.`,
     "request",
     "/teacher/request",
-    "meduam",
+    "medium",
   );
 
   res.status(201).json({

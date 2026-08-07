@@ -33,14 +33,16 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
 
-  filename: (req, file, cd) => {
+  // filename: (req, file, cd) => {
+    filename: (req, file, cb) => {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     const ext = path.extname(file.originalname);
     cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
   },
 });
 
-const fileFilter = (req, res, cb) => {
+// const fileFilter = (req, res, cb) => {
+  const fileFilter = (req, file, cb) => {
   const allowedTypes = [
     "application/pdf",
     "application/msword",
