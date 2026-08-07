@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  downloadFiles,
   getAvailableSupervisors,
   getDashboardStats,
   getFeedback,
@@ -84,6 +85,14 @@ router.get(
   isAuthenticated,
   isAuthorized("Student"),
   getDashboardStats,
+);
+
+// download files
+router.get(
+  "/download/:projectId/:fileId",
+  isAuthenticated,
+  isAuthorized("Student"),
+  downloadFiles,
 );
 
 export default router;
