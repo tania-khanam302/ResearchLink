@@ -47,15 +47,30 @@ const ManageStudents = () => {
     );
 
     return studentUsers.map((student) => {
+      // const studentProject = (projects || []).find(
+      //   (p) => p.student === student._id,
+      // );
+      // return {
+      //   ...student,
+      //   projectTitle: studentProject?.title || null,
+      //   supervisor: studentProject?.supervisor || null,
+      //   projectStatus: studentProject?.status || null,
+      // };
       const studentProject = (projects || []).find(
-        (p) => p.student === student._id,
-      );
-      return {
-        ...student,
-        projectTitle: studentProject?.title || null,
-        supervisor: studentProject?.supervisor || null,
-        projectStatus: studentProject?.status || null,
-      };
+  (p) =>
+    p.student?._id === student._id ||
+    p.student === student._id
+);
+
+return {
+  ...student,
+  projectTitle: studentProject?.title || "No Project",
+  supervisor:
+    studentProject?.supervisor?._id ||
+    studentProject?.supervisor ||
+    null,
+  projectStatus: studentProject?.status || null,
+};
     });
   }, [users, projects]);
 
