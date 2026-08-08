@@ -20,3 +20,25 @@ export const notifyUser= async(
     priority,
    })
 }
+
+export const markAsRead = async (nptification, userId) => {
+  return await Notification.findOneAndUpdate(
+    { _id: notificationId, user: userId },
+    { isRead: true },
+    { new: true },
+  );
+};
+
+export const markAllAsRead = async (notification, userId) => {
+  return await Notification.updateMany(
+    { user: userId, isRead: false },
+    { isRead: true },
+  );
+};
+
+export const deleteNotification = async (notification, userId) => {
+  return await Notification.findOneAndDelete({
+    _id: notificationId,
+    user: userId,
+  });
+};
