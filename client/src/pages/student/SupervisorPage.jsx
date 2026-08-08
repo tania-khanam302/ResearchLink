@@ -26,6 +26,7 @@ const SupervisorPage = () => {
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [requestMessage, setRequestMessage] = useState("");
   const [selectedSupervisor, setSelectedSupervisor] = useState(null);
+  const [requestedSupervisorId, setRequestedSupervisorId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchProject());
@@ -65,14 +66,52 @@ const SupervisorPage = () => {
     setShowRequestModal(true);
   };
 
-  const submitRequest = () => {
-    if (!selectedSupervisor) return;
-    const message =
-      requestMessage?.trim() ||
-      `${authUser.name || "Student"} has request ${selectedSupervisor.name} to be their supervisor.`;
-    dispatch(requestSupervisor({ teacherId: selectedSupervisor._id, message }));
-  };
+  // const submitRequest = () => {
+  //   if (!selectedSupervisor) return;
+  //   const message =
+  //     requestMessage?.trim() ||
+  //     `${authUser.name || "Student"} has request ${
+  //       selectedSupervisor.name
+  //     } to be their supervisor.`;
+  //   dispatch(
+  //     requestSupervisor({ teacherId: selectedSupervisor._id, message })
+  //   ).then(res=>{
+  //     if(res.type === "student/requestSupervisor/fulfilled"){
+  //       setShowRequestModal(false);
+  //     }
+  //   });
+  // };
 
+
+
+const submitRequest = async () => {
+  if (!selectedSupervisor) return;
+
+  const message =
+    requestMessage?.trim() ||
+    `${authUser.name || "Student"} has requested ${
+      selectedSupervisor.name
+    } to be their supervisor.`;
+
+  const res = await dispatch(
+    requestSupervisor({
+      teacherId: selectedSupervisor._id,
+      message,
+    })
+  );
+
+  if (requestSupervisor.fulfilled.match(res)) {
+    // supervisor request pending
+    setRequestedSupervisorId(selectedSupervisor._id);
+
+    // modal close
+    setShowRequestModal(false);
+    setSelectedSupervisor(null);
+    setRequestMessage("");
+  }
+};
+
+  
   return (
     <>
       <div className="space-y-6">
@@ -144,85 +183,12 @@ const SupervisorPage = () => {
         {hasProject && (
           <div className="bg-white rounded-2xl shadow-md overflow-hidden ">
             <div className="bg-gradient-to-r from-[#17a2b8] via-[#1599ad] to-[#138496] px-6 py-5 mb-3">
-              <h1 className="card-title text-2xl font-bold text-white mb-2">
+              <h1 className="card-title text-3xl font-bold text-white mb-2">
                 Project Details
               </h1>
             </div>
 
             <div className="space-y-6 px-6 py-6 mb-3">
-              {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium text-[#17a2b8] uppercase tracking-wide">
-                      Project Title
-                    </label>
-                    <p className="text-lg font-semibold text-slate-800 mt-1">
-                      {project.title || "-"}
-                    </p>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-[#17a2b8] uppercase tracking-wide">
-                      status
-                    </label>
-                    <div className="mt-1">
-                      <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full font-medium
-                 capitalize text-sm ${
-                   project.status === "approved"
-                     ? "bg-green-100 text-green-800"
-                     : project.status === "pending"
-                       ? "bg-yellow-100 text-yellow-800"
-                       : project.status === "rejected"
-                         ? "bg-red-100 text-red-800"
-                         : "bg-gray-100 text-gray-800"
-                 }`}
-                      >
-                        {project?.status || "Invalid"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium text-slate-500 uppercase tracking-wide">
-                      Deadline
-                    </label>
-                    <p className="text-lg font-semibold text-slate-800 mt-1">
-                      {project?.deadline
-                        ? formatDeadline(project.deadline)
-                        : "No deadline set"}
-                    </p>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-slate-500 uppercase tracking-wide">
-                      Created
-                    </label>
-                    <p
-                      className="text-lg font-semibold text-slate-800 mt-1
-                    "
-                    >
-                      {project.createdAt
-                        ? formatDeadline(project.createdAt)
-                        : "Unknown"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {project?.description && (
-                <div>
-                  <label className="text-sm-medium text-slate-500 uppercase tracking-wide">
-                    Description
-                  </label>
-                  <p className="text-slate-700 mt-2 leading-relaxed">
-                    {project?.description || "-"}
-                  </p>
-                </div>
-              )} */}
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {/* Project Title */}
                 <div className="bg-slate-50 border rounded-xl p-5">
@@ -243,15 +209,15 @@ const SupervisorPage = () => {
                   <div className="mt-3">
                     <span
                       className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium capitalize
-        ${
-          project?.status === "approved"
-            ? "bg-green-100 text-green-700"
-            : project?.status === "pending"
-              ? "bg-yellow-100 text-yellow-700"
-              : project?.status === "rejected"
-                ? "bg-red-100 text-red-700"
-                : "bg-gray-100 text-gray-700"
-        }`}
+                        ${
+                          project?.status === "approved"
+                          ? "bg-green-100 text-green-700"
+                          : project?.status === "pending"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : project?.status === "rejected"
+                          ? "bg-red-100 text-red-700"
+                          : "bg-gray-100 text-gray-700"
+                        }`}
                     >
                       {project?.status || "Invalid"}
                     </span>
@@ -320,9 +286,9 @@ const SupervisorPage = () => {
 
         {/* available supervisors */}
         {hasProject && !hasSupervisor && (
-          <div className="min-h-screen bg-slate-50 rounded-2xl">
+          <div className=" bg-slate-50 rounded-2xl">
             {/* header */}
-            <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden mt-6">
+            <div className=" mx-auto bg-white rounded-2xl shadow-lg overflow-hidden mt-6">
               <div className="bg-gradient-to-r from-cyan-600 via-sky-600 to-teal-600 px-8 py-6">
                 <h2 className="text-3xl font-bold text-white">
                   Available Supervisors
@@ -399,17 +365,33 @@ const SupervisorPage = () => {
 
                         {/* BOTTOM */}
                         <div className="flex items-center justify-between mt-7 pt-4 border-t border-slate-100">
-                          <span className="text-xs text-slate-400">
+                          <span className="text-[13px] text-slate-400">
                             Click to request supervision
                           </span>
 
-                          <button
+                          {/* <button
                             onClick={() => handleOpenRequest(sup)}
                             className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 text-white text-sm font-semibold shadow-sm hover:shadow-md hover:scale-105 transition-all"
                           >
                             <UserPlus size={16} />
                             Request
-                          </button>
+                          </button> */}
+                          {requestedSupervisorId === sup._id ? (
+  <button
+    disabled
+    className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-yellow-100 text-yellow-700 text-sm font-semibold cursor-not-allowed"
+  >
+    Request Pending
+  </button>
+) : (
+  <button
+    onClick={() => handleOpenRequest(sup)}
+    className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 text-white text-sm font-semibold shadow-sm hover:shadow-md hover:scale-105 transition-all"
+  >
+    <UserPlus size={16} />
+    Request
+  </button>
+)}
                         </div>
                       </div>
                     </div>
@@ -484,8 +466,7 @@ const SupervisorPage = () => {
                     onChange={(e) => setRequestMessage(e.target.value)}
                     placeholder="Introduce yourself, describe your project interests, and explain why you'd like this professor to supervise your work..."
                     className="w-full min-h-[150px] rounded-xl border border-[#17a2b8]/30 bg-white px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none outline-none focus:ring-0.5 focus:ring-[#17a2b8] focus:border-[#17a2b8] transition-all duration-200 resize-none"
-                    // placeholder="Introduce yourself and explain why you'd like this professor to supervise your"
-                  />
+                    />
                 </div>
 
                 {/* Footer Buttons */}
@@ -505,11 +486,11 @@ const SupervisorPage = () => {
                     onClick={submitRequest}
                     disabled={!requestMessage.trim()}
                     className={`px-5 py-2.5 rounded-xl text-white font-semibold shadow-md transition duration-200
-            ${
-              requestMessage.trim()
-                ? "bg-gradient-to-r from-[#17a2b8] via-[#1599ad] to-[#138496] hover:from-[#138496] hover:to-[#11707f]"
-                : "bg-slate-300 cursor-not-allowed"
-            }`}
+                      ${
+                        requestMessage.trim()
+                        ? "bg-gradient-to-r from-[#17a2b8] via-[#1599ad] to-[#138496] hover:from-[#138496] hover:to-[#11707f]"
+                        : "bg-slate-300 cursor-not-allowed"
+                      }`}
                   >
                     Send Request
                   </button>
