@@ -1,6 +1,7 @@
 import { asyncHandler } from "../middlewares/asyncHandler.js";
 import ErrorHandler from "../middlewares/error.js";
 import { Notification } from "../models/notification.js";
+import * as notificationService from "../services/notificationServices.js"
 
 export const getNotifications = asyncHandler(async (req, res, next) => {
   const userId = req.user._id;
@@ -49,6 +50,7 @@ export const getNotifications = asyncHandler(async (req, res, next) => {
   });
 });
 
+// mark as read
 export const markAsRead = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const userId = req.user.id;
@@ -63,5 +65,33 @@ export const markAsRead = asyncHandler(async (req, res, next) => {
     success: true,
     message: "Notification marked as read",
     data: { notification },
+  });
+});
+
+// mark all As Read
+export const markAllAsRead = asyncHandler(async (req, res, next) => {
+  const userId = req.user.id;
+
+  await notificationService.markAllAsRead(userId);
+
+  res.status(200).json({
+    success: true,
+    message: "All notification marked as read"
+  });
+});
+
+// delete notification
+export const deleteNotification = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  const notification = await notificationService.deleteNotification(id, userId);
+  if (!notification) {
+    return next(new ErrorHandler("Notification not found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Notification delete successfully",
   });
 });
