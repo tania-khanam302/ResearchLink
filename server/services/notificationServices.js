@@ -20,7 +20,7 @@ export const notifyUser= async(
     priority,
    })
 }
-
+// mark as read
 export const markAsRead = async (nptification, userId) => {
   return await Notification.findOneAndUpdate(
     { _id: notificationId, user: userId },
@@ -29,6 +29,7 @@ export const markAsRead = async (nptification, userId) => {
   );
 };
 
+// mark all As Read
 export const markAllAsRead = async (notification, userId) => {
   return await Notification.updateMany(
     { user: userId, isRead: false },
@@ -36,6 +37,7 @@ export const markAllAsRead = async (notification, userId) => {
   );
 };
 
+// delete notification
 export const deleteNotification = async (notification, userId) => {
   return await Notification.findOneAndDelete({
     _id: notificationId,
