@@ -80,24 +80,21 @@ const getFileIcon = (fileName) => {
   return <Icon className={`w-8 h-8 ${color}`} />;
 };
 
-  const handleDownloadFile = async (file )=>{
-    if(!file?.projectId || !file.fileId) return;
-
+  const handleDownloadFile = async(file)=>{
     const res = await dispatch(
-      downloadFiles({projectId:file.projectId, fileId:file.fileId})
-    );
-    if(res.meta.requestStatus !== "fulfilled") return;
-
-    const url= URL.createObjectURL(res.payload.blob);
-
-    const a = Object.assign(document.createElement("a"),{
-      href:url,
-      download:file.name || "download",
+      downloadFiles({projectId: project._id, fileId: file._id})
+    ).then(res =>{
+       const {blob} = res.payload;
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", file.name || "download");
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
     });
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
+  };
   return (
     <>
       <div className="space-y-6">
