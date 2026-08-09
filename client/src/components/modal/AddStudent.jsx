@@ -35,7 +35,7 @@ const AddStudent = () => {
 
   return (
  <>
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
         <div className="bg-white rounded-sm w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
           <div className="card-header rounded-t-lg py-4 p-3 mb-0 bg-blue-50 flex justify-between items-center sticky top-0 z-10">
             <h3 className="text-lg font-semibold text-slate-900">
