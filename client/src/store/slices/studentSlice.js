@@ -66,20 +66,50 @@ export const fetchAllSupervisor = createAsyncThunk(
 );
 
 // request supervisor
+// export const requestSupervisor = createAsyncThunk(
+//   "student/requestSupervisor",
+//   async (data, thunkAPI) => {
+//     try {
+//       const res = await axiosInstance.post("/student/request-supervisor", data);
+//       thunkAPI.dispatch(getSupervisor());
+//       return res.data.data?.request;
+//     } catch (error) {
+//       toast.error(
+//         error.response.data.message || "Failed to request supervisors",
+//       );
+//       return thunkAPI.rejectWithValue(error.response.data.message);
+//     }
+//   },
+// );
+
+// request supervisor
 export const requestSupervisor = createAsyncThunk(
   "student/requestSupervisor",
   async (data, thunkAPI) => {
     try {
-      const res = await axiosInstance.post("/student/request-supervisor", data);
+      const res = await axiosInstance.post(
+        "/student/request-supervisor",
+        data
+      );
+      
+      toast.success(
+        res.data.message || "Supervisor request submitted successfully"
+      );
+
       thunkAPI.dispatch(getSupervisor());
+
       return res.data.data?.request;
     } catch (error) {
       toast.error(
-        error.response.data.message || "Failed to request supervisors",
+        error.response?.data?.message ||
+          "Failed to request supervisor"
       );
-      return thunkAPI.rejectWithValue(error.response.data.message);
+
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message
+      );
     }
-  },
+  }
 );
 
 // upload files
@@ -177,6 +207,7 @@ const studentSlice = createSlice({
 
     builder.addCase(fetchProject.fulfilled, (state, action) => {
       state.project = action.payload?.project || action.payload || null;
+      state.files = action.payload?.files || [];
     });
 
     builder.addCase(getSupervisor.fulfilled, (state, action) => {

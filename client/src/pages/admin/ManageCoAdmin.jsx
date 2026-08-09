@@ -86,7 +86,7 @@ const ManageCoAdmin = () => {
 
   return (
     <>
-      <div className="p-6 space-y-6 bg-slate-50 min-h-screen">
+      <div className="space-y-6 ">
         {/* header section  */}
         <div className="card shadow-lg rounded-md">
           <div className="card-header flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -110,13 +110,13 @@ const ManageCoAdmin = () => {
         </div>
 
         {/* total co-admins active and inactive co-admins */}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-white p-4 rounded-xl shadow">
+        <div className="grid grid-cols-3 gap-4 ">
+          <div className="bg-white p-4 rounded-xl shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
             <p>Total</p>
             <h2 className="text-xl font-bold">{filteredAdmins.length}</h2>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow">
+          <div className="bg-white p-4 rounded-xl shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
             <p>Active</p>
             <h2 className="text-xl font-bold text-green-600">
               {
@@ -127,7 +127,7 @@ const ManageCoAdmin = () => {
             </h2>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow">
+          <div className="bg-white p-4 rounded-xl shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
             <p>Inactive</p>
             <h2 className="text-xl font-bold text-red-500">
               {

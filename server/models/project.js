@@ -1,5 +1,35 @@
 import mongoose from "mongoose";
 
+const feedbackSchema = new mongoose.Schema(
+  {
+    supervisorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    // type: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   enum: ["positive", "negative", "general"],
+    //   default: "general",
+    // },
+    type: {
+  type: String,
+  enum: ["positive", "negative", "general"],
+  default: "general",
+},
+    title: {
+      type: String,
+      required: true,
+    },
+    message: {
+      type: String,
+      required: true,
+      maxlength: [1000, "Feedback message cannot be more than 1000 characters"],
+    },
+  },
+  { timestamps: true },
+);
+
 const projectSchema = new mongoose.Schema(
   {
     student: {
@@ -51,32 +81,7 @@ const projectSchema = new mongoose.Schema(
       },
     ],
 
-    feedback: [
-      {
-        supervisorId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
-        },
-        type: {
-          type: mongoose.Schema.Types.ObjectId,
-          enum: ["positive", "negative", "general"],
-          default: "general",
-        },
-        title: {
-          type: String,
-          required: true,
-        },
-        message: {
-          type: String,
-          required: true,
-          maxlength: [
-            1000,
-            "Feedback message cannot be more than 1000 characters",
-          ],
-        },
-      },
-    ],
+    feedback: [feedbackSchema],
     deadline: {
       type: Date,
     },

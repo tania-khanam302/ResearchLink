@@ -8,6 +8,7 @@ import * as notificationServices from "../services/notificationServices.js";
 import { Project } from "../models/project.js";
 import { Notification } from "../models/notification.js";
 import * as fileServices from "../services/fileServices.js";
+// import {SupervisorRequest} from "../models/supervisorRequest.js";
 
 // get student project =============
 export const getStudentProject = asyncHandler(async (req, res, next) => {
@@ -106,6 +107,46 @@ export const getAvailableSupervisors = asyncHandler(async (req, res, next) => {
   });
 });
 
+// export const getAvailableSupervisors = asyncHandler(
+//   async (req, res, next) => {
+//     const studentId = req.user._id;
+
+//     const supervisors = await User.find({ role: "Teacher" })
+//       .select("name email department expertise")
+//       .lean();
+
+//     const pendingRequests = await SupervisorRequest.find({
+//       student: studentId,
+//       status: "pending",
+//     })
+//       .select("supervisor status")
+//       .lean();
+
+//     const pendingSupervisorIds = new Set(
+//       pendingRequests.map((request) =>
+//         request.supervisor.toString()
+//       )
+//     );
+
+//     const supervisorsWithStatus = supervisors.map((supervisor) => ({
+//       ...supervisor,
+//       requestStatus: pendingSupervisorIds.has(
+//         supervisor._id.toString()
+//       )
+//         ? "pending"
+//         : null,
+//     }));
+
+//     res.status(200).json({
+//       success: true,
+//       data: {
+//         supervisors: supervisorsWithStatus,
+//       },
+//       message: "Available supervisors fetched successfully",
+//     });
+//   }
+// );
+
 // get supervisor =============
 export const getSupervisor = asyncHandler(async (req, res, next) => {
   const studentId = req.user._id;
@@ -176,6 +217,36 @@ export const requestSupervisor = asyncHandler(async (req, res, next) => {
     message: "Supervisor request submitted successfully",
   });
 });
+
+// export const requestSupervisor = createAsyncThunk(
+//   "student/requestSupervisor",
+//   async (data, thunkAPI) => {
+//     try {
+//       const res = await axiosInstance.post(
+//         "/student/request-supervisor",
+//         data
+//       );
+
+//       toast.success(
+//         res.data.message || "Supervisor request sent successfully"
+//       );
+
+//       thunkAPI.dispatch(getSupervisor());
+
+//       return res.data.data?.request;
+//     } catch (error) {
+//       toast.error(
+//         error.response?.data?.message ||
+//           "Failed to request supervisor"
+//       );
+
+//       return thunkAPI.rejectWithValue(
+//         error.response?.data?.message
+//       );
+//     }
+//   }
+// );
+
 // get dashboard stats
 export const getDashboardStats = asyncHandler(async (req, res, next) => {
   const studentId = req.user._id;
@@ -228,7 +299,8 @@ export const getFeedback = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler("Project not found", 404));
   }
 
-  if (project.student.toString() !== studentId.toString()) {
+  // if (project.student.toString() !== studentId.toString()) {
+  if (project.student._id.toString() !== studentId.toString()) {
     return next(
       new ErrorHandler(
         "Not authorized to view feedback for this project",
@@ -265,7 +337,7 @@ export const downloadFiles = asyncHandler(async (req, res, next) => {
   const project = await projectService.getProjectById(projectId);
   if(!project ) return next (new ErrorHandler("Project not found", 404));
 
-  if (project.student .toString()!== studentId.toString()){
+  if (project.student._id.toString()!== studentId.toString()){
     return next (
       new ErrorHandler("Not authorized to download file")
     )
@@ -275,4 +347,4 @@ export const downloadFiles = asyncHandler(async (req, res, next) => {
 
   fileServices.streamDownload(file.filePath, res, file.originalName);
 
-})
+});
