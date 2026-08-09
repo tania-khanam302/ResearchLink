@@ -4,6 +4,11 @@ import { User } from "../models/user.js";
 import * as userServices from "../services/userServices.js";
 import * as projectServices from "../services/projectServices.js";
 
+import { Project } from "../models/project.js";
+import { SupervisorRequest } from "../models/supervisorRequest.js";
+import * as notificationServices from "../services/notificationServices.js";
+
+
 // createStudent ===============
 export const createStudent = asyncHandler(async (req, res, next) => {
   const { name, email, password, department } = req.body;
@@ -207,6 +212,42 @@ export const getAllProjects = asyncHandler (async(req, res, next) =>{
     data:{projects},
   })
 });
+
+// get dashboard stats
+export const getDashboardStats = asyncHandler(async (req, res, next) => {
+  const [
+    totalStudents,
+    totalTeachers,
+    totalCoAdmins,
+    totalProjects,
+    pendingRequests,
+    completeProjects,
+    pendingProjects,
+  ] = await Promise.all([
+    User.countDocuments({ role: "Student" }),
+    User.countDocuments({ role: "Teacher" }),
+    User.countDocuments({ role: "Co-Admin" }),
+    Project.countDocuments(),
+    SupervisorRequest.countDocuments({ status: "pending" }),
+    Project.countDocuments({ status: "complete" }),
+    Project.countDocuments({ status: "pending" }),
+  ]);
+
+  res.status(200).json({
+    success: true,
+    message: "Admin dashbiard stats fetched successfully",
+    data: {
+      totalStudents,
+      totalTeachers,
+      totalCoAdmins,
+      totalProjects,
+      pendingRequests,
+      completeProjects,
+      pendingProjects,
+    },
+  });
+});
+
+
 export const assignSupervisor = asyncHandler (async(req, res, next) =>{});
-export const getDashboardStats = asyncHandler (async(req, res, next) =>{});
 
