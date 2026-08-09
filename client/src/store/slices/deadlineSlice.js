@@ -7,7 +7,7 @@ export const createDeadline = createAsyncThunk(
   async ({ id, data }, thunkAPI) => {
     try {
       const res = await axiosInstance.post(
-        `/deadline//create-deadline/{id}`,
+        `/deadline/create-deadline/${id}`,
         data,
       );
       toast.success(res.data.message || "Deadline updated");
@@ -35,6 +35,7 @@ const deadlineSlice = createSlice({
     builder.addCase(createDeadline.fulfilled, (state, action) => {
       const item = action.payload;
       if (item) state.deadlines.push;
+      // if (item) state.deadlines.push(item);
     });
   },
 });

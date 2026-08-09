@@ -10,7 +10,7 @@ const router = express.Router();
 router.post(
   "/create-deadline/:id",
   isAuthenticated,
-  isAuthorized("Admin-Teacher" , "Co-Admin"),
+  isAuthorized("Admin" , "Co-Admin"),
   // isAuthorized("Admin-Teacher"),
   createDeadline,
 );
