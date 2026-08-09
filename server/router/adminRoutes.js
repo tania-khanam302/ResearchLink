@@ -11,6 +11,7 @@ import {
   updateCoAdmin,
   deleteCoAdmin,
   getAllProjects,
+  getDashboardStats,
 } from "../controllers/adminController.js";
 import multer from "multer";
 import {
@@ -100,12 +101,21 @@ router.get(
   getAllProjects,
 );
 
-// get users
+// dashboard-stats
+router.get(
+  "/fetch-dashboard-stats",
+  isAuthenticated,
+  isAuthorized("Admin"),
+  getDashboardStats,
+);
+
+// get all users
 router.get(
   "/users",
   isAuthenticated,
   isAuthorized("Admin", "Co-Admin"),
   getAllUsers
 );
+
 
 export default router;
