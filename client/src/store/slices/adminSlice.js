@@ -152,7 +152,7 @@ export const deleteCoAdmin = createAsyncThunk(
   },
 );
 
-// getAllProject
+// get all project
 export const getAllProjects = createAsyncThunk(
   "getAllProjects",
   async (_, thunkAPI) => {
@@ -166,6 +166,22 @@ export const getAllProjects = createAsyncThunk(
   },
 );
 
+
+//Dashboard Stats
+export const getDashboardStats = createAsyncThunk(
+  "getDashboardStats",
+  async (__dirname, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get(`/admin/fetch-dashboard-stats`);
+      return res.data.data;
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to fetch dashboard stats",
+      );
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
+    }
+  },
+);
 
 const adminSlice = createSlice({
   name: "admin",
@@ -243,6 +259,11 @@ const adminSlice = createSlice({
       // delete co-admin
       .addCase(deleteCoAdmin.fulfilled, (state, action) => {
         state.users = state.users.filter((u) => u._id !== action.payload);
+      })
+
+      // dashboard stats
+      .addCase(getDashboardStats.fulfilled, (state, action) => {
+        state.stats= action.payload;
       });
   },
 });
