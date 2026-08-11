@@ -248,6 +248,62 @@ export const getDashboardStats = asyncHandler(async (req, res, next) => {
   });
 });
 
+// assignSupervisor
+export const assignSupervisor = asyncHandler(async (req, res, next) => {
+const { studentId, supervisorId } = req.body;
 
-export const assignSupervisor = asyncHandler (async(req, res, next) =>{});
+  if (!studentId || !supervisorId) {
+        return next (
+        new ErrorHandler("Student ID and Supervisor ID are required", 400)
+    )
+  }
+  const project = await project.findOne({ student: studentId });
 
+
+if (!project) {
+    return next(new ErrorHandler("Project not found", 404));
+}
+
+if (project.supervisor !== null) {
+    return next(new ErrorHandler("Supervisor already assigned to this student", 400));
+}
+
+ if (project.status !== "approved") {
+    return next(new ErrorHandler("Project is not in a approved yet", 400));
+ } else if (project.status === "pending" || project.status === "rejected") 
+ {
+    return next(
+        new ErrorHandler("Project is not in a approved yet", 400)
+    );
+ }
+ 
+ const { student, supervisor } = await userServices.assignSupervices.assignSupervisorDirectly(
+    studentId,
+     supervisorId
+    );
+
+    project.supervisor = supervisorId; // supervisor
+    await project.save();
+
+    await notificationServices.notifyUser(
+        supervisorId,
+        `You have been assigned a supervisor ${student.name}`,
+        "approval",
+        "/students/status",
+        "low"
+    );
+    
+    await notificationServices.notifyUser(
+        supervisorId,
+        `The student ${student.name} has been officially assigned to you for Reacharch Link supervision.`,
+        "general",
+        "/teachers/status",
+        "low"
+    );
+   res.status(200).json({
+    success:true,
+    message: "Supervisor assigned successfully",
+    date:{student, supervisor},
+   }) 
+
+});

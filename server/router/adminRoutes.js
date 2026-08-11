@@ -12,6 +12,7 @@ import {
   deleteCoAdmin,
   getAllProjects,
   getDashboardStats,
+  assignSupervisor,
 } from "../controllers/adminController.js";
 import multer from "multer";
 import {
@@ -117,5 +118,12 @@ router.get(
   getAllUsers
 );
 
+// assign supervisor
+router.post(
+  "/assign-supervisor",
+  isAuthenticated,
+  isAuthorized("Admin", "Co-Admin"),
+  assignSupervisor
+);
 
 export default router;
