@@ -245,7 +245,255 @@ const AdminDashboard = () => {
 
   return (
     <>
+      <div className="space-y-6">
+        {/* header */}
+        <div className="bg-gradient-to-r from-[#17a2b8] to-purple-500 rounded-lg text-white p-4">
+          <h1 className="text-2xl font-bold mb-2">Admin Dashboard</h1>
+          <p className="text-blue-100">
+            Manage the entire project management system and oversee all
+            activities.
+          </p>
+        </div>
 
+        {/* stats cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+          {dashboardStats.map((item, i) => (
+            <div
+              key={i}
+              className={`relative overflow-hidden ${item.bg} backdrop-blur-md border border-white/40 shadow-lg rounded-xl p-5 hover:shadow-xl hover:scale-[1.02] transition`}
+            >
+              {/* left border */}
+              <div className="absolute left-0 top-0 h-full w-1 bg-[#17a2b8]" />
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-600">{item.title}</p>
+                  <p className="text-2xl font-bold text-slate-800">
+                    {item.value}
+                  </p>
+                </div>
+
+                <div className={`p-3 rounded-full shadow-sm ${item.iconBg}`}>
+                  <item.Icon className={`w-6 h-6 ${item.iconColor}`} />
+                </div>
+              </div>
+
+              {/* glow effect */}
+              <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-blue-200/20 blur-2xl rounded-full" />
+            </div>
+          ))}
+        </div>
+
+        {/* Charts & activity */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Vertical Bar Chart */}
+          <div className="lg:col-span-2 card">
+            <div className="card-header">
+              <h3 className="card-title">Project Distribution by Supervisor</h3>
+            </div>
+            <div className="p-2">
+              {supervisorBucket.length === 0 ? (
+                <div className="h-64 flex items-center justify-center bg-slate-50 rounded text-slate-500">
+                  No data
+                </div>
+              ) : (
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={supervisorBucket}
+                      margin={{ top: 28, right: 8, bottom: 10, left: 8 }}
+                      barCategoryGap="20%"
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                      <XAxis
+                        dataKey="name"
+                        tick={{ fontSize: 12, fill: "#334155" }}
+                        axisLine={{ stroke: "#CBD5E1" }}
+                        tickLine={{ stroke: "#CBD5E1" }}
+                        interval={0}
+                        height={50}
+                        dy={10}
+                      />
+
+                      <YAxis
+                        allowDecimals={false}
+                        tick={{ fontSize: 12, fill: "#334155" }}
+                        axisLine={{ stroke: "#CBD5E1" }}
+                        tickLine={{ stroke: "#CBD5E1" }}
+                      />
+
+                      <Tooltip
+                        cursor={{ fill: "rgba(99, 102, 241, 0.05)" }}
+                        contentStyle={{
+                          borderRadius: 8,
+                          borderColor: "#E2E8F0",
+                        }}
+                        formatter={(value, name) => [
+                          value,
+                          name === "count" ? "Projects Assigned" : name,
+                        ]}
+                        labelFormatter={(label) => `Supervisor: ${label}`}
+                      />
+
+                      <Bar dataKey="count" radius={[8, 8, 0, 0]}>
+                        {supervisorBucket.map((entry, index) => {
+                          const colors = [
+                            "#1E3A8A",
+                            "#2563EB",
+                            "#3882F6",
+                            "#60A5FA",
+                            "#93C5FD",
+                          ];
+
+                          return (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={colors[index % colors.length]}
+                            />
+                          );
+                        })}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-header">
+              <h3 className="card-title">Recent Activity</h3>
+            </div>
+            <div className="space-y-3">
+              {latestNotifications.map((n) => {
+                return (
+                  <div key={n._id} className="flex items-center text-sm ">
+                    <div
+                      className={`mt-1 w-2 h-2 ${getBulletColor(n.type, n.priority)} rounded-full mr-3`}
+                    />
+                    <div className="flex-1">
+                      <p className="font-medium text-slate-800">{n.message}</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <span
+                          className={`px-2 py-0.5 rounded text-sm font-medium ${
+                            (getBadgeClasses("type"), String(n.type))
+                          }`}
+                        >
+                          Type: {n.type}
+                        </span>
+                        <span
+                          className={`px-2 py-0.05 rounded text-sm font-medium`}
+                        >
+                          Priority: {n.priority}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {latestNotifications.length === 0 && (
+                <div className="text-slate-500 text-sm">
+                  No recent notifications
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title">Quick Actions</h3>
+          </div>
+
+          <div className="grid grid-1 md:grid-cols-3 gap-4">
+            {actionButtons.map((btn, index) => {
+              return (
+                <button
+                  key={index}
+                  className={`${btn.btnClass} flex items-center justify-center space-x-2`}
+                  onClick={btn.onClick}
+                >
+                  <btn.Icon className="w-5 h-5" />
+                  <span>{btn.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {isReportModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
+            <div className="bg-white rounded-sm w-full max-w-lg mx-4 overflow-hidden">
+              <div className="card-header rounded-t-lg py-4 p-3 mb-0 bg-blue-50  sticky top-0 z-10">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    All Files
+                  </h3>
+
+                  <button
+                    onClick={() => setIsReportModalOpen(false)}
+                    className="text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="mt-4">
+                  <input
+                    type="text"
+                    className="input w-full"
+                    placeholder="Search by file name, project title, or student name"
+                    value={reportSearch}
+                    onChange={(e) => setReportSearch(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {filteredFiles.length === 0 ? (
+                <div className="text-slate-500 ">No files found.</div>
+              ) : (
+                <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+                  {filteredFiles.map((f, i) => {
+                    return (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between p-3 bg-slate-50 rounded"
+                      >
+                        <div>
+                          <div className="font-medium text-slate-800">
+                            {f.originalName}
+                          </div>
+
+                          <div className="text-sm text-slate-500">
+                            {f.projectTitle} - {f.studentName}
+                          </div>
+                        </div>
+
+                        <button
+                          className="btn-outline btn-small"
+                          onClick={() =>
+                            handleDownload(
+                              f.projectId,
+                              f.fileId,
+                              f.originalName,
+                            )
+                          }
+                        >
+                          Download
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        {isCreateStudentModalOpen && <AddStudent />}
+        {isCreateTeacherModalOpen && <AddTeacher />}
+      </div>
     </>
   );
 };
