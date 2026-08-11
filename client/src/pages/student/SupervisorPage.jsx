@@ -12,9 +12,7 @@ import { UserPlus, X } from "lucide-react";
 const SupervisorPage = () => {
   const dispatch = useDispatch();
   const { authUser } = useSelector((state) => state.auth);
-  // const { project, supervisors, supervisor } = useSelector(
-  //   (state) => state.student,
-  // );
+
   const {
     project,
     supervisors = [],
