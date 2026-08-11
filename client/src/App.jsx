@@ -176,6 +176,22 @@ const App = () => {
           <Route path="feedback" element={<FeedbackPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
         </Route>
+        
+        {/* Teacher Routes */}
+        <Route
+          path="/teacher"
+          element={
+            <ProtectedRoutes allowedRoles={["Teacher"]}>
+              <DashboardLayout userRole={"Teacher"} />
+            </ProtectedRoutes>
+          }
+        >
+          <Route index element={<TeacherDashboard />} />
+          <Route path="pending-requests" element={<PendingRequests />} />
+          <Route path="assigned-students" element={<AssignedStudents />} />
+          <Route path="files" element={<TeacherFiles />} />
+        </Route>
+
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer theme="dark" />
