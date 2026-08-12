@@ -21,12 +21,13 @@ export const createRequest = async (requestData) => {
 
 // get all requests
 export const getAllRequests = async (filters) => {
-  const requests = (
-    await SupervisorRequest.find(filters)
-      .populate("student", " name email")
-      .populate("supervisor", "name email")
-  ).sort({ createdAt: -1 });
+  const requests = await SupervisorRequest.find(filters)
+    .populate("student", "name email")
+    .populate("supervisor", "name email")
+    .sort({ createdAt: -1 });
+
   const total = await SupervisorRequest.countDocuments(filters);
+
   return { requests, total };
 };
 
@@ -60,7 +61,7 @@ export const rejectRequests = async (requestId, teacherId) => {
 
  if (!request) throw new Error("Request not found");
 
-  if (request.supervisor._id.toString() !== supervisorId) {
+if (request.supervisor._id.toString() !== teacherId.toString()) {
     throw new Error("Not authorized to reject this request");
   }
     if (request.status !== "pending") {

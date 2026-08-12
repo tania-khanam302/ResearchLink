@@ -27,7 +27,7 @@ export const getTeacherRequests = createAsyncThunk(
   async (supervisorId, thunkAPI) => {
     try {
       const res = await axiosInstance.get(
-        "/teacher/requests?supervisor=${supervisorId}",
+        `/teacher/requests?supervisor=${supervisorId}`
       );
       return res.data.data?.requests || res.data.data;
     } catch (error) {
@@ -91,13 +91,17 @@ const teacherSlice = createSlice({
       state.dashboardStats = action.payload;
     });
 
+    // builder.addCase(getTeacherRequests.fulfilled, (state, action) => {
+    //   state.list = action.payload?.requests || action.payload;
+    // });
+
     builder.addCase(getTeacherRequests.fulfilled, (state, action) => {
-      state.list = action.payload?.requests || action.payload;
-    });
+  state.list = action.payload || [];
+});
 
     builder.addCase(acceptRequest.fulfilled, (state, action) => {
       const updatedRequest = action.payload;
-      state.pendingRequests = state.pendingRequest.map((r) =>
+      state.pendingRequests = state.pendingRequests.map((r) =>
         r._id === updatedRequest._id ? updatedRequest : r,
       );
     });

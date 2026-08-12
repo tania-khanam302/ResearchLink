@@ -7,9 +7,13 @@ import * as requestServices from "../services/requestServices.js";
 import * as notificationServices from "../services/notificationServices.js";
 import { Project } from "../models/project.js";
 import { Notification } from "../models/notification.js";
+import { SupervisorRequest } from "../models/supervisorRequest.js";
 import * as fileServices from "../services/fileServices.js";
 import { sendEmail } from "./../services/emailService.js";
-import { generateRequestAcceptedTemplate, generateRequestRejectedTemplate } from "../utils/emailTemplates.js";
+import {
+  generateRequestAcceptedTemplate,
+  generateRequestRejectedTemplate,
+} from "../utils/emailTemplates.js";
 
 // get teacher dashboard stats
 export const getTeacherDashboardStats = asyncHandler(async (req, res, next) => {
@@ -102,7 +106,7 @@ export const acceptRequests = asyncHandler(async (req, res, next) => {
   const message = generateRequestAcceptedTemplate(req.user.name);
   await sendEmail({
     to: studentEmail,
-    subject: "Reasearch lonk- Your Supervisor Has Been Accepted",
+    subject: "Reasearch link- Your Supervisor Has Been Accepted",
     message,
   });
 
@@ -124,7 +128,7 @@ export const rejectRequests = asyncHandler(async (req, res, next) => {
 
     await notificationServices.notifyUser(
     request.student._id,
-    `Your supervisor request has been rejected by $(req.user.name)`,
+    `Your supervisor request has been rejected by ${req.user.name}`,
     "rejection",
     "/student/status",
     "high",
@@ -135,7 +139,7 @@ export const rejectRequests = asyncHandler(async (req, res, next) => {
   const message = generateRequestRejectedTemplate(req.user.name);
   await sendEmail({
     to: studentEmail,
-    subject: "Reasearch lonk- Your Supervisor Has Been Rejected",
+    subject: "Reasearch link- Your Supervisor Has Been Rejected",
     message,
   });
 
