@@ -8,5 +8,142 @@ import * as notificationServices from "../services/notificationServices.js";
 import { Project } from "../models/project.js";
 import { Notification } from "../models/notification.js";
 import * as fileServices from "../services/fileServices.js";
-import { title } from "process";
-import { type } from "os";
+import { sendEmail } from "./../services/emailService.js";
+import { generateRequestAcceptedTemplate, generateRequestRejectedTemplate } from "../utils/emailTemplates.js";
+
+// get teacher dashboard stats
+export const getTeacherDashboardStats = asyncHandler(async (req, res, next) => {
+  const teacherId = req.user._id;
+
+  const totalPendingRequests = await SupervisorRequest.countDocuments({
+    supervisor: teacherId,
+    status: "pending",
+  });
+
+  const completedProjects = await Project.countDocuments({
+    supervisor: teacherId,
+    status: "completed",
+  });
+
+  const recentNotifications = await Notification.find({
+    user: teacherId,
+  })
+    .sort({ createdAt: -1 })
+    .limit(5);
+
+  const dashboardStats = {
+    totalPendingRequests,
+    completedProjects,
+    recentNotifications,
+  };
+
+  res.status(200).json({
+    success: true,
+    message: "Dashboard stats fetched for teacher successfully",
+    data: {
+      dashboardStats,
+    },
+  });
+});
+
+// get requests
+export const getRequests = asyncHandler(async (req, res, next) => {
+  const { supervisor } = req.query;
+
+  const filters = {};
+  if (supervisor) filters.supervisor = supervisor;
+
+  const { requests, total } = await requestServices.getAllRequests(filters);
+
+  const updatedRequests = await Promise.all(
+    requests.map(async (reqObj) => {
+      const requestObj = reqObj.toObject ? reqObj.toObject() : reqObj;
+      if (requestObj?.student?._id) {
+        const latestProject = await Project.findOne({
+          student: requestObj.student._id,
+        })
+          .sort({ createdAt: -1 })
+          .lean();
+
+        return { ...requestObj, latestProject };
+      }
+      return requestObj;
+    }),
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Request fatched successfully",
+    data: {
+      requests: updatedRequests,
+      total,
+    },
+  });
+});
+
+// accept requests
+export const acceptRequests = asyncHandler(async (req, res, next) => {
+  const { requestId } = req.params;
+  const teacherId = req.user._id;
+
+  const request = await requestServices.acceptRequests(requestId, teacherId);
+  if (!request) return next(new ErrorHandler("Request not found", 404));
+
+  await notificationServices.notifyUser(
+    request.student._id,
+    `Your supervisor request has been accepted by $(req.user.name)`,
+    "approval",
+    "/student/status",
+    "low",
+  );
+
+  const student = await User.findById(request.student._id);
+  const studentEmail = student.email;
+  const message = generateRequestAcceptedTemplate(req.user.name);
+  await sendEmail({
+    to: studentEmail,
+    subject: "Reasearch lonk- Your Supervisor Has Been Accepted",
+    message,
+  });
+
+    res.status(200).json({
+    success: true,
+    message: "Request accepted successfully",
+    data: {
+      request
+    },
+  });
+});
+
+// reject requests
+export const rejectRequests = asyncHandler(async (req, res, next) => {
+  const { requestId } = req.params;
+  const teacherId = req.user._id;
+  const request = await requestServices.rejectRequests(requestId, teacherId);
+  if (!request) return next(new ErrorHandler("Request not found", 404));
+
+    await notificationServices.notifyUser(
+    request.student._id,
+    `Your supervisor request has been rejected by $(req.user.name)`,
+    "rejection",
+    "/student/status",
+    "high",
+  );
+
+  const student = await User.findById(request.student._id);
+  const studentEmail = student.email;
+  const message = generateRequestRejectedTemplate(req.user.name);
+  await sendEmail({
+    to: studentEmail,
+    subject: "Reasearch lonk- Your Supervisor Has Been Rejected",
+    message,
+  });
+
+      res.status(200).json({
+    success: true,
+    message: "Request rejected",
+    data: {
+      request
+    },
+  });
+});
