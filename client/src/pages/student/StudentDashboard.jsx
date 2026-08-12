@@ -23,7 +23,7 @@ const StudentDashboard = () => {
   const formatDate = (dateStr) => {
     if (!dateStr) return "N/A";
     return new Date(dateStr).toLocaleDateString("en-US", {
-      day: "numeris",
+      day: "numeric",
       month: "short",
       year: "numeric",
     });
