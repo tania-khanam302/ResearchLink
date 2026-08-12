@@ -1,85 +1,113 @@
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../lib/axios";
 import { toast } from "react-toastify";
-
-// get teacher dashboard stats
-// export const getTeacherDashboardStats = createAsyncThunk(
-//   "teacher/getTeacherDashboardStats",
-//   async (_, thunkAPI) => {
-//     try {
-//       const res = await axiosInstance.get(
-//         "/teacher/fetch-dashboard-stats"
-//       );
-//       return res.data.data?.dashboardStats || res.data.data;
-//     } catch (error) {
-//       toast.error(error.response.data.message || "Failed tp fetch dashboard stats")
-//       return thunkAPI.rejectWithValue(error.response?.data.message );
-//       // const message =
-//       //   error.response?.data?.message ||
-//       //   "Failed to fetch dashboard stats";
-
-//       // toast.error(message);
-
-//       // return thunkAPI.rejectWithValue(error.response?.data.message );
-//     }
-//   }
-// );
-
-
 
 // Get teacher dashboard stats
 export const getTeacherDashboardStats = createAsyncThunk(
   "teacher/getTeacherDashboardStats",
   async (_, thunkAPI) => {
     try {
-      const res = await axiosInstance.get(
-        "/teacher/fetch-dashboard-stats"
-      );
+      const res = await axiosInstance.get("/teacher/fetch-dashboard-stats");
 
       return res.data.data.dashboardStats;
     } catch (error) {
       const message =
-        error.response?.data?.message ||
-        "Failed to fetch dashboard stats";
+        error.response?.data?.message || "Failed to fetch dashboard stats";
 
       toast.error(message);
 
       return thunkAPI.rejectWithValue(message);
     }
-  }
+  },
+);
+
+// // Get teacher requests
+export const getTeacherRequests = createAsyncThunk(
+  "getTeacherRequests",
+  async (supervisorId, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get(
+        "/teacher/requests?supervisor=${supervisorId}",
+      );
+      return res.data.data?.requests || res.data.data;
+    } catch (error) {
+      toast.error(error.response.data.message || "Failed to fetch requests");
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
+);
+
+// accept requests
+export const acceptRequest = createAsyncThunk(
+  "acceptRequest",
+  async (requestId, thunkAPI) => {
+    try {
+      const res = await axiosInstance.put(
+        `/teacher/requests/${requestId}/accept`,
+      );
+      toast.success(res.data.message || "Request accepted successfully");
+      return res.data.data?.request || res.data;
+    } catch (error) {
+      toast.error(error.response.data.message || "Failed to accept request");
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
+);
+
+// reject requests
+export const rejectRequest = createAsyncThunk(
+  "rejectRequest",
+  async (requestId, thunkAPI) => {
+    try {
+      const res = await axiosInstance.put(
+        `/teacher/requests/${requestId}/reject`,
+      );
+      toast.success(res.data.message || "Request rejected successfully");
+      return res.data.data?.request || res.data;
+    } catch (error) {
+      toast.error(error.response.data.message || "Failed to reject request");
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
 );
 
 const teacherSlice = createSlice({
   name: "teacher",
 
   initialState: {
-    assignedStudents: [],
+    assignndStudents: [],
     files: [],
     pendingRequests: [],
     dashboardStats: null,
     loading: false,
     error: null,
+    list: [],
   },
 
   reducers: {},
 
   extraReducers: (builder) => {
-    builder
-      // .addCase(getTeacherDashboardStats.pending, (state) => {
-      //   state.loading = true;
-      //   state.error = null;
-      // })
+    builder.addCase(getTeacherDashboardStats.fulfilled, (state, action) => {
+      state.dashboardStats = action.payload;
+    });
 
-      .addCase(getTeacherDashboardStats.fulfilled, (state, action) => {
-        state.loading = false;
-        state.dashboardStats = action.payload;
-      })
+    builder.addCase(getTeacherRequests.fulfilled, (state, action) => {
+      state.list = action.payload?.requests || action.payload;
+    });
 
-      // .addCase(getTeacherDashboardStats.rejected, (state, action) => {
-      //   state.loading = false;
-      //   state.error = action.payload;
-      // });
+    builder.addCase(acceptRequest.fulfilled, (state, action) => {
+      const updatedRequest = action.payload;
+      state.pendingRequests = state.pendingRequest.map((r) =>
+        r._id === updatedRequest._id ? updatedRequest : r,
+      );
+    });
+
+    builder.addCase(rejectRequest.fulfilled, (state, action) => {
+      const rejectedRequest = action.payload;
+      state.pendingRequests = state.pendingRequests.filter(
+        (r) => r._id !== rejectedRequest._id,
+      );
+    });
   },
 });
 
