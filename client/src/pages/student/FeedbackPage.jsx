@@ -61,22 +61,95 @@ const FeedbackPage = () => {
 
   return (
     <>
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     
-                     <div>
-                     <label className="label">Student</label>
-                     <div className="input bg-slate-50">
-                     {currentProject?.student?.name || "-"}
-                     </div>
-                     </div>
+            <div className="space-y-6">
+        <div className="card">
+          {/* card header */}
+          <div className="card-header">
+            <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">
+              Supervisor Feedback
+            </h1>
+            <p className="card-subtitle text-[#17a2b8]">
+              View feedback and comments from your Supervisor.
+            </p>
+          </div>
 
-                    <div>
-                     <label className="label">Supervisor</label>
-                     <div className="input bg-slate-50">
-                     {currentProject?.supervisor?.name || "-"}
-                     </div>
-                     </div>
-                   </div>
+          {/* feedback stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {feedbackStats.map((item, i) => {
+              return (
+                <div key={i} className={`${item.bg} rounded-lg p-4`}>
+                  <div className="flex items-center">
+                    <div className={`p-2 ${item.iconBg} rounded-lg`}>
+                      {getFeedbackIcon(item.type)}
+                    </div>
+
+                    <div className="ml-3">
+                      <p className={`text-sm font-medium ${item.textColor}`}>
+                        {item.title}
+                      </p>
+
+                      <p className={`text-sm font-medium ${item.valueColor}`}>
+                        {/* {item.getCount(safeFeedback)} */}
+                        {
+                          item.getCount()
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* feedback list */}
+          <div className="space-y-6">
+            {/* {feedback && feedback.length > 0
+              ? feedback.map((f, i) => { */}
+
+                {safeFeedback.length > 0
+  ? safeFeedback.map((f, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow "
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="flex items-center space-x-2">
+                            {getFeedbackIcon(f.type)}
+                            <h3 className="font-medium text-slate-800">
+                              {f.title || "feedback"}
+                            </h3>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <p className="text-sm border-slate-800">
+                            {new Date(f.createdAt).toLocaleDateString()}
+                          </p>
+                          <p>{f.supervisorName || "Supervisor"}</p>
+                        </div>
+                      </div>
+
+                      <div className="bg-slate-50 rounded-lg mb-3">
+                        <p className="text-slate-700 leading-relaxed">
+                          {f.message}
+                        </p>
+                      </div>
+
+                    </div>
+                  );
+                })
+              : <div className="text-center py-8">
+                <MessageCircleMore className="w-16 h-16 text-slate-300 mx-auto mb-4"/>
+                <p className="text-slate-500">
+                  No feedback received yet
+                </p>
+              </div>
+              }
+          </div>
+        </div>
+      </div>
     </>
   );
 };
