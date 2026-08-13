@@ -47,15 +47,27 @@ const PendingRequests = () => {
   const filteredRequests =
     list.filter((request) => {
       //   console.log("request:", project);
+      // const matchesSearch =
+      //   (request?.student?.name || "")
+      //     .toLowerCase()
+      //     .includes(searchTerm.toLowerCase()) ||
+      //   (request?.project?.title || "")
+      //     .toLowerCase()
+      //     .includes(searchTerm.toLowerCase()) ||
+      //   request?.latestproject?.title ||
+      //   "";
+
       const matchesSearch =
-        (request?.student?.name || "")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        (request?.project?.title || "")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        request?.latestproject?.title ||
-        "";
+  (request?.student?.name || "")
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase()) ||
+  (request?.project?.title || "")
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase()) ||
+  (request?.latestProject?.title || "")
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase());
+
       const matchesStatus =
         filterStatus === "all" || request.status === filterStatus;
       return matchesSearch && matchesStatus;
@@ -110,7 +122,7 @@ const PendingRequests = () => {
           {
             filteredRequests.map(req=>{
             const id = req._id;
-            const project = req.latestproject;
+            const project = req.latestProject;
             const projectStatus = project?.status?.toLowerCase() || "pending";
             const supervisorAssigned = !!project?.supervisor;
             const canAccept =
@@ -213,7 +225,7 @@ const PendingRequests = () => {
           }
              {/* not request */}
          {filteredRequests.length === 0 && (
-            <div className="Card text-center py-8">
+            <div className="card text-center py-8">
               <FileText className="w-12 h-12 text-slate-400 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-slate-800 mb-2">
                 No requests found
@@ -224,11 +236,7 @@ const PendingRequests = () => {
             </div>
           )} 
         </div>
-
-
-        
       </div>
-      {/* {} */}
     </>
   );
 };
