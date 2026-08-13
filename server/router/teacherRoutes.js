@@ -2,7 +2,9 @@ import express from "express";
 
 import {
   getTeacherDashboardStats,
-  acceptRequests,getRequests,rejectRequests
+  acceptRequests,getRequests,rejectRequests,
+  addFeedback,
+  markComplete
 } from "../controllers/teacherController.js";
 
 import {
@@ -31,7 +33,7 @@ router.get(
 );
 
 
-// get accept
+// accept request
 router.put(
   "/requests/:requestId/accept",
   isAuthenticated,
@@ -40,7 +42,7 @@ router.put(
   
 );
 
-// get reject
+//  reject request
 router.put(
   "/requests/:requestId/reject",
   isAuthenticated,
@@ -48,4 +50,22 @@ router.put(
   rejectRequests
   
 );
+
+//  add feedback 
+router.post(
+  "/feedback/:projectId",
+  isAuthenticated,
+  isAuthorized("Teacher"),
+  addFeedback
+);
+
+// mark complete
+router.post(
+  "/mark-complete/:projectId",
+  isAuthenticated,
+  isAuthorized("Teacher"),
+  markComplete
+);
+
+
 export default router;
