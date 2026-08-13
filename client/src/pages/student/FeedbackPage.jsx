@@ -61,7 +61,22 @@ const FeedbackPage = () => {
 
   return (
     <>
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     
+                     <div>
+                     <label className="label">Student</label>
+                     <div className="input bg-slate-50">
+                     {currentProject?.student?.name || "-"}
+                     </div>
+                     </div>
 
+                    <div>
+                     <label className="label">Supervisor</label>
+                     <div className="input bg-slate-50">
+                     {currentProject?.supervisor?.name || "-"}
+                     </div>
+                     </div>
+                   </div>
     </>
   );
 };
