@@ -2,7 +2,7 @@ import { asyncHandler } from "../middlewares/asyncHandler.js";
 import ErrorHandler from "../middlewares/error.js";
 import { User } from "../models/user.js";
 import * as userServices from "../services/userServices.js";
-import * as projectService from "../services/projectServices.js";
+import * as projectServices from "../services/projectServices.js";
 import * as requestServices from "../services/requestServices.js";
 import * as notificationServices from "../services/notificationServices.js";
 import { Project } from "../models/project.js";
@@ -203,18 +203,18 @@ export const markComplete = asyncHandler(async (req, res, next) => {
   });
 });
 
-
 // add feedback
 export const addFeedback = asyncHandler(async (req, res, next) => {
     const {projectId}= req.params;
-  const tescherId = req.user._id;
+    const teacherId = req.user._id;
   const {message,title,type}= req.body;
 
     const project = await projectServices.getProjectById(projectId);
 
   if(!project) return next (new ErrorHandler ("Project not found", 404));
   if(project.supervisor._id.toString() !== teacherId.toString()){
-    return next (new ErrorHandler("Not authprized to mark complete", 403));
+    return next (new ErrorHandler("Not authorized to add feedback"
+, 403));
   }
 
   if(!message || !title) return next (new ErrorHandler ("Feedback title and message are required", 400));
