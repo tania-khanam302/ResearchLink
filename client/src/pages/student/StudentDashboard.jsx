@@ -95,11 +95,17 @@ const StudentDashboard = () => {
                   Recent Feedback
                 </p>
 
-                <p className="text-lg font-semibold text-slate-800">
+                {/* <p className="text-lg font-semibold text-slate-800">
                   {feedbackList?.length
                     ? formatDate(feedbackList[0]?.createAt)
                     : "No feedback yet"}
-                </p>
+                </p> */}
+                <p className="text-lg font-semibold text-slate-800">
+  {feedbackList?.length
+    ? formatDate(feedbackList[0]?.createdAt)
+    : "No feedback yet"}
+</p>
+
               </div>
             </div>
           </div>
@@ -214,14 +220,19 @@ const StudentDashboard = () => {
                             {feedback.title || "Supervisor Feedback"}
                           </h3>
                         </div>
-                        <p className="text-xs text-slate-500">
+                        {/* <p className="text-xs text-slate-500">
                           {formatDate(feedback.createAt)}
-                        </p>
+                        </p> */}
+                        <p className="text-xs text-slate-500">
+  {formatDate(feedback.createdAt)}
+</p>
+
                       </div>
 
                       <div className="text-slate-50 rounded-lg p-3">
                         <p className="text-slate-700 text-sm loading-relaxed">
-                          {feedback.massage}
+                          {feedback.message}
+
                         </p>
                       </div>
 
@@ -310,7 +321,7 @@ const StudentDashboard = () => {
                           {n.message}
                         </p>
                         <p className="text-xs  text-slate-500 mt-1">
-                          {formatDate(n.createAt)}
+                          {formatDate(n.createdAt)}
                         </p>
                       </div>
                     );
