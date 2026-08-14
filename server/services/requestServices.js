@@ -37,9 +37,11 @@ export const acceptRequests = async (requestId, supervisorId) => {
     .populate("student", "name email supervisor project")
     .populate("supervisor", "name email assignedStudents maxStudents");
 
-  if (!request) throw new Error("Request not found");
+  if (!request) {
+    throw new Error("Request not found");
+  }
 
-  if (request.supervisor._id.toString() !== supervisorId) {
+  if (request.supervisor._id.toString() !== supervisorId.toString()) {
     throw new Error("Not authorized to accept this request");
   }
 
@@ -51,7 +53,8 @@ export const acceptRequests = async (requestId, supervisorId) => {
   await request.save();
 
   return request;
-  };
+};
+
 
 // reject requests
 export const rejectRequests = async (requestId, teacherId) => {

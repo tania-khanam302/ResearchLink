@@ -115,8 +115,8 @@ const TeacherDashboard = () => {
                       <MoveDiagonal className="w-5 h-5"/>
                     </div>
                     <div className="ml-3 flex-1">
-                      <p className="text-sm to-slate-800">{notification.message}</p>
-                      <p className="text-xs to-slate-500">{new Date(notification.createdAt).toDateString()}</p>
+                      <p className="text-sm text-slate-800">{notification.message}</p>
+                      <p className="text-sm text-slate-800">{new Date(notification.createdAt).toDateString()}</p>
 
                     </div>
 
