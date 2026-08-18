@@ -45,7 +45,7 @@ const AdminDashboard = () => {
 
   const { stats, projects } = useSelector((state) => state.admin);
   // const { projects } = useSelector((state) => state.project);
-  const { notifications } = useSelector((state) => state.notification.list);
+  const notifications = useSelector((state) => state.notification.list);
 
   const dispatch = useDispatch();
 
@@ -107,7 +107,6 @@ const AdminDashboard = () => {
       },
     );
   };
-
 
   const supervisorBucket = useMemo(() => {
     const map = new Map();
@@ -364,7 +363,17 @@ const AdminDashboard = () => {
             <div className="card-header">
               <h3 className="card-title">Recent Activity</h3>
             </div>
-            <div className="space-y-3">
+            <div
+              className="space-y-3 h-[300px]    overflow-y-auto
+    overflow-x-hidden
+    pr-2
+    [&::-webkit-scrollbar]:w-1.5
+    [&::-webkit-scrollbar-track]:bg-slate-100
+    [&::-webkit-scrollbar-thumb]:bg-[#b0cbcf]
+    [&::-webkit-scrollbar-thumb]:rounded-full
+    [&::-webkit-scrollbar-thumb:hover]:bg-[#c6e3e7]
+  "
+            >
               {latestNotifications.map((n) => {
                 return (
                   <div key={n._id} className="flex items-center text-sm ">
@@ -375,16 +384,18 @@ const AdminDashboard = () => {
                       <p className="font-medium text-slate-800">{n.message}</p>
                       <div className="mt-1 flex items-center gap-2">
                         <span
-                          className={`px-2 py-0.5 rounded text-sm font-medium ${
-                            (getBadgeClasses("type"), String(n.type))
-                          }`}
+                          className={`px-2 py-0.5 rounded text-sm font-medium ${getBadgeClasses(
+                            "type",
+                            n.type,
+                          )}capitalize`}
                         >
-                          Type: {n.type}
+                          {n.type}
                         </span>
                         <span
-                          className={`px-2 py-0.05 rounded text-sm font-medium`}
+                          className={`px-2 py-0.05 rounded text-sm font-medium capitalize
+                             ${getBulletColor(n.type, n.priority)}`}
                         >
-                          Priority: {n.priority}
+                          {n.priority}
                         </span>
                       </div>
                     </div>
