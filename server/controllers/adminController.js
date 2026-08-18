@@ -2,6 +2,10 @@ import { asyncHandler } from "../middlewares/asyncHandler.js";
 import ErrorHandler from "../middlewares/error.js";
 import { User } from "../models/user.js";
 import * as userServices from "../services/userServices.js";
+
+import { Thesis } from "../models/thesis.js";
+import * as thesisServices from "../services/thesisServices.js";
+
 import * as projectServices from "../services/projectServices.js";
 
 import { Project } from "../models/project.js";
@@ -204,6 +208,17 @@ export const deleteCoAdmin = asyncHandler(async (req, res, next) => {
   });
 });
 
+export const getAllTheses = asyncHandler(async (req, res, next) => {
+  const theses = await thesisServices.getAllTheses();
+
+  res.status(200).json({
+    success: true,
+    message: "Theses fetched successfully",
+    data: { theses },
+  });
+});
+
+
 export const getAllProjects = asyncHandler (async(req, res, next) =>{
   const projects = await projectServices.getAllProjects();
   res.json({
@@ -257,7 +272,8 @@ const { studentId, supervisorId } = req.body;
         new ErrorHandler("Student ID and Supervisor ID are required", 400)
     )
   }
-  const project = await project.findOne({ student: studentId });
+  // const project = await project.findOne({ student: studentId });
+const project = await Project.findOne({ student: studentId });
 
 
 if (!project) {

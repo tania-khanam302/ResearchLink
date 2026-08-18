@@ -151,6 +151,24 @@ export const deleteCoAdmin = createAsyncThunk(
     }
   },
 );
+// get all theses
+export const getAllTheses = createAsyncThunk(
+  "getAllTheses",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get("/admin/theses");
+      return res.data.data;
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to fetch theses"
+      );
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message
+      );
+    }
+  }
+);
+
 
 // get all project
 export const getAllProjects = createAsyncThunk(
@@ -203,6 +221,7 @@ const adminSlice = createSlice({
   initialState: {
     students: [],
     teachers: [],
+    theses: [],
     projects: [],
     users: [],
     stats: null,
@@ -239,6 +258,12 @@ const adminSlice = createSlice({
       .addCase(getAllProjects.fulfilled, (state, action) => {
         state.projects = action.payload.projects;
       })
+      
+      // get all theses
+      .addCase(getAllTheses.fulfilled, (state, action) => {
+  state.theses = action.payload.theses;
+})
+
 
       // create teacher
       .addCase(createTeacher.fulfilled, (state, action) => {

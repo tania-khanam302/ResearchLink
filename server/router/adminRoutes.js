@@ -10,6 +10,7 @@ import {
   createCoAdmin,
   updateCoAdmin,
   deleteCoAdmin,
+  getAllTheses,
   getAllProjects,
   getDashboardStats,
   assignSupervisor,
@@ -93,6 +94,14 @@ router.delete(
   isAuthorized("Admin"),
   deleteCoAdmin
 );
+// theses
+router.get(
+  "/theses",
+  isAuthenticated,
+  isAuthorized("Admin", "Co-Admin"),
+  getAllTheses,
+);
+
 
 // projects
 router.get(
