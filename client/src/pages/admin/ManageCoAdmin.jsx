@@ -330,12 +330,12 @@ const ManageCoAdmin = () => {
 
         {/* show and delete */}
         {showDeleteModal && adminToDelete && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="fixed inset-0 z-50 flex items-center justify-center ">
             {/* overlay*/}
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+            <div className="fixed inset-0 bg-black/40 backdrop-blur-sm  z-40"></div>
 
             <div className="relative inset-0 z-50 w-full max-w-md mx-4 animate-fadeIn">
-              <div className="card bg-white rounded-sm w-full max-w-md mx-4 shadow-xl">
+               <div className="card bg-white rounded-sm w-full max-w-md mx-4 shadow-xl">
                 <div className="grid items-center mb-4 p-6">
                   <div className="flex-shrink-0 w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-red-100">
                     <AlertTriangle className="w-6 h-6 text-red-600" />

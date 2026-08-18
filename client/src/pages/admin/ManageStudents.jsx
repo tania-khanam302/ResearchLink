@@ -266,7 +266,7 @@ return {
                 <th className="px-6 py-4">Student Info</th>
                 <th className="px-6 py-4">Department & Year</th>
                 <th className="px-6 py-4">Supervisor</th>
-                <th className="px-6 py-4">Project Title</th>
+                <th className="px-6 py-4">Project / Thesis Title</th>
                 <th className="px-6 py-4">Action</th>
               </tr>
             </thead>
@@ -322,6 +322,7 @@ return {
                           <div className="text-[16px] text-slate-900">
                             {student.projectTitle}
                           </div>
+                          
                         </td>
 
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

@@ -35,20 +35,20 @@ const SubmitProposal = () => {
               Submit Proposal
             </h1>
             <p className="card-subtitle text-[#17a2b8]">
-              Please fill out all sections of your project proposal. Make sure
-              to be detailed and cleared about your project goals.{""}
+              Please fill out all sections of your thesis/project proposal. Make sure
+              to be detailed and cleared about your thesis/project goals.{""}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="label">Project Title</label>
+              <label className="label">Thesis/Project Title</label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="Enter your project title"
+                placeholder="Enter your thesis/project title"
                 className="
                   w-full
                   px-3
@@ -70,12 +70,12 @@ const SubmitProposal = () => {
             </div>
 
             <div>
-              <label className="label">Project Description</label>
+              <label className="label">Thesis/Project Description</label>
               <textarea
                 name="description"
                 value={formData.Description}
                 onChange={handleChange}
-                placeholder="Provide a detailed description of your project..."
+                placeholder="Provide a detailed description of your thesis/project..."
                 className="
                   input
                   min-h-[120px]
