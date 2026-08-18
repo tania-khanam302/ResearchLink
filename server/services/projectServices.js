@@ -85,7 +85,22 @@ export const addFeedback = async (
     type,
   });
 
-  // await project.save();
+  await project.save();
+  const latestFeedback = project.feedback[project.feedback.length - 1];
 
-  // return project;
+  return { project, latestFeedback };
 };
+
+
+export const getProjectBySupervisor = async (supervisorId) => {
+  return await Project.find({ supervisor: supervisorId })
+    .populate("student", "name email")
+    .populate("supervisor", "name email")
+    .sort({ createdAt: -1 });
+};
+
+// export const getProjectBySupervisor = async (
+// supervisorId
+// ) => {
+//   return await getAllProjects({supervisor:supervisorId});
+// };
