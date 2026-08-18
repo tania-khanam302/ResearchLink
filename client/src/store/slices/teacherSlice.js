@@ -88,6 +88,40 @@ export const markComplete = createAsyncThunk(
   },
 );
 
+// download files
+export const downloadTeacherFiles = createAsyncThunk(
+  "downloadTeacherFiles",
+  async({projectId, fileId}, thunkAPI)=>{
+    try{
+
+      const res = await axiosInstance.get(`/teacher/download/${projectId}/${fileId}`,{
+        responseType: "blob",
+      })
+      return {blob:res.data,projectId,fileId}
+    }catch(error){
+
+      toast.error(error.response?.data?.message|| "Failed to download file");
+      return thunkAPI.rejectWithValue(error.response?.data?.message)
+    }
+  }
+)
+// get files
+export const getFiles = createAsyncThunk(
+  "getTeacherFiles",
+  async(_, thunkAPI)=>{
+    try{
+
+      const res = await axiosInstance.get(`/teacher/files`)
+      return res.data?.data?.files || res.data.data;
+    }catch(error){
+
+      toast.error(error.response?.data?.message|| "Failed to fetch teacher file");
+      return thunkAPI.rejectWithValue(error.response?.data?.message)
+    }
+  }
+)
+
+
 // add feedback
 export const addFeedback = createAsyncThunk(
   "addFeedback",
@@ -128,36 +162,34 @@ export const getAssignedStudents = createAsyncThunk(
 const teacherSlice = createSlice({
   name: "teacher",
 
-initialState: {
-  assignedStudents: [],
-  files: [],
-  pendingRequests: [],
-  dashboardStats: null,
-  loading: false,
-  error: null,
-  list: [],
-},
-
+  initialState: {
+    assignedStudents: [],
+    files: [],
+    pendingRequests: [],
+    dashboardStats: null,
+    loading: false,
+    error: null,
+    list: [],
+  },
 
   reducers: {},
 
   extraReducers: (builder) => {
     // get teacher dashboard stats
     builder.addCase(getTeacherDashboardStats.pending, (state) => {
-  state.loading = true;
-  state.error = null;
-});
+      state.loading = true;
+      state.error = null;
+    });
 
-builder.addCase(getTeacherDashboardStats.fulfilled, (state, action) => {
-  state.loading = false;
-  state.dashboardStats = action.payload;
-});
+    builder.addCase(getTeacherDashboardStats.fulfilled, (state, action) => {
+      state.loading = false;
+      state.dashboardStats = action.payload;
+    });
 
-builder.addCase(getTeacherDashboardStats.rejected, (state, action) => {
-  state.loading = false;
-  state.error = action.payload || "Failed to fetch dashboard stats";
-});
-
+    builder.addCase(getTeacherDashboardStats.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload || "Failed to fetch dashboard stats";
+    });
 
     // get assigned student
     builder.addCase(getAssignedStudents.pending, (state, action) => {
@@ -166,7 +198,7 @@ builder.addCase(getTeacherDashboardStats.rejected, (state, action) => {
     });
     builder.addCase(getAssignedStudents.fulfilled, (state, action) => {
       state.loading = false;
-      state.assignedStudents  = action.payload?.students || action.payload || [];
+      state.assignedStudents = action.payload?.students || action.payload || [];
     });
     builder.addCase(getAssignedStudents.rejected, (state, action) => {
       state.error = action.payload || "Failed to fetch assigned students";
@@ -175,29 +207,52 @@ builder.addCase(getTeacherDashboardStats.rejected, (state, action) => {
 
     builder.addCase(addFeedback.fulfilled, (state, action) => {
       const { projectId, feedback } = action.payload;
-      state.assignedStudents  = state.assignedStudents .map((s) =>
+      state.assignedStudents = state.assignedStudents.map((s) =>
         s.projectId === projectId ? { ...s, feedback } : s,
       );
     });
 
+    // builder.addCase(markComplete.fulfilled, (state, action) => {
+    //   const { projectId } = action.payload;
+    //   state.assignedStudents.state.assignedStudents.map((s) => {
+    //     if (s.project._id === projectId) {
+    //       return {
+    //         ...s,
+    //         project: {
+    //           ...s.project,
+    //           status: "completed",
+    //         },
+    //       };
+    //     }
+    //     return s;
+    //   });
+    // });
+
     builder.addCase(markComplete.fulfilled, (state, action) => {
-      const {projectId}= action.payload;
-      state.assignedStudents .state.assignedStudents .map(s=>{
-        if(s.project._id === projectId){
-          return{
-            ...s,
-            project:{
-              ...s.project,
-              status:"completed",
-            }
-          }
-        }
-        return s;
-      })
-    });
+  const { projectId } = action.payload;
+
+  state.assignedStudents = state.assignedStudents.map((s) => {
+    if (s.project?._id === projectId) {
+      return {
+        ...s,
+        project: {
+          ...s.project,
+          status: "completed",
+        },
+      };
+    }
+
+    return s;
+  });
+});
+
 
     builder.addCase(getTeacherRequests.fulfilled, (state, action) => {
       state.list = action.payload || [];
+    });
+
+    builder.addCase(getFiles.fulfilled, (state, action) => {
+      state.files = action.payload.files || action.payload || [];
     });
 
     builder.addCase(acceptRequest.fulfilled, (state, action) => {

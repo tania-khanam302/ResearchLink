@@ -203,13 +203,21 @@ export const requestSupervisor = asyncHandler(async (req, res, next) => {
 
   const request = await requestServices.createRequest(requestData);
 
+  // await notificationServices.notifyUser(
+  //   teacherId,
+  //   `${student.name} has request ${supervisor.name} to be their supervisor.`,
+  //   "request",
+  //   "/teacher/request",
+  //   "medium",
+  // );
+
   await notificationServices.notifyUser(
-    teacherId,
-    `${student.name} has request ${supervisor.name} to be their supervisor.`,
-    "request",
-    "/teacher/request",
-    "medium",
-  );
+  teacherId,
+  "Supervisor request submitted successfully",
+  "request",
+  "/teacher/request",
+  "medium",
+);
 
   res.status(201).json({
     success: true,
@@ -282,7 +290,8 @@ export const getDashboardStats = asyncHandler(async (req, res, next) => {
       project,
       upcomingDeadlines,
       topNotifications,
-      feedbackNotifications,
+      // feedbackNotifications,
+      feedbackList: feedbackNotifications,
       supervisorName,
     }
   })
@@ -351,9 +360,6 @@ export const downloadFiles = asyncHandler(async (req, res, next) => {
   if (!file) {
     return next(new ErrorHandler("File not found", 404));
   }
-
-  console.log("FOUND FILE:", file);
-  console.log("FILE URL:", file.fileUrl);
 
   return fileServices.streamDownload(
     file.fileUrl,
