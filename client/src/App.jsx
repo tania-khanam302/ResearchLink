@@ -30,14 +30,15 @@ import ManageTeachers from "./pages/admin/ManageTeachers";
 import ManageCoAdmin from "./pages/admin/ManageCoAdmin";
 import AssignSupervisor from "./pages/admin/AssignSupervisor";
 import DeadlinesPage from "./pages/admin/DeadlinesPage";
+import ThesisPage from "./pages/admin/ThesisPage";
 import ProjectsPage from "./pages/admin/ProjectsPage";
+
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { Loader, Loader2 } from "lucide-react";
 import { getUser } from "./store/slices/authSlice";
 import { all } from "axios";
-import { getAllProjects, getAllUsers } from "./store/slices/adminSlice";
-
+import { getAllTheses, getAllProjects, getAllUsers } from "./store/slices/adminSlice";
 
 // co-admin
 import CoAdminDashboard from "./pages/coadmin/CoAdminDashboard";
@@ -46,6 +47,7 @@ import CoAdminTeachers from "./pages/coadmin/CoAdminTeachers";
 
 // not found
 import NotFound from "./pages/NotFound";
+import { fetchDashboardStats } from "./store/slices/studentSlice";
 
 const App = () => {
   const { authUser, isCheckingAuth } = useSelector((state) => state.auth);
@@ -58,7 +60,11 @@ const App = () => {
   useEffect(() => {
     if (authUser?.role === "Admin") {
       dispatch(getAllUsers());
+      dispatch(getAllTheses());
       dispatch(getAllProjects());
+    }
+    if (authUser?.role === "Student") {
+      dispatch(fetchDashboardStats());
     }
   }, [authUser]);
 
@@ -73,7 +79,7 @@ const App = () => {
       authUser?.role &&
       !allowedRoles.includes(authUser.role)
     ) {
-      const redirectPath =      
+      const redirectPath =
         authUser.role === "Admin"
           ? "/admin"
           : authUser.role === "Co-Admin"
@@ -87,11 +93,11 @@ const App = () => {
     return children;
   };
 
-  // loading page 
+  // loading page
   if (isCheckingAuth && !authUser) {
     return (
       <div className="flex justify-center items-center m-auto h-screen">
-       <Loader className="size-20 animate-spin text-[#17a2b8]" />
+        <Loader className="size-20 animate-spin text-[#17a2b8]" />
       </div>
     );
   }
@@ -105,8 +111,7 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-
-{/* login  */}
+        {/* login  */}
         <Route
           path="/"
           element={
@@ -127,7 +132,6 @@ const App = () => {
           }
         />
 
-
         {/* Admin Routes */}
         <Route
           path="/admin"
@@ -140,9 +144,11 @@ const App = () => {
           <Route index element={<AdminDashboard />} />
           <Route path="students" element={<ManageStudents />} />
           <Route path="teachers" element={<ManageTeachers />} />
-          <Route path="/admin/co-admin" element={<ManageCoAdmin />} />
+          {/* <Route path="/admin/co-admin" element={<ManageCoAdmin />} /> */}
+          <Route path="co-admin" element={<ManageCoAdmin />} />
           <Route path="assign-supervisor" element={<AssignSupervisor />} />
           <Route path="deadlines" element={<DeadlinesPage />} />
+          <Route path="thesis" element={<ThesisPage />} />
           <Route path="projects" element={<ProjectsPage />} />
         </Route>
 
@@ -176,7 +182,7 @@ const App = () => {
           <Route path="feedback" element={<FeedbackPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
         </Route>
-        
+
         {/* Teacher Routes */}
         <Route
           path="/teacher"

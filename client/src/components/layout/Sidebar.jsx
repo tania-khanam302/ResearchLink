@@ -73,6 +73,11 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             path: "/admin/assign-supervisor",
             icon: "link",
           },
+              {
+      name: "Thesis",
+      path: "/admin/thesis",
+      icon: "document",
+    },
           {
             name: "Project",
             path: "/admin/projects",
