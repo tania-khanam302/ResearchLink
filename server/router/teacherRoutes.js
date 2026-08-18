@@ -4,7 +4,10 @@ import {
   getTeacherDashboardStats,
   acceptRequests,getRequests,rejectRequests,
   addFeedback,
-  markComplete
+  markComplete,
+  getAssignedStudents,
+  downloadFiles,
+  getFiles
 } from "../controllers/teacherController.js";
 
 import {
@@ -65,6 +68,29 @@ router.post(
   isAuthenticated,
   isAuthorized("Teacher"),
   markComplete
+);
+
+// get assigned student
+router.get(
+  "/assigned-student",
+  isAuthenticated,
+  isAuthorized("Teacher"),
+  getAssignedStudents
+);
+
+//  download files
+router.get(
+  "/download/:projectId/:fileId",
+  isAuthenticated,
+  isAuthorized("Teacher"),
+  downloadFiles
+);
+//  get files
+router.get(
+  "/files",
+  isAuthenticated,
+  isAuthorized("Teacher"),
+  getFiles
 );
 
 
