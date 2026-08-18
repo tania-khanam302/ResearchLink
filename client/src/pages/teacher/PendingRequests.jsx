@@ -25,15 +25,34 @@ const PendingRequests = () => {
       [id]: { ...prev[id], [key]: value },
     }));
   };
+
+  // const handleAccept = async (request) => {
+  //   const id = request._id;
+  //   setLoading(id, "accept", true);
+  //   try {
+  //     await dispatch(acceptRequest(id)).unwrap();
+  //   } finally {
+  //     setLoading(id, "accept", false);
+  //   }
+  // };
+
   const handleAccept = async (request) => {
-    const id = request._id;
-    setLoading(id, "accept", true);
-    try {
-      await dispatch(acceptRequest(id)).unwrap();
-    } finally {
-      setLoading(id, "accept", false);
-    }
-  };
+  console.log("REQUEST:", request);
+  console.log("REQUEST ID:", request._id);
+  console.log("TEACHER ID:", authUser?._id);
+
+  const id = request._id;
+
+  setLoading(id, "accepting", true);
+
+  try {
+    await dispatch(acceptRequest(id)).unwrap();
+  } finally {
+    setLoading(id, "accepting", false);
+  }
+};
+
+
   const handleReject = async (request) => {
     const id = request._id;
     setLoading(id, "rejecting", true);

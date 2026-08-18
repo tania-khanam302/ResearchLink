@@ -275,7 +275,7 @@ const submitRequest = async () => {
                   Available Supervisors
                 </h2>
                 <p className="text-cyan-50 mt-2 text-sm">
-                  Explore faculty members and request supervision based on their
+                  Explore faculty members and request Supervisor based on their
                   expertise and research interests.
                 </p>
               </div>
@@ -347,7 +347,7 @@ const submitRequest = async () => {
                         {/* BOTTOM */}
                         <div className="flex items-center justify-between mt-7 pt-4 border-t border-slate-100">
                           <span className="text-[13px] text-slate-400">
-                            Click to request supervision
+                            Click to request Supervisor
                           </span>
 
                             {requestedSupervisorId === sup._id ? (
@@ -384,10 +384,10 @@ const submitRequest = async () => {
               <div className="bg-gradient-to-r from-[#17a2b8] via-[#1599ad] to-[#138496] px-6 py-5 flex items-center justify-between">
                 <div>
                   <h3 className="text-2xl font-bold text-white">
-                    Request Supervision
+                    Request Supervisor
                   </h3>
                   <p className="text-sm text-slate-100 mt-1">
-                    Send a professional supervision request to your preferred
+                    Send a professional Supervisor request to your preferred
                     faculty member.
                   </p>
                 </div>
