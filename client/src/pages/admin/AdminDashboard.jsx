@@ -203,6 +203,14 @@ const AdminDashboard = () => {
       iconColor: "text-orange-600",
       Icon: AlertCircle,
     },
+          {
+    title: "Active Theses",
+    value: stats?.totalTheses ?? 0,
+    bg: "bg-indigo-100",
+    iconBg: "bg-indigo-100",
+    iconColor: "text-indigo-600",
+    Icon: FileTextIcon,
+  },
     {
       title: "Active Projects",
       value: stats?.totalProjects ?? 0,
@@ -211,6 +219,7 @@ const AdminDashboard = () => {
       iconColor: "text-yellow-600",
       Icon: Folder,
     },
+
     {
       title: "Nearing Deadlines",
       value: nearingDeadlines,
@@ -225,19 +234,19 @@ const AdminDashboard = () => {
     {
       label: "Add Student",
       onClick: () => dispatch(toggleStudentModal()),
-      btnClass: "btn-primary bg-[#17a2b8] hover:bg-[#138496]",
+      btnClass: "btn-primary h-[40px] bg-[#17a2b8] hover:bg-[#138496]",
       Icon: PlusIcon,
     },
     {
       label: "Add Teacher",
       onClick: () => dispatch(toggleTeacherModal()),
-      btnClass: "btn-secondary",
+      btnClass: "btn-secondary h-[40px]",
       Icon: PlusIcon,
     },
     {
       label: "View Reports",
       onClick: () => setIsReportModalOpen(true),
-      btnClass: "btn-outline border-[#17a2b8] text-[#17a2b8]",
+      btnClass: "btn-outline h-[40px] border-[#17a2b8] text-[#17a2b8]",
       Icon: FileTextIcon,
     },
   ];
@@ -418,7 +427,7 @@ const AdminDashboard = () => {
             <h3 className="card-title">Quick Actions</h3>
           </div>
 
-          <div className="grid grid-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-1 md:grid-cols-3 gap-4 mb-4 py-3">
             {actionButtons.map((btn, index) => {
               return (
                 <button
@@ -455,7 +464,7 @@ const AdminDashboard = () => {
                   <input
                     type="text"
                     className="input w-full"
-                    placeholder="Search by file name, project title, or student name"
+                    placeholder="Search by file name, thesis and project title, or student name"
                     value={reportSearch}
                     onChange={(e) => setReportSearch(e.target.value)}
                   />
