@@ -134,25 +134,31 @@ const DeadlinesPage = () => {
               Project Deadlines
             </h2>
           </div>
-          <div className="overflow-y-auto">
-            <table className="w-full">
-              <thead className="bg-slate-50">
+          <div className="w-full max-w-full overflow-auto max-h-[500px]
+          
+      [&::-webkit-scrollbar]:w-1.5
+      [&::-webkit-scrollbar-track]:bg-slate-100
+      [&::-webkit-scrollbar-thumb]:bg-[#b0cbcf]
+      [&::-webkit-scrollbar-thumb]:rounded-full
+      [&::-webkit-scrollbar-thumb:hover]:bg-[#8fb8be]">
+      <table className="min-w-auto w-full text-left border-collapse">
+        <thead className="bg-slate-200 sticky top-0 z-10">
                 <tr className=" text-[#138496] text-xs font-semibold uppercase">
-                  <th className="px-6 py-3 text-left tracking-wide ">
+                  <th className="px-2 py-6 text-left tracking-wide ">
                     Student
                   </th>
-                  <th className="px-6 py-5 text-left "> Project Title</th>
-                  <th className="px-6 py-5 text-left ">Supervisor</th>
-                  <th className="px-6 py-5 text-left ">Deadline</th>
-                  <th className="px-6 py-5 text-left">Updated</th>
+                  <th className="px-2 py-6 text-left "> Project Title</th>
+                  <th className="px-2 py-6 text-left ">Supervisor</th>
+                  <th className="px-2 py-6 text-left ">Deadline</th>
+                  <th className="px-2 py-6 text-left">Updated</th>
                 </tr>
               </thead>
 
-              <tbody className="bg-white divide-y divide-slate-200">
+                <tbody className=" bg-slate-50 divide-y divide-slate-200">
                 {filterProjects.map((row) => {
                   return (
-                    <tr key={row._id} className="hover:bg-slate-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                    <tr key={row._id} className="hover:bg-white">
+                      <td className="px-2 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-sm font-medium text-slate-900">
                             {row.studentName}
@@ -163,9 +169,9 @@ const DeadlinesPage = () => {
                         </div>
                       </td>
 
-                      <td className="px-6 py-4 text-[14px]">{row.title}</td>
+                      <td className="px-2 py-4 text-[14px]">{row.title}</td>
 
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-2 py-4 whitespace-nowrap">
                         {row.supervisor !== "-" ? (
                           <span
                             className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs
@@ -183,11 +189,11 @@ const DeadlinesPage = () => {
                         )}
                       </td>
 
-                      <td className="px-6 py-4 text-[14px]">
+                      <td className="px-2 py-4 text-[14px]">
                         {row.deadlineDate}
                       </td>
 
-                      <td className="px-6 py-4 text-[14px]">{row.updatedAt}</td>
+                      <td className="px-2 py-4 text-[14px]">{row.updatedAt}</td>
                     </tr>
                   );
                 })}

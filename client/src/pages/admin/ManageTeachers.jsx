@@ -225,28 +225,33 @@ const ManageTeachers = () => {
               Teachers List
             </h2>
           </div>
-          <div className="overflow-x-auto">
+          <div className="w-full max-w-full overflow-auto max-h-[500px]
+          
+      [&::-webkit-scrollbar]:w-1.5
+      [&::-webkit-scrollbar-track]:bg-slate-100
+      [&::-webkit-scrollbar-thumb]:bg-[#b0cbcf]
+      [&::-webkit-scrollbar-thumb]:rounded-full
+      [&::-webkit-scrollbar-thumb:hover]:bg-[#8fb8be]">
             {filteredTeachers && filteredTeachers.length > 0 ? (
-              <table className="w-full text-left border-collapse overflow-x-hidden">
-                <thead className="bg-slate-100">
+      <table className="min-w-auto w-full text-left border-collapse">
+        <thead className="bg-slate-200 sticky top-0 z-10">
                   <tr className=" text-[#138496] text-xs font-semibold uppercase">
-                    <th className="px-6 py-3 text-left tracking-wide">
+                    <th className="px-2 py-6 text-left tracking-wide">
                       Teacher Info
                     </th>
-                    {/* <th className="px-6 py-5 text-left ">E-mail</th> */}
-                    <th className="px-6 py-5 text-left ">Department</th>
-                    <th className="px-6 py-5 text-left ">Expertise</th>
-                    <th className="px-6 py-5 text-left ">Join Date</th>
-                    <th className="px-6 py-5 text-left">Action</th>
+                    <th className="px-2 py-6 text-left ">Department</th>
+                    <th className="px-2 py-6 text-left ">Expertise</th>
+                    <th className="px-2 py-6 text-left ">Join Date</th>
+                    <th className="px-2 py-6 text-left">Action</th>
                   </tr>
                 </thead>
 
-                <tbody className="bg-white divide-y divide-slate-200">
+                <tbody className=" bg-slate-50 divide-y divide-slate-200">
                   {filteredTeachers.map((teacher) => {
                     return (
-                      <tr key={teacher._id} className="hover:bg-slate-50">
+                      <tr key={teacher._id} className="hover:bg-white">
                         {/* Teacher Info */}
-                        <td className="px-6 py-4">
+                        <td className="px-2 py-4">
                           <div>
                             <div className="text-sm font-medium text-slate-900">
                               {teacher.name}
@@ -257,27 +262,22 @@ const ManageTeachers = () => {
                           </div>
                         </td>
 
-                        {/* email */}
-                        {/* <td className="text-sm  text-slate-900">
-                          {teacher.email}
-                        </td> */}
-
                         {/* department */}
-                        <td className="px-6 py-4 whitespace-nowrapp">
+                        <td className="px-2 py-4 whitespace-nowrapp">
                           <div className="text-sm text-slate-900">
                             {teacher.department || "-"}
                           </div>
                         </td>
 
                         {/* expertise */}
-                        <td className="px-6 py-4 whitespace-nowrapp">
+                        <td className="px-2 py-4 whitespace-nowrapp">
                           {Array.isArray(teacher.expertise)
                             ? teacher.expertise.join(", ")
                             : teacher.expertise}
                         </td>
 
                         {/* join date */}
-                        <td className="px-6 py-4">
+                        <td className="px-2 py-4">
                           <div className="text-sm text-slate-900">
                             {teacher.createdAt
                               ? new Date(teacher.createdAt).toLocaleString()
@@ -286,7 +286,7 @@ const ManageTeachers = () => {
                         </td>
 
                         {/* action */}
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <td className="px-2 py-4 whitespace-nowrap text-sm font-medium">
                           <button
                             onClick={() => handleEdit(teacher)}
                             className="text-[#17a2b8] hover:text-blue-900 pe-2"

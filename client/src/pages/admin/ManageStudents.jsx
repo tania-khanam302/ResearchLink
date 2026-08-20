@@ -256,18 +256,23 @@ return {
             <h2 className="card-title text-[20px] font-semibold text-[#17a2b8]">
               Students List
             </h2>
-          </div>
-          <div className="overflow-x-auto">
-           
-            {filteredStudents && filteredStudents.length > 0 ? (
-              <table className="w-full text-left border-collapse overflow-x-hidden ">
-            <thead className="bg-slate-200">
+          </div> 
+          <div className="w-full max-w-full overflow-auto max-h-[500px]
+          
+      [&::-webkit-scrollbar]:w-1.5
+      [&::-webkit-scrollbar-track]:bg-slate-100
+      [&::-webkit-scrollbar-thumb]:bg-[#b0cbcf]
+      [&::-webkit-scrollbar-thumb]:rounded-full
+      [&::-webkit-scrollbar-thumb:hover]:bg-[#8fb8be]">
+            {filteredStudents && filteredStudents.length > 0 ? ( 
+      <table className="min-w-auto w-full text-left border-collapse">
+        <thead className="bg-slate-200 sticky top-0 z-10">
               <tr className="text-[#138496] text-[12px] font-semibold uppercase">
-                <th className="px-6 py-4">Student Info</th>
-                <th className="px-6 py-4">Department & Year</th>
-                <th className="px-6 py-4">Supervisor</th>
-                <th className="px-6 py-4">Project / Thesis Title</th>
-                <th className="px-6 py-4">Action</th>
+                <th className="px-2 py-6">Student Info</th>
+                <th className="px-2 py-6">Department & Year</th>
+                <th className="px-2 py-6">Supervisor</th>
+                <th className="px-2 py-6">Project / Thesis Title</th>
+                <th className="px-2 py-6">Action</th>
               </tr>
             </thead>
                 <tbody className=" bg-slate-50 divide-y divide-slate-200">
@@ -275,7 +280,7 @@ return {
                     return (
                       <tr key={student._id} className="hover:bg-white">
                         {/* student info  */}
-                        <td className="px-6 py-4 font-xl">
+                        <td className="px-2 py-6 font-xl">
                           <div>
                             <div className="text-[16px] font-medium text-slate-900">
                               {student.name}
@@ -287,7 +292,7 @@ return {
                         </td>
 
 {/* department  */}
-                        <td className="px-6 py-4 whitespace-nowrapp">
+                        <td className="px-2 py-4 whitespace-nowrapp">
                           <div className="text-[16px] text-slate-900">
                             {student.department || "-"}
                           </div>
@@ -300,9 +305,9 @@ return {
                         </td>
 
 {/* supervisor  */}
-                        <td className="px-6 py-4 whitespace-nowrapp">
+                        <td className="px-2 py-4 whitespace-nowrapp text-center">
                           {student.supervisor ? (
-                            <span className="inline-flex items-center px-2 py-0.9 rounded-full text-green-800 bg-gray-200 text-[16px] font-medium">
+                            <span className="inline-flex flex-wrap items-center px-2 py-0.9 rounded-full text-center w-[130px] text-green-800 bg-gray-200 text-[14px] font-medium">
                             
                                 {users?.find(
                                   (u)=>u._id === student?.supervisor
@@ -318,14 +323,14 @@ return {
                         </td>
 
 {/* project title */}
-                        <td className="px-6 py-4">
+                        <td className="px-2 py-4">
                           <div className="text-[16px] text-slate-900">
                             {student.projectTitle}
                           </div>
                           
                         </td>
 
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <td className="px-2 py-4 whitespace-nowrap text-sm font-medium">
                           <button
                             onClick={() => handleEdit(student)}
                             className="text-[#17a2b8] hover:text-blue-900 pe-2"

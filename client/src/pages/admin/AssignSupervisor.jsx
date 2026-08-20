@@ -150,7 +150,7 @@ const AssignSupervisor = () => {
   // table header
   const headers = [
     "Student",
-    "Project Title",
+    "Thesis and Project Title",
     "Supervisor",
     "Deadline",
     "Updated",
@@ -221,9 +221,15 @@ const AssignSupervisor = () => {
             </h2>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-slate-50 text-left px-4">
+          <div className="w-full max-w-full overflow-auto max-h-[500px]
+          
+      [&::-webkit-scrollbar]:w-1.5
+      [&::-webkit-scrollbar-track]:bg-slate-100
+      [&::-webkit-scrollbar-thumb]:bg-[#b0cbcf]
+      [&::-webkit-scrollbar-thumb]:rounded-full
+      [&::-webkit-scrollbar-thumb:hover]:bg-[#8fb8be]">
+      <table className="min-w-auto w-full text-left border-collapse">
+        <thead className="bg-slate-200 sticky top-0 z-10">
                 <tr>
                   {headers.map((h) => {
                     return (
@@ -237,9 +243,10 @@ const AssignSupervisor = () => {
                   })}
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-slate-200">
+              
+                <tbody className=" bg-slate-50 divide-y divide-slate-200">
                 {filtered.map((row) => (
-                  <tr key={row.projectId} className="hover:bg-slate-50">
+                  <tr key={row.projectId} className="hover:bg-white">
                     {/* Student */}
                     <td className="px-2 py-4 whitespace-nowrap">
                       <div>
@@ -283,31 +290,33 @@ const AssignSupervisor = () => {
                     <td className="px-2 py-4 text-[14px]">{row.updatedAt}</td>
 
                     {/* Assign Supervisor */}
-                    <td className="px-2 py-4 whitespace-nowrap">
-                      <select
-                        className="input-field w-full"
-                        value={selectedSupervisor[row.projectId] || ""}
-                        disabled={
-                          !!row.supervisor ||
-                          row.status === "rejected" ||
-                          !row.isApproved
-                        }
-                        onChange={(e) =>
-                          handleAssignSupervisor(row.projectId, e.target.value)
-                        }
-                      >
-                        <option value="" disabled>
-                          Select Supervisor
-                        </option>
-                        {teachers
-                          .filter((t) => t.capacityLeft > 0)
-                          .map((t) => (
-                            <option value={t._id} key={t._id}>
-                              {t.name} ({t.capacityLeft} slots left)
-                            </option>
-                          ))}
-                      </select>
-                    </td>
+<td className="px-2 py-4 whitespace-nowrap">
+  <select
+    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-700 shadow-sm outline-none transition-all duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
+    value={selectedSupervisor[row.projectId] || ""}
+    disabled={
+      !!row.supervisor ||
+      row.status === "rejected" ||
+      !row.isApproved
+    }
+    onChange={(e) =>
+      handleAssignSupervisor(row.projectId, e.target.value)
+    }
+  >
+    <option value="" disabled>
+      Select Supervisor
+    </option>
+
+    {teachers
+      .filter((t) => t.capacityLeft > 0)
+      .map((t) => (
+        <option value={t._id} key={t._id} >
+          {t.name} ({t.capacityLeft} slots left)
+        </option>
+      ))}
+  </select>
+</td>
+
 
                     {/* Action */}
                     <td className="px-2 py-4 whitespace-nowrap text-sm font-medium">
