@@ -284,7 +284,7 @@ const CoAdminDashboard = () => {
           <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* add student */}
             <button
-              className="btn-primary bg-[#17a2b8] hover:bg-[#138496] flex items-center justify-center space-x-2"
+              className="btn-primary h-[40px] bg-[#17a2b8] hover:bg-[#138496] flex items-center justify-center space-x-2"
               onClick={() => dispatch(toggleStudentModal())}
             >
               <PlusIcon className="w-5 h-5" />
@@ -294,7 +294,7 @@ const CoAdminDashboard = () => {
 
             {/* add techer */}
             <button
-              className="btn-secondary flex items-center justify-center space-x-2"
+              className="btn-secondary h-[40px] flex items-center justify-center space-x-2"
               onClick={() => dispatch(toggleTeacherModal())}
             >
               <PlusIcon className="w-5 h-5" />
@@ -304,7 +304,7 @@ const CoAdminDashboard = () => {
 
             {/* View Reports */}
             <button
-              className="btn-outline border-[#17a2b8] text-[#17a2b8] flex items-center justify-center space-x-2"
+              className="btn-outline h-[40px] border-[#17a2b8] text-[#17a2b8] flex items-center justify-center space-x-2"
               onClick={() => setIsReportModalOpen(true)}
             >
               <FileTextIcon className="w-5 h-5" />
