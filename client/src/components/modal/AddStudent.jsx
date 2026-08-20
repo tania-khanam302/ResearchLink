@@ -94,7 +94,7 @@ const AddStudent = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="input-field w-full p-2 border-b border-[#17a2b8] focus:outline-none focus:ring-1 focus:ring-[#17a2b8] pr-10"
+                  className="input-field w-full p-2 border-b border-slate-400 focus:outline-none pr-10"
                   //   className={`input w-full focus:ring-1 focus:ring-[#17a2b8] pr-10 ${
                   //   errors.password ? "input-error" : ""
                   // }`}
@@ -142,14 +142,14 @@ const AddStudent = () => {
                 <button
                   type="button"
                   onClick={() => dispatch(toggleStudentModal())}
-                  className="btn-danger text-white px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
+                  className="btn-danger text-white px-4 font-medium h-9 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
+                  className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-9 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
                 >
                   Add Student
                 </button>

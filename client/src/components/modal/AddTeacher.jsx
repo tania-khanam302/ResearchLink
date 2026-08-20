@@ -131,8 +131,7 @@ const AddTeacher = () => {
                     })
                   }
                 >
-                  {/* ব্যবহারকারীকে বাধ্য করতে একটি ডিফল্ট ফাঁকা অপশন যোগ করা হয়েছে */}
-                  <option value="" disabled>
+                   <option value="" disabled>
                     Select Department
                   </option>
                   <option value="Computer Science">Computer Science</option>
@@ -210,24 +209,24 @@ const AddTeacher = () => {
                   className="input-feild w-full p-2 border-b border-slate-400 focus:outline-none"
                 />
               </div>
-    </form>
               <div className="flex justify-end space-x-3 mt-2 pt-1">
                 <button
                   type="button"
                   onClick={() => dispatch(toggleTeacherModal())}
-                  className="btn-danger text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 mt-2 md:mt-0 shadow-md"
+                  className="btn-danger text-white px-4 font-medium h-9 rounded-md flex items-center space-x-2 mt-2 md:mt-0 shadow-md"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 mt-2 md:mt-0 shadow-md"
+                  className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-9 rounded-md flex items-center space-x-2 mt-2 md:mt-0 shadow-md"
                 >
                   Add Teacher
                 </button>
               </div>
         
+    </form>
             
           </div>
         </div>

@@ -44,6 +44,11 @@ import { getAllTheses, getAllProjects, getAllUsers } from "./store/slices/adminS
 import CoAdminDashboard from "./pages/coadmin/CoAdminDashboard";
 import CoAdminStudents from "./pages/coadmin/CoAdminStudents";
 import CoAdminTeachers from "./pages/coadmin/CoAdminTeachers";
+import CoAdminAssignSupervisor from "./pages/coadmin/CoAdminAssignSupervisor";
+import CoAdminThesisPage from "./pages/coadmin/CoAdminThesisPage";
+import CoAdminProjectsPage from "./pages/coadmin/CoAdminProjectsPage";
+import CoAdminDeadlinesPage from "./pages/coadmin/CoAdminDeadlinesPage";
+
 
 // not found
 import NotFound from "./pages/NotFound";
@@ -57,16 +62,36 @@ const App = () => {
     dispatch(getUser());
   }, [dispatch]);
 
+  // useEffect(() => {
+  //   if (authUser?.role === "Admin") {
+  //     dispatch(getAllUsers());
+  //     dispatch(getAllTheses());
+  //     dispatch(getAllProjects());
+  //   }
+  //   if (authUser?.role === "Student") {
+  //     dispatch(fetchDashboardStats());
+  //   }
+  // }, [authUser]);
+
+
   useEffect(() => {
-    if (authUser?.role === "Admin") {
-      dispatch(getAllUsers());
-      dispatch(getAllTheses());
-      dispatch(getAllProjects());
-    }
-    if (authUser?.role === "Student") {
-      dispatch(fetchDashboardStats());
-    }
-  }, [authUser]);
+  if (
+    authUser?.role === "Admin" ||
+    authUser?.role === "Co-Admin"
+  ) {
+    dispatch(getAllUsers());
+    dispatch(getAllProjects());
+  }
+
+  if (authUser?.role === "Admin") {
+    dispatch(getAllTheses());
+  }
+
+  if (authUser?.role === "Student") {
+    dispatch(fetchDashboardStats());
+  }
+}, [authUser, dispatch]);
+
 
   // protected routes ===================
   const ProtectedRoutes = ({ children, allowedRoles }) => {
@@ -164,6 +189,27 @@ const App = () => {
           <Route index element={<CoAdminDashboard />} />
           <Route path="students" element={<CoAdminStudents />} />
           <Route path="teachers" element={<CoAdminTeachers />} />
+           <Route
+    path="assign-supervisor"
+    element={<CoAdminAssignSupervisor />}
+  />
+    {/* Co-Admin Thesis */}
+  <Route
+    path="thesis"
+    element={<CoAdminThesisPage />}
+  />
+
+  {/* Co-Admin Projects */}
+  <Route
+    path="projects"
+    element={<CoAdminProjectsPage />}
+  />
+
+  {/* Co-Admin Deadlines */}
+  <Route
+    path="deadlines"
+    element={<CoAdminDeadlinesPage />}
+  />
         </Route>
 
         {/* Student Routes */}

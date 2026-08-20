@@ -98,23 +98,28 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             path: "/co-admin",
             icon: "home",
           },
+                    {
+            name: "Manage Teacher",
+            path: "/co-admin/teachers",
+            icon: "academic",
+          },
           {
             name: "Manage Student",
             path: "/co-admin/students",
             icon: "users",
           },
-          {
-            name: "Manage Teacher",
-            path: "/co-admin/teachers",
-            icon: "academic",
-          },
+
           
           {
             name: "Assign Supervisor",
             path: "/co-admin/assign-supervisor",
             icon: "link",
           },
-          
+                        {
+      name: "Thesis",
+      path: "/co-admin/thesis",
+      icon: "document",
+    },
           {
             name: "Project",
             path: "/co-admin/projects",
@@ -400,7 +405,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
                 open ? "opacity-100 max-h-20" : "opacity-0 max-h-0"
               }`}
             >
-              <p className="text-xs text-slate-500 text-start">Research Link</p>
+              <p className="text-xs text-slate-500 text-start">Educational Research Link</p>
             </div>
           </div>
         </div>
