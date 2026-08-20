@@ -206,7 +206,11 @@ export const assignSupervisor = createAsyncThunk(
   "assignSupervisor",
   async(data, thunkAPI)=>{
     try{
-      const res = await axiosInstance.post("/admin/assgign-supervisor",data);
+      const res = await axiosInstance.post(
+  "/admin/assign-supervisor",
+  data
+);
+
       toast.success(res.data.message);
       return res.data.data;
     }catch(error){
