@@ -5,13 +5,10 @@ import { toggleStudentModal } from "../../store/slices/popupSlice";
 import { Eye, EyeOff, X } from "lucide-react";
 
 const AddStudent = () => {
-
-
   const dispatch = useDispatch();
   // showPassword and showConfirmPassword ===================
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
 
   const [formData, setFormData] = useState({
     name: "",
@@ -20,9 +17,9 @@ const AddStudent = () => {
     password: "",
   });
 
-    // add student function
+  // add student function
   const handleCreateStudent = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     dispatch(createStudent(formData));
     setFormData({
       name: "",
@@ -34,7 +31,7 @@ const AddStudent = () => {
   };
 
   return (
- <>
+    <>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
         <div className="bg-white rounded-sm w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
           <div className="card-header rounded-t-lg py-4 p-3 mb-0 bg-blue-50 flex justify-between items-center sticky top-0 z-10">
@@ -43,7 +40,7 @@ const AddStudent = () => {
             </h3>
             <button
               onClick={() => dispatch(toggleStudentModal())}
-              className="text-slate-400 hover:text-slate-600" 
+              className="text-slate-400 hover:text-slate-600"
             >
               <X className="w-6 h-6 text-[#17a2b8]" />
             </button>
@@ -83,24 +80,22 @@ const AddStudent = () => {
                 />
               </div>
 
-              <div>
+              <div className="relative">
                 <label className="block text-sm font-medium text-slate-700 mb-1">
                   Password
                 </label>
                 <input
-                  type="password"
+                  // type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={formData.password}
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
                   className="input-field w-full p-2 border-b border-slate-400 focus:outline-none pr-10"
-                  //   className={`input w-full focus:ring-1 focus:ring-[#17a2b8] pr-10 ${
-                  //   errors.password ? "input-error" : ""
-                  // }`}
                   placeholder="Enter password"
                 />
-                   <button
+                <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2"
@@ -126,15 +121,27 @@ const AddStudent = () => {
                   }
                 >
                   {/* ব্যবহারকারীকে বাধ্য করতে একটি ডিফল্ট ফাঁকা অপশন যোগ করা হয়েছে */}
-                  <option value="" disabled>Select Department</option>
+                  <option value="" disabled>
+                    Select Department
+                  </option>
                   <option value="Computer Science">Computer Science</option>
-                  <option value="Software Engineering">Software Engineering</option>
-                  <option value="Information Technology">Information Technology</option>
+                  <option value="Software Engineering">
+                    Software Engineering
+                  </option>
+                  <option value="Information Technology">
+                    Information Technology
+                  </option>
                   <option value="Data Science">Data Science</option>
-                  <option value="Electrical Engineering">Electrical Engineering</option>
-                  <option value="Mechanical Engineering">Mechanical Engineering</option>
+                  <option value="Electrical Engineering">
+                    Electrical Engineering
+                  </option>
+                  <option value="Mechanical Engineering">
+                    Mechanical Engineering
+                  </option>
                   <option value="Civil Engineering">Civil Engineering</option>
-                  <option value="Business Administration">Business Administration</option>
+                  <option value="Business Administration">
+                    Business Administration
+                  </option>
                 </select>
               </div>
 

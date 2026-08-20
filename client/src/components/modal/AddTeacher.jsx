@@ -44,19 +44,21 @@ const AddTeacher = () => {
           <div className="card-header rounded-t-lg py-4 p-3 mb-0 bg-blue-50 flex justify-between items-center sticky top-0 z-10">
             <h3 className="text-lg font-semibold text-slate-900">
               {" "}
-              
               Add Teacher
             </h3>
             <button
               onClick={() => dispatch(toggleTeacherModal())}
-              className="text-slate-400 hover:text-slate-600" // hover:to-slate-600 ঠিক করে hover:text-slate-600 করা হয়েছে
+              className="text-slate-400 hover:text-slate-600"
             >
               <X className="w-6 h-6 text-[#17a2b8]" />
             </button>
           </div>
 
           <div className="p-5 mb-2">
-            <form onSubmit={handleCreateTeacher} className="space-y-4 max-h-96 overflow-y-auto pr-2">
+            <form
+              onSubmit={handleCreateTeacher}
+              className="space-y-4 max-h-96 overflow-y-auto pr-2"
+            >
               <div>
                 <label className="block text-sm font-medium text-slate-700">
                   Full Name
@@ -89,21 +91,19 @@ const AddTeacher = () => {
                 />
               </div>
 
-              <div>
+              <div className="relative">
                 <label className="block text-sm font-medium text-slate-700">
                   Password
                 </label>
                 <input
-                  type="password"
+                  // type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={formData.password}
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="input-field w-full p-2 border-b border-[#17a2b8] focus:outline-none focus:ring-1 focus:ring-[#17a2b8] pr-10"
-                  //   className={`input w-full focus:ring-1 focus:ring-[#17a2b8] pr-10 ${
-                  //   errors.password ? "input-error" : ""
-                  // }`}
+                  className="input-field w-full p-2 border-b border-slate-400 focus:outline-none"
                   placeholder="Enter password"
                 />
                 <button
@@ -131,7 +131,7 @@ const AddTeacher = () => {
                     })
                   }
                 >
-                   <option value="" disabled>
+                  <option value="" disabled>
                     Select Department
                   </option>
                   <option value="Computer Science">Computer Science</option>
@@ -225,9 +225,7 @@ const AddTeacher = () => {
                   Add Teacher
                 </button>
               </div>
-        
-    </form>
-            
+            </form>
           </div>
         </div>
       </div>
