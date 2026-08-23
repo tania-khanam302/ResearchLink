@@ -32,6 +32,7 @@ const ManageStudents = () => {
     name: "",
     email: "",
     department: "",
+  type: "",
   });
 
   const dispatch = useDispatch();
@@ -271,7 +272,8 @@ return {
                 <th className="px-2 py-6">Student Info</th>
                 <th className="px-2 py-6">Department & Year</th>
                 <th className="px-2 py-6">Supervisor</th>
-                <th className="px-2 py-6">Project / Thesis Title</th>
+<th className="px-2 py-6">Type</th>
+<th className="px-2 py-6">Thesis / Project Title</th>
                 <th className="px-2 py-6">Action</th>
               </tr>
             </thead>
@@ -321,7 +323,17 @@ return {
                             </span>
                           )}
                         </td>
-
+<td className="px-2 py-4 text-center">
+  <span
+    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+      student.type === "Thesis"
+        ? "text-purple-800 bg-purple-100"
+        : "text-blue-800 bg-blue-100"
+    }`}
+  >
+    {student.type || "-"}
+  </span>
+</td>
 {/* project title */}
                         <td className="px-2 py-4">
                           <div className="text-[16px] text-slate-900">

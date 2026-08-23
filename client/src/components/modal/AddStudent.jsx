@@ -15,6 +15,7 @@ const AddStudent = () => {
     email: "",
     department: "",
     password: "",
+  type: "",
   });
 
   // add student function
@@ -144,6 +145,30 @@ const AddStudent = () => {
                   </option>
                 </select>
               </div>
+
+<div>
+  <label className="block text-sm font-medium text-slate-700 mb-1">
+    Type
+  </label>
+
+  <select
+    className="input-field w-full p-2 border-b border-slate-400 focus:outline-none"
+    required
+    value={formData.type}
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        type: e.target.value,
+      })
+    }
+  >
+    <option value="" disabled>
+      Select Type
+    </option>
+    <option value="Project">Project</option>
+    <option value="Thesis">Thesis</option>
+  </select>
+</div>
 
               <div className="flex justify-end space-x-3 pt-4">
                 <button
