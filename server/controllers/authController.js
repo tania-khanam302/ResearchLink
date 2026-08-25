@@ -63,45 +63,46 @@ export const getUser = asyncHandler(async (req, res, next) => {
 
 // ====================== forgotPassword =======================
 export const forgotPassword = asyncHandler(async (req, res, next) => {
+  // console.log("1 NEXT:", typeof next);
 
-/*
-// ======================================extra add atay terminale dekha jabe 
-  console.log("SMTP_USER:", process.env.SMTP_USER);
-  console.log("SMTP_PASS:", process.env.SMTP_PASSWORD);
-// ======================================extra add
-*/
   const user = await User.findOne({ email: req.body.email });
 
+  // console.log("2 NEXT:", typeof next);
+
   if (!user) {
-    return next(new ErrorHandler("User not found with this email", 404)); //404 Not Found
+    return next(new ErrorHandler("User not found with this email", 404));
   }
 
-  // ========================================== je email dia login krchi seta vull dile [User not found with this email1] ata ase
+  // console.log("3 NEXT:", typeof next);
+
   const resetToken = user.getResetPasswordToken();
 
   await user.save({ validateBeforeSave: false });
 
   const resetPasswordUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
-
   const message = generateForgotPasswordEmailTemplate(resetPasswordUrl);
+
+  // console.log("4 NEXT:", typeof next);
 
   try {
     await sendEmail({
       to: user.email,
-      subject: "Final Year Project Management System - 🔐 Password Reset Request",
+      subject: "Research Link- 🔐 Password Reset Request",
       message,
     });
+
+    // console.log("5 EMAIL SENT");
+
     res.status(200).json({
       success: true,
       message: `Email sent to ${user.email} successfully`,
     });
   } catch (error) {
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
-    await user.save({ validateBeforeSave: false });
-    return next(new ErrorHandler(error.message || "Cannot send E-mail",500));
+    console.log("6 EMAIL ERROR:", error);
+    return next(new ErrorHandler(error.message || "Cannot send E-mail", 500));
   }
 });
+
 
 // ====================== resetPassword =======================
 export const resetPassword = asyncHandler(async (req, res, next) => {

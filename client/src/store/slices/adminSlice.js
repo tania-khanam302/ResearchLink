@@ -159,16 +159,11 @@ export const getAllTheses = createAsyncThunk(
       const res = await axiosInstance.get("/admin/theses");
       return res.data.data;
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Failed to fetch theses"
-      );
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message
-      );
+      toast.error(error.response?.data?.message || "Failed to fetch theses");
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
     }
-  }
+  },
 );
-
 
 // get all project
 export const getAllProjects = createAsyncThunk(
@@ -183,7 +178,6 @@ export const getAllProjects = createAsyncThunk(
     }
   },
 );
-
 
 //Dashboard Stats
 export const getDashboardStats = createAsyncThunk(
@@ -204,21 +198,84 @@ export const getDashboardStats = createAsyncThunk(
 // assign supervisor
 export const assignSupervisor = createAsyncThunk(
   "assignSupervisor",
-  async(data, thunkAPI)=>{
-    try{
-      const res = await axiosInstance.post(
-  "/admin/assign-supervisor",
-  data
-);
-
+  async (data, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post("/admin/assign-supervisor", data);
       toast.success(res.data.message);
       return res.data.data;
-    }catch(error){
+    } catch (error) {
       toast.error(error.response.data.message || "Failed to assign supervisor");
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
+  },
+);
+
+// approve project
+export const approveProject = createAsyncThunk(
+  "approveProject",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axiosInstance.put(`/admin/project/${id}`, {status: "approved"});
+      toast.success(res.data.message || "Project approved successfully");
+      return id;
+    } catch (error) {
+      toast.error(error.response.data.message || "Failed to approved project");
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
+);
+
+// reject project
+export const rejectProject = createAsyncThunk(
+  "rejectProject",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axiosInstance.put(`/admin/project/${id}`, {status:"rejected"});
+      toast.success(res.data.message || "Project rejected successfully");
+      return id;
+    } catch (error) {
+      toast.error(error.response.data.message || "Failed to reject project");
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
+);
+
+// delete project
+export const deleteProject = createAsyncThunk(
+  "deleteProject",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axiosInstance.delete(`/admin/project/${id}`);
+
+      toast.success(res.data.message || "Project deleted successfully");
+
+      return id;
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to delete project"
+      );
+
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to delete project"
+      );
+    }
   }
-)
+);
+
+
+// get project
+export const getProject = createAsyncThunk(
+  "getProject",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get(`/admin/project/${id}`);
+     return res.data?.data?.project || res.data?.data || res.data;
+    } catch (error) {
+      toast.error(error.response.data.message || "Failed to fetch project");
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  },
+);
 
 const adminSlice = createSlice({
   name: "admin",
@@ -262,12 +319,11 @@ const adminSlice = createSlice({
       .addCase(getAllProjects.fulfilled, (state, action) => {
         state.projects = action.payload.projects;
       })
-      
+
       // get all theses
       .addCase(getAllTheses.fulfilled, (state, action) => {
-  state.theses = action.payload.theses;
-})
-
+        state.theses = action.payload.theses;
+      })
 
       // create teacher
       .addCase(createTeacher.fulfilled, (state, action) => {
@@ -307,8 +363,28 @@ const adminSlice = createSlice({
 
       // dashboard stats
       .addCase(getDashboardStats.fulfilled, (state, action) => {
-        state.stats= action.payload;
-      });
+        state.stats = action.payload;
+      })
+
+      // approved project
+      .addCase(approveProject.fulfilled, (state, action) => {
+       const projectId = action.payload;
+        state.projects = state.projects.map((p)=> p._id === projectId ? {...p, status:"approved"}:p);
+      })
+      // reject project
+      .addCase(rejectProject.fulfilled, (state, action) => {
+       const projectId = action.payload;
+        state.projects = state.projects.map((p)=> p._id === projectId ? {...p, status:"rejected"}:p);
+      })
+      
+// delete project
+.addCase(deleteProject.fulfilled, (state, action) => {
+  const projectId = action.payload;
+
+  state.projects = state.projects.filter(
+    (p) => p._id !== projectId
+  );
+});
   },
 });
 

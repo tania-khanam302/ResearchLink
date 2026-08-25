@@ -104,3 +104,20 @@ export const getProjectBySupervisor = async (supervisorId) => {
 // ) => {
 //   return await getAllProjects({supervisor:supervisorId});
 // };
+
+export const updateProject = async(id, updatedData)=>{
+  const project = await Project.findByIdAndUpdate(id, updatedData,{
+    new:true,
+    runValidators:true,
+  })
+  .populate("student", "name email")
+  .populate("supervisor", "name email")
+  if(!project){
+    throw new ErrorHandler("Project not found", 404);
+  }
+  return project;
+}
+
+export const deleteProject = async (id) => {
+  return await Project.findByIdAndDelete(id);
+};

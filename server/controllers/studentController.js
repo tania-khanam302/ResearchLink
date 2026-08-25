@@ -72,7 +72,7 @@ export const uploadFiles = asyncHandler(async (req, res, next) => {
   const studentId = req.user._id;
   const project = await projectService.getProjectById(projectId);
 
-  if (!project || project.student._id.toString() !== studentId.toString()) {
+  if (!project || project.student._id.toString() !== studentId.toString() || project.status === "rejected") {
     return next(
       new ErrorHandler("Not authorized to upload files for this project", 403),
     );
@@ -203,21 +203,21 @@ export const requestSupervisor = asyncHandler(async (req, res, next) => {
 
   const request = await requestServices.createRequest(requestData);
 
-  // await notificationServices.notifyUser(
-  //   teacherId,
-  //   `${student.name} has request ${supervisor.name} to be their supervisor.`,
-  //   "request",
-  //   "/teacher/request",
-  //   "medium",
-  // );
-
   await notificationServices.notifyUser(
-  teacherId,
-  "Supervisor request submitted successfully",
-  "request",
-  "/teacher/request",
-  "medium",
-);
+    teacherId,
+    `${student.name} has request ${supervisor.name} to be their supervisor.`,
+    "request",
+    "/teacher/request",
+    "medium",
+  );
+
+//   await notificationServices.notifyUser(
+//   teacherId,
+//   "Supervisor request submitted successfully",
+//   "request",
+//   "/teacher/request",
+//   "medium",
+// );
 
   res.status(201).json({
     success: true,

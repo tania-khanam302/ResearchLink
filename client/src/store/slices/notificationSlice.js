@@ -97,10 +97,10 @@ const notificationSlice = createSlice({
       state.list = state.list.filter((n) => n._id !== action.payload);
 
       if (removed) {
-        if (!remove.isRead) {
+        if (!removed.isRead) {
           state.unreadCount = Math.max(0, state.unreadCount - 1);
         }
-        if (!remove.isRead) {
+        if (!removed.isRead) {
           state.readCount = Math.max(0, state.readCount - 1);
         }
         if (!removed.priority === "high") {

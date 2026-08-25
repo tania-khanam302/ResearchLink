@@ -93,13 +93,21 @@ export const acceptRequests = asyncHandler(async (req, res, next) => {
   const request = await requestServices.acceptRequests(requestId, teacherId);
   if (!request) return next(new ErrorHandler("Request not found", 404));
 
+  // await notificationServices.notifyUser(
+  //   request.student._id,
+  //   `Your supervisor request has been accepted by $(req.user.name)`,
+  //   "approval",
+  //   "/student/status",
+  //   "low",
+  // );
+
   await notificationServices.notifyUser(
-    request.student._id,
-    `Your supervisor request has been accepted by $(req.user.name)`,
-    "approval",
-    "/student/status",
-    "low",
-  );
+  request.student._id,
+  `Your supervisor request has been accepted by ${req.user.name}`,
+  "approval",
+  "/student/status",
+  "low",
+);
 
   const student = await User.findById(request.student._id);
   const studentEmail = student.email;

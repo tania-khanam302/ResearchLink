@@ -28,12 +28,12 @@ const AssignSupervisor = () => {
 
     return teacherUsers.map((t) => ({
       ...t,
-      assignedCount: Array.isArray(t.assignStudents)
-        ? t.assignStudents.length
+      assignedCount: Array.isArray(t.assignedStudents)
+        ? t.assignedStudents.length
         : 0,
       capacityLeft:
         (typeof t.maxStudents === "number" ? t.maxStudents : 0) -
-        (Array.isArray(t.assignStudents) ? t.assignStudents.length : 0),
+        (Array.isArray(t.assignedStudents) ? t.assignedStudents.length : 0),
     }));
   }, [users]);
 
@@ -74,18 +74,18 @@ const AssignSupervisor = () => {
 
   const [pendingFor, setPendingFor] = useState(null);
 
-  // const handleAssignSupervisor = (projectId, supervisorId) => {
-  //   setSelectedSupervisor((prev) => ({
-  //     ...prev,
-  //     [projectId]: supervisorId,
-  //   }));
-  // };
-  const handleSupervisorSelect = (projectId, supervisorId) => {
+  const handleAssignSupervisor = (projectId, supervisorId) => {
     setSelectedSupervisor((prev) => ({
       ...prev,
       [projectId]: supervisorId,
     }));
   };
+  // const handleSupervisorSelect = (projectId, supervisorId) => {
+  //   setSelectedSupervisor((prev) => ({
+  //     ...prev,
+  //     [projectId]: supervisorId,
+  //   }));
+  // };
 
   const handleAssign = async (studentId, projectStatus, projectId) => {
     const supervisorId = selectedSupervisor[projectId];
@@ -107,7 +107,7 @@ const AssignSupervisor = () => {
     setPendingFor(null);
 
     if (assignSupervisorThunk.fulfilled.match(res)) {
-      toast.success("Supervisor assigned successfully");
+      // toast.success("Supervisor assigned successfully");
 
       setSelectedSupervisor((prev) => {
         const newState = { ...prev };
@@ -117,7 +117,7 @@ const AssignSupervisor = () => {
 
       dispatch(getAllUsers());
     } else {
-      toast.error("Failed to assign supervisor");
+      // toast.error("Failed to assign supervisor");
     }
   };
 
@@ -300,8 +300,8 @@ const AssignSupervisor = () => {
       !row.isApproved
     }
     onChange={(e) =>
-      handleAssignSupervisor(row.projectId, e.target.value)
-    }
+    
+  handleAssignSupervisor(row.projectId, e.target.value)}
   >
     <option value="" disabled>
       Select Supervisor

@@ -14,6 +14,9 @@ import {
   getAllProjects,
   getDashboardStats,
   assignSupervisor,
+  getProject,
+  updateProjectStatus,
+  deleteProject,
 } from "../controllers/adminController.js";
 import multer from "multer";
 import {
@@ -135,4 +138,26 @@ router.post(
   assignSupervisor
 );
 
+// get project
+router.get(
+  "/project/:id",
+  isAuthenticated,
+  isAuthorized("Admin", "Co-Admin"),
+  getProject
+);
+
+// update project status
+router.put(
+  "/project/:id",
+  isAuthenticated,
+  isAuthorized("Admin", "Co-Admin"),
+  updateProjectStatus
+);
+// delete project
+router.delete(
+  "/project/:id",
+  isAuthenticated,
+  isAuthorized("Admin", "Co-Admin"),
+  deleteProject
+); 
 export default router;

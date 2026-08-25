@@ -19,19 +19,42 @@ export const login = createAsyncThunk("login", async (data, thunkAPI) => {
 });
 
 // forgot password =================
+// export const forgotPassword = createAsyncThunk(
+//   "auth/password/forgot-password",
+//   async (email, thunkAPI) => {
+//     try {
+//       const res = await axiosInstance.post("/auth/password/forgot-password", email);
+//       toast.success(res.data.message);
+//       return null;
+//     } catch (error) {
+//       toast.error(error.response.data.message);
+//       return thunkAPI.rejectWithValue(error.response.data.message);
+//     }
+//   },
+// );
+
 export const forgotPassword = createAsyncThunk(
   "auth/password/forgot-password",
-  async (email, thunkAPI) => {
+  async ({ email }, thunkAPI) => {
     try {
-      const res = await axiosInstance.post("/auth/password/forgot-password", email);
+      const res = await axiosInstance.post(
+        "/auth/password/forgot-password",
+        { email }
+      );
+
       toast.success(res.data.message);
-      return null;
+      return res.data;
     } catch (error) {
-      toast.error(error.response.data.message);
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        error.response?.data?.message ||
+        "Failed to send reset password email";
+
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
     }
-  },
+  }
 );
+
 
 // reset password =================
 export const resetPassword = createAsyncThunk(

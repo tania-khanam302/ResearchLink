@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: "null",
     },
+    type: {
+  type: String,
+  enum: ["Project", "Thesis"],
+  default: "Project",
+},
     expertise: {
       type: [String],
       default: [],
@@ -72,12 +77,22 @@ const userSchema = new mongoose.Schema(
   },
 );
 
-userSchema.pre("save", async function (next) {
+// userSchema.pre("save", async function (next) {
+//   if (!this.isModified("password")) {
+//     next();
+//   }
+//   this.password = await bcrypt.hash(this.password, 10);
+// });
+
+
+userSchema.pre("save", async function () {
   if (!this.isModified("password")) {
-    next();
+    return;
   }
+
   this.password = await bcrypt.hash(this.password, 10);
 });
+
 
 userSchema.methods.generateToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
