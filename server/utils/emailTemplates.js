@@ -4,7 +4,7 @@ export function generateForgotPasswordEmailTemplate(resetPasswordUrl) {
 
     <!-- Header -->
     <div style="text-align:center; margin-bottom:20px;">
-      <h2 style="color:#3b82f6; margin:0;">Final Year Project Management System - 🔐 Password Reset Request</h2>
+      <h2 style="color:#3b82f6; margin:0;">Research Link - 🔐 Password Reset Request</h2>
       <p style="font-size:14px; color:#6b7280; margin:5px 0 0;">
         Secure access to your account
       </p>
