@@ -42,7 +42,7 @@ export const getAllUsers = async () => {
   const query = { role: { $ne: "Admin" } }; //exclude admin
 
   const users = await User.find(query)
-    .select("-pasword -resetPasswordToken -resetPasswordExpire")
+    .select("-password -resetPasswordToken -resetPasswordExpire")
     .sort({ createdAt: -1 });
     
     return users;
