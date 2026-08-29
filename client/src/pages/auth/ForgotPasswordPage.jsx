@@ -6,8 +6,8 @@ import { forgotPassword } from "../../store/slices/authSlice";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(""); // useState er vitore false suggest kore seta e dichi✅ isSubmitted এর type string করা হয়েছে যাতে success message দেখানো যায়
-  const [error, setError] = useState("");
+ const [isSubmitted, setIsSubmitted] = useState(false);
+ const [error, setError] = useState("");
   const { isRequestingForToken } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
