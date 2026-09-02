@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  ArrowDownToLine,
   ArrowDownToLineIcon,
   File,
   FileArchive,
@@ -19,6 +18,8 @@ const TeacherFiles = () => {
   const [viewMode, setViewMode] = useState("grid");
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   const dispatch = useDispatch();
   const fileFromStore = useSelector((state) => state.teacher.files) || [];
@@ -100,6 +101,19 @@ const TeacherFiles = () => {
 
     return matchesSearch && matchesType;
   });
+  const totalPages = Math.ceil(filteredFiles.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+
+  const currentFiles = filteredFiles.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
+
+  // Search or filter change return to first page
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterType]);
 
   const handleDownloadFile = async (file) => {
     try {
@@ -174,81 +188,120 @@ const TeacherFiles = () => {
   return (
     <>
       <div className="space-y-6">
-        {/* HEADER */}
-        <div className="card">
-          <div className="card-header">
-            <div className="flex justify-between items-center">
-              <h1 className="card-title">Student Files</h1>
-              <p className="card-subtitle">
-                Manage files shared with and received from students
-              </p>
+        {/* header */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="relative px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-[#f0fbfc] to-white overflow-hidden">
+            <div className="absolute -right-10 -top-16 w-36 h-36 rounded-full bg-[#17a2b8]/5" />
+            <div className="absolute right-20 -bottom-20 w-32 h-32 rounded-full bg-[#17a2b8]/5" />
+
+            <div className="relative flex items-center gap-4">
+              <div
+                className="w-11 h-11 shrink-0 rounded-lg
+                   bg-[#17a2b8]/10
+                   border border-[#17a2b8]/20
+                   flex items-center justify-center"
+              >
+                <FileText className="w-5 h-5 text-[#138496]" />
+              </div>
+
+              <div>
+                <h1 className="text-xl sm:text-2xl font-semibold text-slate-800 tracking-tight">
+                  Student Files
+                </h1>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  Manage files shared with and received from students
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* CONTROLER */}
-          <div className="flex flex-row justify-between items-center gap-4 mb-6">
-            <div className="flex items-center gap-4">
-              <select
-                className="input w-56"
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-              >
-                <option value="all">All Files</option>
-                <option value="report">Reports</option>
-                <option value="presentation">Presentation</option>
-                <option value="code">Code</option>
-                <option value="image">Image</option>
-              </select>
+          <div className="px-6 py-5 border-b border-slate-100">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              {/* Search & Filter */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <select
+                  className="w-full sm:w-52 h-10 px-3 text-sm text-slate-700
+                     bg-white border border-slate-300 rounded-lg
+                     outline-none cursor-pointer
+                     focus:border-[#17a2b8]
+                     focus:ring-2 focus:ring-[#17a2b8]/10
+                     transition-all"
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                >
+                  <option value="all">All Files</option>
+                  <option value="report">Reports</option>
+                  <option value="presentation">Presentation</option>
+                  <option value="code">Code</option>
+                  <option value="image">Image</option>
+                </select>
 
-              <input
-                type="text"
-                className="input w-96"
-                placeholder="Search files..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`p-2 rounded-lg ${
-                  viewMode === "grid"
-                    ? "bg-blue-100 text-blue-600"
-                    : "hover:bg-slate-100 text-slate-600"
-                }`}
-              >
-                <LayoutGrid className="w-5 h-5" />
-              </button>
+                <input
+                  type="text"
+                  className="w-full sm:w-80 h-10 px-3 text-sm text-slate-700
+                     bg-white border border-slate-300 rounded-lg
+                     outline-none placeholder:text-slate-400
+                     focus:border-[#17a2b8]
+                     focus:ring-2 focus:ring-[#17a2b8]/10
+                     transition-all"
+                  placeholder="Search files..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
 
-              <button
-                onClick={() => setViewMode("list")}
-                className={`p-2 rounded-lg ${
-                  viewMode === "list"
-                    ? "bg-blue-100 text-blue-600"
-                    : "hover:bg-slate-100 text-slate-600"
-                }`}
-              >
-                <List className="w-5 h-5" />
-              </button>
+              {/* View Mode */}
+              <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg w-fit">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 rounded-md transition-all ${
+                    viewMode === "grid"
+                      ? "bg-white text-[#138496] shadow-sm"
+                      : "text-slate-500 hover:text-slate-700"
+                  }`}
+                  title="Grid view"
+                >
+                  <LayoutGrid className="w-5 h-5" />
+                </button>
+
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`p-2 rounded-md transition-all ${
+                    viewMode === "list"
+                      ? "bg-white text-[#138496] shadow-sm"
+                      : "text-slate-500 hover:text-slate-700"
+                  }`}
+                  title="List view"
+                >
+                  <List className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* FILE STATS */}
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 mb-6">
-            {fileStats.map((item, i) => {
-              return (
-                <div key={i} className={`${item.bg} p-4 rounded-lg`}>
-                  <p className={`text-sm ${item.text}`}>{item.label}</p>
-                  <p className={`text-2xl ${item.text} font-bold`}>
-                    {item.count}
-                  </p>
-                </div>
-              );
-            })}
+          {/* files section */}
+          <div className="p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              {fileStats.map((item, i) => {
+                return (
+                  <div
+                    key={i}
+                    className={`${item.bg} p-4 rounded-lg border border-white/60`}
+                  >
+                    <p className={`text-sm ${item.text}`}>{item.label}</p>
+
+                    <p className={`text-2xl ${item.text} font-bold mt-1`}>
+                      {item.count}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* FILES DISPLAY */}
+        {/* files display */}
         {viewMode === "grid" ? (
           <div className="card bg-gray-50 pe-4 pl-4  px-5 py-5">
             <div
@@ -265,7 +318,7 @@ const TeacherFiles = () => {
   "
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {filteredFiles.map((file) => (
+                {currentFiles.map((file) => (
                   <div
                     key={file.id}
                     className="bg-white border border-slate-200 rounded-xl p-5 shadow-md hover:shadow-lg hover:border-[#17a2b8]/40 transition-all duration-300"
@@ -297,9 +350,6 @@ const TeacherFiles = () => {
                         <span className="px-2 py-1 rounded-md bg-slate-100">
                           {file.type}
                         </span>
-
-                        {/* <span>•</span>
-            <span>{file.size}</span> */}
                       </div>
 
                       {/* Upload Date */}
@@ -341,7 +391,7 @@ const TeacherFiles = () => {
                 </thead>
 
                 <tbody>
-                  {filteredFiles.map((file) => (
+                  {currentFiles.map((file) => (
                     <tr
                       key={file.id}
                       className="border-t hover:bg-slate-50 transition-colors"
@@ -363,11 +413,6 @@ const TeacherFiles = () => {
                       <td className="py-3 px-4">
                         {new Date(file.uploadDate).toLocaleDateString()}
                       </td>
-
-                      {/* <td className="py-3 px-4">
-                {file.size}
-              </td> */}
-
                       <td className="py-3 px-4">
                         <button
                           onClick={() => handleDownloadFile(file)}
@@ -380,6 +425,100 @@ const TeacherFiles = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* pagination */}
+        {filteredFiles.length > 0 && totalPages > 1 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
+            {/* Showing info */}
+            <p className="text-sm text-slate-500">
+              Showing{" "}
+              <span className="font-medium text-slate-700">
+                {startIndex + 1}
+              </span>{" "}
+              to{" "}
+              <span className="font-medium text-slate-700">
+                {Math.min(startIndex + itemsPerPage, filteredFiles.length)}
+              </span>{" "}
+              of{" "}
+              <span className="font-medium text-slate-700">
+                {filteredFiles.length}
+              </span>{" "}
+              files
+            </p>
+
+            {/* Pagination buttons */}
+            <div className="flex items-center gap-1">
+              {/* Previous */}
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="
+          px-3 py-2
+          text-sm font-medium
+          rounded-lg
+          border border-slate-200
+          bg-white
+          text-slate-600
+          hover:bg-slate-50
+          disabled:opacity-40
+          disabled:cursor-not-allowed
+          transition
+        "
+              >
+                Previous
+              </button>
+
+              {/* Page numbers */}
+              {Array.from({ length: totalPages }, (_, index) => {
+                const page = index + 1;
+
+                return (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`
+              min-w-9 h-9
+              px-3
+              text-sm font-medium
+              rounded-lg
+              border
+              transition
+              ${
+                currentPage === page
+                  ? "bg-[#17a2b8] text-white border-[#17a2b8] shadow-sm"
+                  : "bg-white text-slate-600 border-slate-200 hover:bg-[#f0fbfc] hover:text-[#138496]"
+              }
+            `}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
+
+              {/* Next */}
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="
+          px-3 py-2
+          text-sm font-medium
+          rounded-lg
+          border border-slate-200
+          bg-white
+          text-slate-600
+          hover:bg-slate-50
+          disabled:opacity-40
+          disabled:cursor-not-allowed
+          transition
+        "
+              >
+                Next
+              </button>
             </div>
           </div>
         )}
