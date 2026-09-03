@@ -4,13 +4,11 @@ import {
   CheckCircle,
   Users,
   Clock,
-  Loader,
   Loader2,
   MoveDiagonal,
   LayoutDashboard,
 } from "lucide-react";
 import { getTeacherDashboardStats } from "./../../store/slices/teacherSlice";
-// import { title } from 'process';
 
 const TeacherDashboard = () => {
   const dispatch = useDispatch();
@@ -25,12 +23,6 @@ const TeacherDashboard = () => {
 
   const statsCards = [
     {
-      // title: "Assigned Students",
-      // value: authuser?.assignedStudents?.length || 0,
-      // loading,
-      // icon: Users,
-      // bg: "bg-blue-100",
-      // color: "text-blue-600",
       title: "Assigned Students",
       value: dashboardStats?.assignedStudents || 0,
       loading,
@@ -47,7 +39,7 @@ const TeacherDashboard = () => {
       color: "text-yellow-600",
     },
     {
-      title: "Completed These/Projects",
+      title: "Completed Thesis/Projects",
       value: dashboardStats?.completedProjects || 0,
       loading,
       icon: CheckCircle,
@@ -81,7 +73,7 @@ const TeacherDashboard = () => {
               </h1>
 
               <p className="mt-1 text-sm text-slate-500">
-                Manage your students and provide guidance on their projects
+                Manage your students and provide guidance on their thesis and projects
               </p>
             </div>
           </div>
@@ -195,8 +187,6 @@ const TeacherDashboard = () => {
           </div>
         </div>
       </div>
-
-
     </>
   );
 };
