@@ -11,6 +11,7 @@ import {
 const PendingRequests = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [filterType, setFilterType] = useState("all");
   const [loadingMap, setLoadingMap] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -25,7 +26,7 @@ const PendingRequests = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, filterStatus]);
+  }, [searchTerm, filterStatus, filterType]);
 
   const setLoading = (id, key, value) => {
     setLoadingMap((prev) => ({
@@ -75,23 +76,44 @@ const PendingRequests = () => {
     }
   };
 
-  const filteredRequests =
-    (list || []).filter((request) => {
-      const matchesSearch =
-        (request?.student?.name || "")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        (request?.project?.title || "")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        (request?.latestProject?.title || "")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
+const filteredRequests =
+  (list || []).filter((request) => {
+    const matchesSearch =
+      (request?.student?.name || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (request?.project?.title || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (request?.latestProject?.title || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (request?.thesis?.title || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (request?.latestThesis?.title || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
-      const matchesStatus =
-        filterStatus === "all" || request.status === filterStatus;
-      return matchesSearch && matchesStatus;
-    }) || [];
+    const matchesStatus =
+      filterStatus === "all" || request.status === filterStatus;
+
+    // Type Filter Logic
+    const thesis = request.latestThesis || request.thesis;
+    const project = request.latestProject || request.project;
+
+    const requestType = thesis
+      ? "thesis"
+      : project
+        ? "project"
+        : null;
+
+    const matchesType =
+      filterType === "all" || requestType === filterType;
+
+    return matchesSearch && matchesStatus && matchesType;
+  }) || [];
+
   const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -149,6 +171,29 @@ const PendingRequests = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
+              <div className="w-full md:w-52">
+                <select
+                  className="w-full h-10
+      px-3
+      text-sm
+      text-slate-700
+      bg-white
+      border border-slate-300
+      rounded-lg
+      outline-none
+      cursor-pointer
+      transition-all
+      focus:border-[#17a2b8]
+      focus:ring-2
+      focus:ring-[#17a2b8]/10"
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                >
+                  <option value="all">All Types</option>
+                  <option value="thesis">Thesis</option>
+                  <option value="project">Project</option>
+                </select>
+              </div>
 
               <div className="w-full md:w-52">
                 <select
@@ -181,8 +226,27 @@ const PendingRequests = () => {
         {/* request */}
         <div className="space-y-4">
           {currentRequests.map((req) => {
+            console.log("TEACHER REQUEST DATA:", req);
             const id = req._id;
-            const project = req.latestProject;
+            // const project = req.latestProject;
+            //             const project =
+            //   req.latestProject?.title || req.latestProject?.status
+            //     ? req.latestProject
+            //     : req.project;
+
+            // const workType =
+            //   project?.workType ||
+            //   project?.type ||
+            //   "Project";
+
+            const thesis = req.latestThesis || req.thesis;
+            const project = req.latestProject || req.project;
+            const work = thesis || project;
+
+            const workType = thesis
+              ? "Thesis"
+              : project?.workType || project?.type || "Project";
+
             const projectStatus = project?.status?.toLowerCase() || "pending";
             const supervisorAssigned = !!project?.supervisor;
             const canAccept =
@@ -199,7 +263,7 @@ const PendingRequests = () => {
               statusMessage = "Project rejected";
             } else if (projectStatus === "pending") {
               bgclass = "bg-yellow-50 border-yellow-300";
-              statusMessage = "Project pending";
+              statusMessage = "Thesis/project pending";
             }
             return (
               <div key={id} className={`card border ${bgclass} transition-all`}>
@@ -227,9 +291,18 @@ const PendingRequests = () => {
                     <p className="text-sm  text-slate-600 mb-2">
                       {req?.student?.email || "No email"}
                     </p>
+                    {/* <h4 className="font-medium text-slate-700 mb-2">
+  {project?.title
+    ? `${workType}: ${project.title}`
+    : "No thesis/project title"}
+</h4> */}
+
                     <h4 className="font-medium text-slate-700 mb-2">
-                      {project?.title || "No project title"}
+                      {work?.title
+                        ? `${workType}: ${work.title}`
+                        : "No thesis/project title"}
                     </h4>
+
                     <p className="text-sm text-slate-500">
                       Submitted:{" "}
                       {req?.createdAt
