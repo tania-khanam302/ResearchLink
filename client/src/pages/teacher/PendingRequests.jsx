@@ -76,43 +76,38 @@ const PendingRequests = () => {
     }
   };
 
-const filteredRequests =
-  (list || []).filter((request) => {
-    const matchesSearch =
-      (request?.student?.name || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      (request?.project?.title || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      (request?.latestProject?.title || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      (request?.thesis?.title || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      (request?.latestThesis?.title || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+  const filteredRequests =
+    (list || []).filter((request) => {
+      const matchesSearch =
+        (request?.student?.name || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        (request?.project?.title || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        (request?.latestProject?.title || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        (request?.thesis?.title || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        (request?.latestThesis?.title || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
 
-    const matchesStatus =
-      filterStatus === "all" || request.status === filterStatus;
+      const matchesStatus =
+        filterStatus === "all" || request.status === filterStatus;
 
-    // Type Filter Logic
-    const thesis = request.latestThesis || request.thesis;
-    const project = request.latestProject || request.project;
+      // Type Filter Logic
+      const thesis = request.latestThesis || request.thesis;
+      const project = request.latestProject || request.project;
 
-    const requestType = thesis
-      ? "thesis"
-      : project
-        ? "project"
-        : null;
+      const requestType = thesis ? "thesis" : project ? "project" : null;
 
-    const matchesType =
-      filterType === "all" || requestType === filterType;
+      const matchesType = filterType === "all" || requestType === filterType;
 
-    return matchesSearch && matchesStatus && matchesType;
-  }) || [];
+      return matchesSearch && matchesStatus && matchesType;
+    }) || [];
 
   const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
 
