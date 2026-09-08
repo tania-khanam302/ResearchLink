@@ -143,26 +143,46 @@ const ManageTeachers = () => {
   return (
     <>
       <div className="space-y-6 bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed">
-        {/*header */}
-        <div className="card shadow-lg rounded-md">
-          <div className="card-header flex flex-col md:flex-row justify-between items-start md:items-center">
-            <div>
-              <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">
-                Manage Teachers
-              </h1>
-              <p className="card-subtitle text-[#17a2b8]">
-                Add, edit, and manage teacher accounts
-              </p>
-            </div>
-            <button
-              onClick={() => dispatch(toggleTeacherModal())}
-              className="btn-primary bg-[#17a2b8] hover:bg-[#138496] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 mt-4 md:mt-0"
-            >
-              <UserPlus className="w-5 h-5" />
-              <span>Add New Teacher</span>
-            </button>
-          </div>
+ {/* Header */}
+<div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
+
+  <div className="relative px-6 py-6 sm:px-8 sm:py-7">
+    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+
+      <div className="flex items-start gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
+          <Users className="h-6 w-6" />
         </div>
+
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Manage Teachers
+          </h1>
+
+          <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
+            Add, edit, and manage teacher accounts
+          </p>
+        </div>
+      </div>
+
+      <button
+        onClick={() => dispatch(toggleTeacherModal())}
+        className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#17a2b8] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#138496] hover:shadow-md"
+      >
+        <UserPlus className="h-4 w-4" />
+        <span>Add New Teacher</span>
+      </button>
+
+    </div>
+  </div>
+
+  <div className="pointer-events-none absolute -bottom-20 -right-20 h-48 w-48 rounded-full bg-cyan-100/50 blur-3xl" />
+
+  <div className="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-cyan-500/5" />
+</div>
+
+
 
         {/* Stats cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

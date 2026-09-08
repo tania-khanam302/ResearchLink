@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createDeadline } from "../../store/slices/deadlineSlice";
 import { getAllProjects, getAllTheses } from "../../store/slices/adminSlice";
-import { Search, X } from "lucide-react";
+import { CalendarDays, Search, X } from "lucide-react";
 
 const DeadlinesPage = () => {
   const dispatch = useDispatch();
@@ -188,24 +188,52 @@ const DeadlinesPage = () => {
     <>
       <div className="space-y-6">
         {/* Manage Deadlines  header */}
-        <div className="card">
-          <div className="card-header flex flex-col md:flex-row justify-between items-start md:items-center">
-            <div>
-              <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">
-                Manage Deadlines
-              </h1>
-              <p className="card-subtitle text-[#17a2b8]">
-                Create and monitor project and thesis deadlines
-              </p>
-            </div>
-            <button
-              onClick={() => setShowModal(true)}
-              className="btn-primary bg-[#17a2b8] hover:bg-[#138496] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 mt-4 md:mt-0"
-            >
-              Create or Update Deadline
-            </button>
-          </div>
+<div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  {/* Top Accent */}
+  <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
+
+  <div className="relative z-10 px-6 py-6 sm:px-8 sm:py-7">
+    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+
+      {/* Title */}
+      <div className="flex items-start gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
+          <CalendarDays className="h-6 w-6" />
         </div>
+
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Manage Deadlines
+          </h1>
+
+          <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
+            Create and monitor project and thesis deadlines
+          </p>
+        </div>
+      </div>
+
+      {/* Action */}
+      <button
+        onClick={() => setShowModal(true)}
+        className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#17a2b8] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#138496] hover:shadow-md"
+      >
+        <CalendarDays className="h-4 w-4" />
+        <span>Create or Update Deadline</span>
+      </button>
+
+    </div>
+  </div>
+
+  {/* Decorative Circles */}
+  <div className="pointer-events-none absolute -right-16 -bottom-20 h-52 w-52 rounded-full bg-cyan-100/50 blur-3xl" />
+
+  <div className="pointer-events-none absolute right-16 -bottom-10 h-28 w-28 rounded-full border border-cyan-200/40 bg-cyan-50/30" />
+
+  <div className="pointer-events-none absolute right-8 bottom-8 h-10 w-10 rounded-full bg-teal-400/10" />
+
+  <div className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-indigo-500/5" />
+</div>
+
 
         {/* Search Deadlines */}
         <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">

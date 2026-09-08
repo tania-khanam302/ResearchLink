@@ -224,14 +224,44 @@ const AssignSupervisor = () => {
     <>
       <div className="space-y-6">
         {/* Assign Supervisor Heading */}
-        <div className="card">
-          <div className="card-header">
-            <h1 className="card-title">Assign Supervisor</h1>
-            <p className="card-subtitle">
-              Manage supervisor assignments for thesis and project
-            </p>
-          </div>
+  {/* Header */}
+<div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  {/* Top Accent */}
+  <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
+
+  <div className="relative z-10 px-6 py-6 sm:px-8 sm:py-7">
+    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+
+      {/* Title */}
+      <div className="flex items-start gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
+          <Users className="h-6 w-6" />
         </div>
+
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Assign Supervisor
+          </h1>
+
+          <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
+            Manage supervisor assignments for thesis and project
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {/* Decorative Circles */}
+  <div className="pointer-events-none absolute -right-16 -bottom-20 h-52 w-52 rounded-full bg-cyan-100/50 blur-3xl" />
+
+  <div className="pointer-events-none absolute right-16 -bottom-8 h-28 w-28 rounded-full border border-cyan-200/40 bg-cyan-50/30" />
+
+  <div className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-indigo-500/5" />
+</div>
+
+
+
 
         {/* Search and Filters */}
         <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">

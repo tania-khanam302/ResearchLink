@@ -7,6 +7,7 @@ import * as requestServices from "../services/requestServices.js";
 import * as notificationServices from "../services/notificationServices.js";
 import { Project } from "../models/project.js";
 import { Thesis } from "../models/thesis.js";
+import { Deadline } from "../models/deadline.js";
 import { Notification } from "../models/notification.js";
 import { SupervisorRequest } from "../models/supervisorRequest.js";
 import * as fileServices from "../services/fileServices.js";
@@ -19,46 +20,179 @@ import {
 
 
 // get teacher dashboard stats
-export const getTeacherDashboardStats = asyncHandler(async (req, res, next) => {
-  const teacherId = req.user._id;
+export const getTeacherDashboardStats = asyncHandler(
+  async (req, res, next) => {
+    const teacherId = req.user?._id;
 
-  const totalPendingRequests = await SupervisorRequest.countDocuments({
-    supervisor: teacherId,
-    status: "pending",
-  });
+    if (!teacherId) {
+      return next(new ErrorHandler("Teacher authentication required", 401));
+    }
 
-  const completedProjects = await Project.countDocuments({
-    supervisor: teacherId,
-    status: "completed",
-  });
+  
 
-  const completedTheses = await Thesis.countDocuments({
-    supervisor: teacherId,
-    status: "completed",
-  });
+    const assignedStudents = await User.countDocuments({
+      supervisor: teacherId,
+    });
 
-  const completedWorks = completedProjects + completedTheses;
+    const totalPendingRequests =
+      await SupervisorRequest.countDocuments({
+        supervisor: teacherId,
+        status: "pending",
+      });
 
-  const recentNotifications = await Notification.find({
-    user: teacherId,
-  })
-    .sort({ createdAt: -1 })
-    .limit(5);
 
-  const dashboardStats = {
-    totalPendingRequests,
-    completedProjects: completedWorks,
-    recentNotifications,
-  };
+    const projects = await Project.find({
+      supervisor: teacherId,
+    })
+      .select("_id status student title createdAt")
+      .lean();
 
-  res.status(200).json({
-    success: true,
-    message: "Dashboard stats fetched for teacher successfully",
-    data: {
-      dashboardStats,
-    },
-  });
-});
+  
+    const theses = await Thesis.find({
+      supervisor: teacherId,
+    })
+      .select("_id status student title createdAt")
+      .lean();
+
+
+    const totalProjects = projects.length;
+    const totalTheses = theses.length;
+
+    const completedProjects = projects.filter(
+      (project) => project.status === "completed",
+    ).length;
+
+    const completedTheses = theses.filter(
+      (thesis) => thesis.status === "completed",
+    ).length;
+
+    const completedWorks =
+      completedProjects + completedTheses;
+
+    const totalResearchWorks =
+      totalProjects + totalTheses;
+
+    const activeWorks = Math.max(
+      totalResearchWorks - completedWorks,
+      0,
+    );
+
+ 
+    const now = new Date();
+
+    const projectIds = projects.map(
+      (project) => project._id,
+    );
+
+    const thesisIds = theses.map(
+      (thesis) => thesis._id,
+    );
+
+    const deadlineDocs = await Deadline.find({
+      dueDate: { $gte: now },
+      $or: [
+        {
+          project: { $in: projectIds },
+        },
+        {
+          thesis: { $in: thesisIds },
+        },
+      ],
+    })
+      .populate({
+        path: "project",
+        select: "_id title student",
+        populate: {
+          path: "student",
+          select: "_id name email",
+        },
+      })
+      .populate({
+        path: "thesis",
+        select: "_id title student",
+        populate: {
+          path: "student",
+          select: "_id name email",
+        },
+      })
+      .sort({ dueDate: 1 })
+      .limit(5)
+      .lean();
+
+    const upcomingDeadlines = deadlineDocs.map(
+      (deadline) => {
+        const work =
+          deadline.project || deadline.thesis;
+
+        return {
+          _id: deadline._id,
+
+          name: deadline.name,
+
+          dueDate: deadline.dueDate,
+
+          title:
+            work?.title ||
+            deadline.name,
+
+          student: work?.student
+            ? {
+                _id: work.student._id,
+                name: work.student.name,
+                email: work.student.email,
+              }
+            : null,
+
+          type: deadline.project
+            ? "Project"
+            : "Thesis",
+
+          workId: work?._id || null,
+        };
+      },
+    );
+
+   
+    const recentNotifications =
+      await Notification.find({
+        user: teacherId,
+      })
+        .sort({ createdAt: -1 })
+        .limit(5)
+        .lean();
+
+    const dashboardStats = {
+      assignedStudents,
+      totalPendingRequests,
+      activeWorks,
+      completedWorks,
+      totalResearchWorks,
+      recentNotifications,
+      upcomingDeadlines,
+    };
+
+    console.log("Assigned Students:", assignedStudents);
+    console.log("Projects:", totalProjects);
+    console.log("Theses:", totalTheses);
+    console.log("Pending:", totalPendingRequests);
+    console.log("Completed:", completedWorks);
+    console.log("Active:", activeWorks);
+    console.log(
+      "Upcoming Deadlines:",
+      upcomingDeadlines.length,
+    );
+ 
+    res.status(200).json({
+      success: true,
+      message:
+        "Dashboard stats fetched for teacher successfully",
+      data: {
+        dashboardStats,
+      },
+    });
+  },
+);
+
 
 // get requests
 export const getRequests = asyncHandler(async (req, res, next) => {
@@ -131,13 +265,53 @@ export const getRequests = asyncHandler(async (req, res, next) => {
 });
 
 // accept requests
+// export const acceptRequests = asyncHandler(async (req, res, next) => {
+//   const { requestId } = req.params;
+//   const teacherId = req.user._id;
+
+//   const request = await requestServices.acceptRequests(requestId, teacherId);
+//   if (!request) return next(new ErrorHandler("Request not found", 404));
+
+//   await notificationServices.notifyUser(
+//     request.student._id,
+//     `Your supervisor request has been accepted by ${req.user.name}`,
+//     "approval",
+//     "/student/status",
+//     "low",
+//   );
+
+//   const student = await User.findById(request.student._id);
+//   const studentEmail = student.email;
+//   const message = generateRequestAcceptedTemplate(req.user.name);
+//   await sendEmail({
+//     to: studentEmail,
+//     subject: "Reasearch link- Your Supervisor Has Been Accepted",
+//     message,
+//   });
+
+//   res.status(200).json({
+//     success: true,
+//     message: "Request accepted successfully",
+//     data: {
+//       request,
+//     },
+//   });
+// });
+
 export const acceptRequests = asyncHandler(async (req, res, next) => {
   const { requestId } = req.params;
   const teacherId = req.user._id;
 
-  const request = await requestServices.acceptRequests(requestId, teacherId);
-  if (!request) return next(new ErrorHandler("Request not found", 404));
+  const request = await requestServices.acceptRequests(
+    requestId,
+    teacherId,
+  );
 
+  if (!request) {
+    return next(new ErrorHandler("Request not found", 404));
+  }
+
+  // Student notification
   await notificationServices.notifyUser(
     request.student._id,
     `Your supervisor request has been accepted by ${req.user.name}`,
@@ -146,14 +320,29 @@ export const acceptRequests = asyncHandler(async (req, res, next) => {
     "low",
   );
 
+  // Teacher notification
   const student = await User.findById(request.student._id);
-  const studentEmail = student.email;
-  const message = generateRequestAcceptedTemplate(req.user.name);
-  await sendEmail({
-    to: studentEmail,
-    subject: "Reasearch link- Your Supervisor Has Been Accepted",
-    message,
-  });
+
+  if (student) {
+    await notificationServices.notifyUser(
+      teacherId,
+      `You accepted ${student.name}'s supervisor request`,
+      "approval",
+      "/teacher/assigned-students",
+      "low",
+    );
+  }
+
+  // Email student
+  if (student?.email) {
+    const message = generateRequestAcceptedTemplate(req.user.name);
+
+    await sendEmail({
+      to: student.email,
+      subject: "Research Link - Your Supervisor Has Been Accepted",
+      message,
+    });
+  }
 
   res.status(200).json({
     success: true,
@@ -163,6 +352,7 @@ export const acceptRequests = asyncHandler(async (req, res, next) => {
     },
   });
 });
+
 
 // reject requests
 export const rejectRequests = asyncHandler(async (req, res, next) => {

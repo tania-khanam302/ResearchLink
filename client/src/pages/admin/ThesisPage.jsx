@@ -592,7 +592,7 @@ const ThesisPage = () => {
                           {thesis.status === "pending" && (
                             <>
                               <button
-                                className="inline-flex items-center justify-center rounded-lg bg-[#17a2b8] px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#138496] hover:shadow-md active:scale-[0.98]"
+                                className="inline-flex items-center justify-center rounded-lg bg-green-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-green-800 hover:shadow-md active:scale-[0.98]"
                                 onClick={() =>
                                   handleStatusChange(thesis._id, "approved")
                                 }

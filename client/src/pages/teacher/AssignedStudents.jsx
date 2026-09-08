@@ -256,15 +256,18 @@ const AssignedStudents = () => {
       text: "text-green-700",
       sub: "text-green-600",
     },
-    {
-      label: "In Progress",
-      value: sortedStudents.filter(
-        (s) => getWorkInfo(s).status === "in_progress",
-      ).length,
-      bg: "bg-yellow-50",
-      text: "text-yellow-700",
-      sub: "text-yellow-600",
-    },
+   {
+  label: "In Progress",
+  value: sortedStudents.filter((s) => {
+    const status = getWorkInfo(s).status;
+
+    return status === "in_progress" || status === "approved";
+  }).length,
+  bg: "bg-yellow-50",
+  text: "text-yellow-700",
+  sub: "text-yellow-600",
+},
+
     {
       label: "Total Research Works",
       value: sortedStudents.length,
@@ -575,30 +578,32 @@ const AssignedStudents = () => {
             onClick={closeModal}
           >
             <div
-              className="
-                bg-white rounded-xl shadow-2xl
-                w-full max-w-md
-                transition-all
-              "
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-6">
-                {/* Modal Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-slate-800">
-                    Provide Feedback
-                  </h2>
+  className="
+    bg-white rounded-xl shadow-2xl
+    w-full max-w-lg
+    max-h-[90vh]
+    flex flex-col
+    overflow-hidden
+    transition-all
+  "
+  onClick={(e) => e.stopPropagation()}
+  >
+    <div className="flex items-center justify-between p-5 border-b border-slate-200 shrink-0">
+    <h2 className="text-xl font-bold text-slate-800">
+      Provide Feedback
+    </h2>
 
-                  <button
-                    onClick={closeModal}
-                    className="text-slate-400 hover:text-slate-600"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
+    <button
+      onClick={closeModal}
+      className="text-slate-400 hover:text-slate-600"
+    >
+      <X className="w-5 h-5" />
+    </button>
+  </div>
 
+              <div className="p-5 overflow-y-auto flex-1 min-h-0">
                 {/* Work Info */}
-                <div className="bg-slate-50 rounded-lg p-4 mb-6">
+                <div className="bg-slate-50 rounded-lg p-3 mb-4">
                   <div className="space-y-2 text-sm">
                     <div>
                       <span className="font-medium text-slate-600">Type:</span>
@@ -657,7 +662,7 @@ const AssignedStudents = () => {
                 </div>
 
                 {/* Feedback Form */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {/* Feedback Title */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -738,23 +743,28 @@ const AssignedStudents = () => {
                   </div>
                 </div>
 
-                {/* Modal Actions */}
-                <div className="flex gap-3 mt-6">
-                  <button onClick={closeModal} className="btn-danger">
-                    Cancel
-                  </button>
-
-                  <button
-                    className="btn-primary bg-[#138496] hover:bg-[#17a2b8]"
-                    onClick={submitFeedback}
-                    disabled={
-                      !feedbackData.title.trim() || !feedbackData.message.trim()
-                    }
-                  >
-                    Submit Feedback
-                  </button>
-                </div>
+              
               </div>
+               {/* Fixed Buttons */}
+  <div className="flex justify-end gap-3 p-5 border-t border-slate-200 shrink-0 bg-white">
+    <button
+      onClick={closeModal}
+      className="btn-danger"
+    >
+      Cancel
+    </button>
+
+    <button
+      className="btn-primary bg-[#138496] hover:bg-[#17a2b8]"
+      onClick={submitFeedback}
+      disabled={
+        !feedbackData.title.trim() ||
+        !feedbackData.message.trim()
+      }
+    >
+      Submit Feedback
+    </button>
+  </div>
             </div>
           </div>
         )}

@@ -20,6 +20,21 @@ export const getTeacherDashboardStats = createAsyncThunk(
 );
 
 // Get teacher requests
+// export const getTeacherRequests = createAsyncThunk(
+//   "getTeacherRequests",
+//   async (supervisorId, thunkAPI) => {
+//     try {
+//       const res = await axiosInstance.get(
+//         `/teacher/requests?supervisor=${supervisorId}`,
+//       );
+//       return res.data.data?.requests || res.data.data;
+//     } catch (error) {
+//       toast.error(error.response.data.message || "Failed to fetch requests");
+//       return thunkAPI.rejectWithValue(error.response.data.message);
+//     }
+//   },
+// );
+
 export const getTeacherRequests = createAsyncThunk(
   "getTeacherRequests",
   async (supervisorId, thunkAPI) => {
@@ -27,10 +42,15 @@ export const getTeacherRequests = createAsyncThunk(
       const res = await axiosInstance.get(
         `/teacher/requests?supervisor=${supervisorId}`,
       );
-      return res.data.data?.requests || res.data.data;
+
+      return res.data.data?.requests || res.data.data || [];
     } catch (error) {
-      toast.error(error.response.data.message || "Failed to fetch requests");
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        error.response?.data?.message || "Failed to fetch requests";
+
+      toast.error(message);
+
+      return thunkAPI.rejectWithValue(message);
     }
   },
 );
@@ -206,17 +226,35 @@ export const addFeedback = createAsyncThunk(
 );
 
 // get assign student
+// export const getAssignedStudents = createAsyncThunk(
+//   "getAssignedStudents",
+//   async (_, thunkAPI) => {
+//     try {
+//       const res = await axiosInstance.get(`/teacher/assigned-student`);
+//       return res.data.data?.students || res.data.data || res.data;
+//     } catch (error) {
+//       toast.error(
+//         error.response.data.message || "Failed to fetch assigned students",
+//       );
+//       return thunkAPI.rejectWithValue(error.response.data.message);
+//     }
+//   },
+// );
+
 export const getAssignedStudents = createAsyncThunk(
-  "getAssignedStudents",
+  "teacher/getAssignedStudents",
   async (_, thunkAPI) => {
     try {
-      const res = await axiosInstance.get(`/teacher/assigned-student`);
-      return res.data.data?.students || res.data.data || res.data;
+      const res = await axiosInstance.get("/teacher/assigned-student");
+
+      return res.data?.data?.students || [];
     } catch (error) {
-      toast.error(
-        error.response.data.message || "Failed to fetch assigned students",
-      );
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        error.response?.data?.message || "Failed to fetch assigned students";
+
+      toast.error(message);
+
+      return thunkAPI.rejectWithValue(message);
     }
   },
 );
@@ -260,8 +298,9 @@ const teacherSlice = createSlice({
     // fulfilled
     builder.addCase(getAssignedStudents.fulfilled, (state, action) => {
       state.loading = false;
-      state.assignedStudents = action.payload?.students || action.payload || [];
+      state.assignedStudents = action.payload || [];
     });
+
     // rejected
     builder.addCase(getAssignedStudents.rejected, (state, action) => {
       state.error = action.payload || "Failed to fetch assigned students";
@@ -319,8 +358,20 @@ const teacherSlice = createSlice({
     });
 
     // get teacher requests
+    // builder.addCase(getTeacherRequests.fulfilled, (state, action) => {
+    //   state.list = action.payload || [];
+    // });
+    builder.addCase(getTeacherRequests.pending, (state) => {
+      state.error = null;
+    });
+
     builder.addCase(getTeacherRequests.fulfilled, (state, action) => {
       state.list = action.payload || [];
+    });
+
+    builder.addCase(getTeacherRequests.rejected, (state, action) => {
+      state.error = action.payload || "Failed to fetch requests";
+      state.list = [];
     });
 
     // get Files
