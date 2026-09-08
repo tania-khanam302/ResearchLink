@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../lib/axios";
 import { toast } from "react-toastify";
 
+
+
 // create-student
 export const createStudent = createAsyncThunk(
   "createStudent",
@@ -151,6 +153,7 @@ export const deleteCoAdmin = createAsyncThunk(
     }
   },
 );
+
 // get all theses
 export const getAllTheses = createAsyncThunk(
   "getAllTheses",
@@ -215,7 +218,9 @@ export const approveProject = createAsyncThunk(
   "approveProject",
   async (id, thunkAPI) => {
     try {
-      const res = await axiosInstance.put(`/admin/project/${id}`, {status: "approved"});
+      const res = await axiosInstance.put(`/admin/project/${id}`, {
+        status: "approved",
+      });
       toast.success(res.data.message || "Project approved successfully");
       return id;
     } catch (error) {
@@ -230,7 +235,9 @@ export const rejectProject = createAsyncThunk(
   "rejectProject",
   async (id, thunkAPI) => {
     try {
-      const res = await axiosInstance.put(`/admin/project/${id}`, {status:"rejected"});
+      const res = await axiosInstance.put(`/admin/project/${id}`, {
+        status: "rejected",
+      });
       toast.success(res.data.message || "Project rejected successfully");
       return id;
     } catch (error) {
@@ -251,17 +258,14 @@ export const deleteProject = createAsyncThunk(
 
       return id;
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Failed to delete project"
-      );
+      toast.error(error.response?.data?.message || "Failed to delete project");
 
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to delete project"
+        error.response?.data?.message || "Failed to delete project",
       );
     }
-  }
+  },
 );
-
 
 // get project
 export const getProject = createAsyncThunk(
@@ -269,7 +273,7 @@ export const getProject = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const res = await axiosInstance.get(`/admin/project/${id}`);
-     return res.data?.data?.project || res.data?.data || res.data;
+      return res.data?.data?.project || res.data?.data || res.data;
     } catch (error) {
       toast.error(error.response.data.message || "Failed to fetch project");
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -292,11 +296,12 @@ const adminSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // student
+      // create student
       .addCase(createStudent.fulfilled, (state, action) => {
         if (state.users) state.users.unshift(action.payload);
       })
 
+      // update Student
       .addCase(updateStudent.fulfilled, (state, action) => {
         if (state.users) {
           state.users = state.users.map((u) =>
@@ -305,6 +310,7 @@ const adminSlice = createSlice({
         }
       })
 
+      // delete Student
       .addCase(deleteStudent.fulfilled, (state, action) => {
         if (state.users) {
           state.users = state.users.filter((u) => u._id !== action.payload);
@@ -350,12 +356,14 @@ const adminSlice = createSlice({
       .addCase(createCoAdmin.fulfilled, (state, action) => {
         state.users.unshift(action.payload);
       })
+
       // update co-admin
       .addCase(updateCoAdmin.fulfilled, (state, action) => {
         state.users = state.users.map((u) =>
           u._id === action.payload._id ? action.payload : u,
         );
       })
+
       // delete co-admin
       .addCase(deleteCoAdmin.fulfilled, (state, action) => {
         state.users = state.users.filter((u) => u._id !== action.payload);
@@ -368,23 +376,25 @@ const adminSlice = createSlice({
 
       // approved project
       .addCase(approveProject.fulfilled, (state, action) => {
-       const projectId = action.payload;
-        state.projects = state.projects.map((p)=> p._id === projectId ? {...p, status:"approved"}:p);
+        const projectId = action.payload;
+        state.projects = state.projects.map((p) =>
+          p._id === projectId ? { ...p, status: "approved" } : p,
+        );
       })
+
       // reject project
       .addCase(rejectProject.fulfilled, (state, action) => {
-       const projectId = action.payload;
-        state.projects = state.projects.map((p)=> p._id === projectId ? {...p, status:"rejected"}:p);
+        const projectId = action.payload;
+        state.projects = state.projects.map((p) =>
+          p._id === projectId ? { ...p, status: "rejected" } : p,
+        );
       })
-      
-// delete project
-.addCase(deleteProject.fulfilled, (state, action) => {
-  const projectId = action.payload;
 
-  state.projects = state.projects.filter(
-    (p) => p._id !== projectId
-  );
-});
+      // delete project
+      .addCase(deleteProject.fulfilled, (state, action) => {
+        const projectId = action.payload;
+        state.projects = state.projects.filter((p) => p._id !== projectId);
+      });
   },
 });
 

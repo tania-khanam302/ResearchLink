@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../lib/axios";
 import { toast } from "react-toastify";
 
+
+// create Deadline
 export const createDeadline = createAsyncThunk(
   "createDeadline",
   async ({ id, data }, thunkAPI) => {
@@ -34,8 +36,7 @@ const deadlineSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(createDeadline.fulfilled, (state, action) => {
       const item = action.payload;
-      if (item) state.deadlines.push;
-      // if (item) state.deadlines.push(item);
+      if (item) state.deadlines.push(item);
     });
   },
 });

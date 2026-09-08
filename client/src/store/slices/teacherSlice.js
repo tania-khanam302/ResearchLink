@@ -13,15 +13,13 @@ export const getTeacherDashboardStats = createAsyncThunk(
     } catch (error) {
       const message =
         error.response?.data?.message || "Failed to fetch dashboard stats";
-
       toast.error(message);
-
       return thunkAPI.rejectWithValue(message);
     }
   },
 );
 
-// // Get teacher requests
+// Get teacher requests
 export const getTeacherRequests = createAsyncThunk(
   "getTeacherRequests",
   async (supervisorId, thunkAPI) => {
@@ -71,74 +69,138 @@ export const rejectRequest = createAsyncThunk(
   },
 );
 
-// mark complete
-export const markComplete = createAsyncThunk(
-  "markComplete",
-  async (projectId, thunkAPI) => {
+export const deleteRequest = createAsyncThunk(
+  "teacher/deleteRequest",
+  async (requestId, thunkAPI) => {
     try {
-      const res = await axiosInstance.post(
-        `/teacher/mark-complete/${projectId}`,
-      );
-      toast.success(res.data.message || "Marked completed");
-      return { projectId };
+      const res = await axiosInstance.delete(`/teacher/requests/${requestId}`);
+      toast.success(res.data.message || "Request deleted successfully");
+
+      return requestId;
     } catch (error) {
-      toast.error(error.response.data.message || "Failed to mark completed");
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        error.response?.data?.message || "Failed to delete request";
+
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
     }
   },
 );
 
-// download files
-export const downloadTeacherFiles = createAsyncThunk(
-  "downloadTeacherFiles",
-  async({projectId, fileId}, thunkAPI)=>{
-    try{
+// mark complete
+export const markComplete = createAsyncThunk(
+  "teacher/markComplete",
+  async ({ workId, workType }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post(`/teacher/mark-complete/${workId}`, {
+        workType,
+      });
 
-      const res = await axiosInstance.get(`/teacher/download/${projectId}/${fileId}`,{
-        responseType: "blob",
-      })
-      return {blob:res.data,projectId,fileId}
-    }catch(error){
+      toast.success(res.data.message || "Marked completed");
 
-      toast.error(error.response?.data?.message|| "Failed to download file");
-      return thunkAPI.rejectWithValue(error.response?.data?.message)
+      return {
+        workId,
+        workType,
+      };
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Failed to mark completed";
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
     }
-  }
-)
+  },
+);
+
+// download teacher files
+export const downloadTeacherFiles = createAsyncThunk(
+  "teacher/downloadTeacherFiles",
+  async ({ workId, fileId, workType }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get(
+        `/teacher/download/${workId}/${fileId}`,
+        {
+          params: {
+            workType,
+          },
+          responseType: "blob",
+        },
+      );
+
+      return {
+        blob: res.data,
+        workId,
+        fileId,
+        workType,
+      };
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Failed to download file";
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
+//delete teacher file
+export const deleteTeacherFile = createAsyncThunk(
+  "teacher/deleteFile",
+  async ({ workId, fileId, workType }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.delete(
+        `/teacher/files/${workId}/${fileId}`,
+        {
+          data: { workType },
+        },
+      );
+
+      toast.success(res.data.message || "File deleted successfully");
+      return { workId, fileId, workType };
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to delete file";
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
 // get files
 export const getFiles = createAsyncThunk(
   "getTeacherFiles",
-  async(_, thunkAPI)=>{
-    try{
-
-      const res = await axiosInstance.get(`/teacher/files`)
+  async (_, thunkAPI) => {
+    try {
+      const res = await axiosInstance.get(`/teacher/files`);
       return res.data?.data?.files || res.data.data;
-    }catch(error){
-
-      toast.error(error.response?.data?.message|| "Failed to fetch teacher file");
-      return thunkAPI.rejectWithValue(error.response?.data?.message)
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to fetch teacher file",
+      );
+      return thunkAPI.rejectWithValue(error.response?.data?.message);
     }
-  }
-)
-
+  },
+);
 
 // add feedback
 export const addFeedback = createAsyncThunk(
   "addFeedback",
-  async ({ projectId, payload }, thunkAPI) => {
+  async ({ workId, workType, payload }, thunkAPI) => {
     try {
-      const res = await axiosInstance.post(
-        `/teacher/feedback/${projectId}`,
-        payload,
-      );
+      const res = await axiosInstance.post(`/teacher/feedback/${workId}`, {
+        ...payload,
+        workType,
+      });
+
       toast.success(res.data.message || "Feedback posted");
       return {
-        projectId,
+        workId,
+        workType,
         feedback: res.data.data?.feedback || res.data.data || res.data,
       };
     } catch (error) {
-      toast.error(error.response.data.message || "Failed to post feedback");
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        error.response?.data?.message || "Failed to post feedback";
+
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
     }
   },
 );
@@ -161,7 +223,6 @@ export const getAssignedStudents = createAsyncThunk(
 
 const teacherSlice = createSlice({
   name: "teacher",
-
   initialState: {
     assignedStudents: [],
     files: [],
@@ -180,12 +241,12 @@ const teacherSlice = createSlice({
       state.loading = true;
       state.error = null;
     });
-
+    // fulfilled
     builder.addCase(getTeacherDashboardStats.fulfilled, (state, action) => {
       state.loading = false;
       state.dashboardStats = action.payload;
     });
-
+    // rejected
     builder.addCase(getTeacherDashboardStats.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload || "Failed to fetch dashboard stats";
@@ -196,65 +257,78 @@ const teacherSlice = createSlice({
       state.loading = true;
       state.error = null;
     });
+    // fulfilled
     builder.addCase(getAssignedStudents.fulfilled, (state, action) => {
       state.loading = false;
       state.assignedStudents = action.payload?.students || action.payload || [];
     });
+    // rejected
     builder.addCase(getAssignedStudents.rejected, (state, action) => {
       state.error = action.payload || "Failed to fetch assigned students";
       state.loading = false;
     });
 
+    // add feedback
     builder.addCase(addFeedback.fulfilled, (state, action) => {
-      const { projectId, feedback } = action.payload;
-      state.assignedStudents = state.assignedStudents.map((s) =>
-        s.projectId === projectId ? { ...s, feedback } : s,
+      const { workId, workType, feedback } = action.payload;
+      state.assignedStudents = state.assignedStudents.map((student) => {
+        const work = student[workType];
+
+        if (work?._id === workId) {
+          return {
+            ...student,
+            [workType]: {
+              ...work,
+              feedback: [...(work.feedback || []), feedback],
+            },
+          };
+        }
+        return student;
+      });
+    });
+
+    // delete teacher file
+    builder.addCase(deleteTeacherFile.fulfilled, (state, action) => {
+      const { workId, fileId } = action.payload;
+
+      state.files = state.files.filter(
+        (file) =>
+          !(
+            file.workId?.toString() === workId?.toString() &&
+            file._id?.toString() === fileId?.toString()
+          ),
       );
     });
 
-    // builder.addCase(markComplete.fulfilled, (state, action) => {
-    //   const { projectId } = action.payload;
-    //   state.assignedStudents.state.assignedStudents.map((s) => {
-    //     if (s.project._id === projectId) {
-    //       return {
-    //         ...s,
-    //         project: {
-    //           ...s.project,
-    //           status: "completed",
-    //         },
-    //       };
-    //     }
-    //     return s;
-    //   });
-    // });
-
+    // mark complete
     builder.addCase(markComplete.fulfilled, (state, action) => {
-  const { projectId } = action.payload;
+      const { workId, workType } = action.payload;
+      state.assignedStudents = state.assignedStudents.map((student) => {
+        const work = student[workType];
+        if (work?._id === workId) {
+          return {
+            ...student,
+            [workType]: {
+              ...work,
+              status: "completed",
+            },
+          };
+        }
+        return student;
+      });
+    });
 
-  state.assignedStudents = state.assignedStudents.map((s) => {
-    if (s.project?._id === projectId) {
-      return {
-        ...s,
-        project: {
-          ...s.project,
-          status: "completed",
-        },
-      };
-    }
-
-    return s;
-  });
-});
-
-
+    // get teacher requests
     builder.addCase(getTeacherRequests.fulfilled, (state, action) => {
       state.list = action.payload || [];
     });
 
+    // get Files
     builder.addCase(getFiles.fulfilled, (state, action) => {
       state.files = action.payload.files || action.payload || [];
     });
 
+    // accept Request
     builder.addCase(acceptRequest.fulfilled, (state, action) => {
       const updatedRequest = action.payload;
       state.list = state.list.map((r) =>
@@ -262,9 +336,17 @@ const teacherSlice = createSlice({
       );
     });
 
+    // reject Request
     builder.addCase(rejectRequest.fulfilled, (state, action) => {
       const rejectedRequest = action.payload;
       state.list = state.list.filter((r) => r._id !== rejectedRequest._id);
+    });
+
+    // delete Request
+    builder.addCase(deleteRequest.fulfilled, (state, action) => {
+      state.list = state.list.filter(
+        (request) => request._id !== action.payload,
+      );
     });
   },
 });
