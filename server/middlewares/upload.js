@@ -23,6 +23,12 @@ const storage = multer.diskStorage({
         "../uploads/projects",
         req.params.projectId,
       );
+    } else if (req.route.path.includes("/upload/:thesisId")) {
+      uploadPath = path.join(
+        __dirname,
+        "../uploads/theses",
+        req.params.thesisId,
+      );
     } else if (req.route.path.includes("/upload/userId")) {
       uploadPath = path.join(__dirname, "../uploads/users", req.params.userId);
     } else {
@@ -33,16 +39,14 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
 
-  // filename: (req, file, cd) => {
-    filename: (req, file, cb) => {
+  filename: (req, file, cb) => {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     const ext = path.extname(file.originalname);
     cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
   },
 });
 
-// const fileFilter = (req, res, cb) => {
-  const fileFilter = (req, file, cb) => {
+const fileFilter = (req, file, cb) => {
   const allowedTypes = [
     "application/pdf",
     "application/msword",
@@ -135,4 +139,4 @@ const handleUploadError = (err, req, res, next) => {
   next(err);
 };
 
-export{ upload, handleUploadError};
+export { upload, handleUploadError };
