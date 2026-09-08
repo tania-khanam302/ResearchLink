@@ -15,7 +15,6 @@ export const createRequest = async (requestData) => {
   }
 
   const request = await SupervisorRequest.create(requestData);
-
   return await request.save();
 };
 
@@ -27,7 +26,6 @@ export const getAllRequests = async (filters) => {
     .sort({ createdAt: -1 });
 
   const total = await SupervisorRequest.countDocuments(filters);
-
   return { requests, total };
 };
 
@@ -51,29 +49,40 @@ export const acceptRequests = async (requestId, supervisorId) => {
 
   request.status = "accepted";
   await request.save();
-
   return request;
 };
 
-
 // reject requests
 export const rejectRequests = async (requestId, teacherId) => {
-    const request = await SupervisorRequest.findById(requestId)
+  const request = await SupervisorRequest.findById(requestId)
     .populate("student", "name email")
     .populate("supervisor", "name email");
 
- if (!request) throw new Error("Request not found");
+  if (!request) throw new Error("Request not found");
 
-if (request.supervisor._id.toString() !== teacherId.toString()) {
+  if (request.supervisor._id.toString() !== teacherId.toString()) {
     throw new Error("Not authorized to reject this request");
   }
-    if (request.status !== "pending") {
+  if (request.status !== "pending") {
     throw new Error("Request has already been processed");
   }
 
-    request.status = "rejected";
+  request.status = "rejected";
   await request.save();
-
   return request;
+};
 
+// delete request
+export const deleteRequest = async (requestId, teacherId) => {
+  const request = await SupervisorRequest.findById(requestId);
+
+  if (!request) {
+    throw new Error("Request not found");
+  }
+
+  if (request.supervisor.toString() !== teacherId.toString()) {
+    throw new Error("Not authorized to delete this request");
+  }
+  await SupervisorRequest.findByIdAndDelete(requestId);
+  return request;
 };
