@@ -9,17 +9,17 @@ import {
   requestSupervisor,
   submitProposal,
   uploadFiles,
+  deleteFile,
 
 } from "../controllers/studentController.js";
-import multer from "multer";
-
 import {
   isAuthenticated,
   isAuthorized,
 } from "../middlewares/authMiddleware.js";
 import { handleUploadError, upload } from "../middlewares/upload.js";
-
 const router = express.Router();
+
+
 
 // student project routes
 router.get(
@@ -39,7 +39,7 @@ router.post(
 
 // upload files
 router.post(
-  "/upload/:projectId",
+  "/upload/:workId",
   isAuthenticated,
   isAuthorized("Student"),
   upload.array("files", 10),
@@ -89,10 +89,18 @@ router.get(
 
 // download files
 router.get(
-  "/download/:projectId/:fileId",
+  "/download/:workId/:fileId",
   isAuthenticated,
   isAuthorized("Student"),
   downloadFiles,
+);
+
+// delete
+router.delete(
+  "/files/:workId/:fileId",
+  isAuthenticated,
+  isAuthorized("Student"),
+  deleteFile,
 );
 
 export default router;

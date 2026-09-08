@@ -1,21 +1,23 @@
 import express from "express";
-
 import {
   getTeacherDashboardStats,
-  acceptRequests,getRequests,rejectRequests,
+  acceptRequests,
+  getRequests,
+  rejectRequests,
+  deleteRequest,
   addFeedback,
   markComplete,
   getAssignedStudents,
   downloadFiles,
-  getFiles
+  getFiles,
+  deleteFile,
 } from "../controllers/teacherController.js";
-
 import {
   isAuthenticated,
   isAuthorized,
 } from "../middlewares/authMiddleware.js";
-
 const router = express.Router();
+
 
 
 // get teacher dashboard stats
@@ -35,7 +37,6 @@ router.get(
   
 );
 
-
 // accept request
 router.put(
   "/requests/:requestId/accept",
@@ -53,10 +54,17 @@ router.put(
   rejectRequests
   
 );
+// delete request
+router.delete(
+  "/requests/:requestId",
+  isAuthenticated,
+  isAuthorized("Teacher"),
+  deleteRequest
+);
 
 //  add feedback 
 router.post(
-  "/feedback/:projectId",
+  "/feedback/:workId",
   isAuthenticated,
   isAuthorized("Teacher"),
   addFeedback
@@ -64,7 +72,7 @@ router.post(
 
 // mark complete
 router.post(
-  "/mark-complete/:projectId",
+  "/mark-complete/:workId",
   isAuthenticated,
   isAuthorized("Teacher"),
   markComplete
@@ -80,11 +88,12 @@ router.get(
 
 //  download files
 router.get(
-  "/download/:projectId/:fileId",
+  "/download/:workId/:fileId",
   isAuthenticated,
   isAuthorized("Teacher"),
   downloadFiles
 );
+
 //  get files
 router.get(
   "/files",
@@ -93,5 +102,12 @@ router.get(
   getFiles
 );
 
+//  delete file
+router.delete(
+  "/files/:workId/:fileId",
+  isAuthenticated,
+  isAuthorized("Teacher"),
+  deleteFile
+);
 
 export default router;
