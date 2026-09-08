@@ -6,95 +6,208 @@ import * as projectService from "../services/projectServices.js";
 import * as requestServices from "../services/requestServices.js";
 import * as notificationServices from "../services/notificationServices.js";
 import { Project } from "../models/project.js";
+import { Thesis } from "../models/thesis.js";
 import { Notification } from "../models/notification.js";
 import * as fileServices from "../services/fileServices.js";
-// import {SupervisorRequest} from "../models/supervisorRequest.js";
 
-// get student project =============
+
+
+
+// get student project 
 export const getStudentProject = asyncHandler(async (req, res, next) => {
   const studentId = req.user._id;
 
   const project = await projectService.getProjectByStudent(studentId);
 
-  if (!project) {
-    return res.status(200).json({
-      success: true,
-      data: { project: null },
-      message: "No project found for the student",
-    });
-  }
+  const thesis = await Thesis.findOne({
+    student: studentId,
+  }).sort({ createdAt: -1 });
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
-    data: { project },
+    data: {
+      project: project || null,
+      thesis: thesis || null,
+    },
   });
 });
 
-// submit proposal =============
+// submit proposal 
 export const submitProposal = asyncHandler(async (req, res, next) => {
-  const { title, description } = req.body;
+  const { type, title, description, researchArea } = req.body;
+
   const studentId = req.user._id;
+  // Validate proposal type
+  if (!type || !["Project", "Thesis"].includes(type)) {
+    return next(
+      new ErrorHandler("Proposal type must be either Project or Thesis.", 400),
+    );
+  }
+
+  // Validate title
+  if (!title || !title.trim()) {
+    return next(new ErrorHandler("Proposal title is required.", 400));
+  }
+
+  // Validate description
+  if (!description || !description.trim()) {
+    return next(new ErrorHandler("Proposal description is required.", 400));
+  }
+
+  // Validate thesis research area
+  if (type === "Thesis" && (!researchArea || !researchArea.trim())) {
+    return next(
+      new ErrorHandler("Research area is required for thesis proposal.", 400),
+    );
+  }
 
   const existingProject = await projectService.getProjectByStudent(studentId);
+
+  const existingThesis = await Thesis.findOne({
+    student: studentId,
+  }).sort({ createdAt: -1 });
 
   if (existingProject && existingProject.status !== "rejected") {
     return next(
       new ErrorHandler(
-        "You already have an active project. You can only submit a new proposal if your previous project was rejected.",
+        "You already have an active project proposal. You can only submit a new proposal if your previous proposal was rejected.",
         400,
       ),
     );
   }
 
-  if(existingProject && existingProject.status === "rejected"){
+  if (existingThesis && existingThesis.status !== "rejected") {
+    return next(
+      new ErrorHandler(
+        "You already have an active thesis proposal. You can only submit a new proposal if your previous proposal was rejected.",
+        400,
+      ),
+    );
+  }
+
+  if (existingProject && existingProject.status === "rejected") {
     await Project.findByIdAndDelete(existingProject._id);
   }
 
-  const projectData = {
-    student: studentId,
-    title,
-    description,
-  };
-  const project = await projectService.createProject(projectData);
+  if (existingThesis && existingThesis.status === "rejected") {
+    await Thesis.findByIdAndDelete(existingThesis._id);
+  }
 
-  await User.findByIdAndUpdate(studentId, { project: project._id });
+  if (type === "Project") {
+    const projectData = {
+      student: studentId,
+      type: "Project",
+      title: title.trim(),
+      description: description.trim(),
+    };
 
-  res.status(201).json({
-    success: true,
-    data: { project },
-    message: "Project proposal submitted successfully",
-  });
+    const project = await projectService.createProject(projectData);
+
+    // Update student's project reference
+    await User.findByIdAndUpdate(studentId, {
+      project: project._id,
+    });
+
+    return res.status(201).json({
+      success: true,
+      data: {
+        project,
+      },
+      message: "Project proposal submitted successfully",
+    });
+  }
+
+  // create thesis
+  if (type === "Thesis") {
+    const thesis = await Thesis.create({
+      student: studentId,
+      title: title.trim(),
+      description: description.trim(),
+      researchArea: researchArea.trim(),
+    });
+
+    return res.status(201).json({
+      success: true,
+      data: {
+        thesis,
+      },
+      message: "Thesis proposal submitted successfully",
+    });
+  }
 });
 
-// upload files =============
+// upload files 
 export const uploadFiles = asyncHandler(async (req, res, next) => {
-  const { projectId } = req.params;
+  const { workId } = req.params;
   const studentId = req.user._id;
-  const project = await projectService.getProjectById(projectId);
-
-  if (!project || project.student._id.toString() !== studentId.toString() || project.status === "rejected") {
-    return next(
-      new ErrorHandler("Not authorized to upload files for this project", 403),
-    );
-  }
 
   if (!req.files || req.files.length === 0) {
     return next(new ErrorHandler("No files uploaded", 400));
   }
 
-  const updatedProject = await projectService.addfilesToProject(
-    projectId,
-    req.files,
+  let academicWork = await projectService.getProjectById(workId);
+  let workType = "Project";
+
+  if (!academicWork) {
+    academicWork = await Thesis.findById(workId);
+    workType = "Thesis";
+  }
+  if (!academicWork) {
+    return next(new ErrorHandler("Project or Thesis not found", 404));
+  }
+
+  const workStudentId = academicWork.student?._id || academicWork.student;
+
+  if (workStudentId.toString() !== studentId.toString()) {
+    return next(new ErrorHandler("Not authorized to upload files", 403));
+  }
+
+  if (academicWork.status === "rejected") {
+    return next(
+      new ErrorHandler("Cannot upload files to a rejected proposal", 403),
+    );
+  }
+  
+  // Project
+  if (workType === "Project") {
+    const updatedProject = await projectService.addfilesToProject(
+      workId,
+      req.files,
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Files uploaded successfully",
+      data: {
+        project: updatedProject,
+      },
+    });
+  }
+  
+  // thesis
+  academicWork.files.push(
+    ...req.files.map((file) => ({
+      fileUrl: file.path || file.location || file.filename,
+
+      originalName: file.originalname,
+
+      fileType: file.mimetype,
+
+      uploadedAt: new Date(),
+    })),
   );
 
-  res.status(200).json({
+  await academicWork.save();
+  return res.status(200).json({
     success: true,
-    message: "File uploaded successfully",
-    data: { project: updatedProject },
+    message: "Files uploaded successfully",
+    data: {
+      thesis: academicWork,
+    },
   });
 });
 
-// get available supervisors =============
+// get available supervisors 
 export const getAvailableSupervisors = asyncHandler(async (req, res, next) => {
   const supervisors = await User.find({ role: "Teacher" })
     .select("name email department expertise")
@@ -107,47 +220,7 @@ export const getAvailableSupervisors = asyncHandler(async (req, res, next) => {
   });
 });
 
-// export const getAvailableSupervisors = asyncHandler(
-//   async (req, res, next) => {
-//     const studentId = req.user._id;
-
-//     const supervisors = await User.find({ role: "Teacher" })
-//       .select("name email department expertise")
-//       .lean();
-
-//     const pendingRequests = await SupervisorRequest.find({
-//       student: studentId,
-//       status: "pending",
-//     })
-//       .select("supervisor status")
-//       .lean();
-
-//     const pendingSupervisorIds = new Set(
-//       pendingRequests.map((request) =>
-//         request.supervisor.toString()
-//       )
-//     );
-
-//     const supervisorsWithStatus = supervisors.map((supervisor) => ({
-//       ...supervisor,
-//       requestStatus: pendingSupervisorIds.has(
-//         supervisor._id.toString()
-//       )
-//         ? "pending"
-//         : null,
-//     }));
-
-//     res.status(200).json({
-//       success: true,
-//       data: {
-//         supervisors: supervisorsWithStatus,
-//       },
-//       message: "Available supervisors fetched successfully",
-//     });
-//   }
-// );
-
-// get supervisor =============
+// get supervisor 
 export const getSupervisor = asyncHandler(async (req, res, next) => {
   const studentId = req.user._id;
   const student = await User.findById(studentId).populate(
@@ -169,7 +242,7 @@ export const getSupervisor = asyncHandler(async (req, res, next) => {
   });
 });
 
-// request supervisor =============
+// request supervisor 
 export const requestSupervisor = asyncHandler(async (req, res, next) => {
   const { teacherId, message } = req.body;
   const studentId = req.user._id;
@@ -202,7 +275,6 @@ export const requestSupervisor = asyncHandler(async (req, res, next) => {
   };
 
   const request = await requestServices.createRequest(requestData);
-
   await notificationServices.notifyUser(
     teacherId,
     `${student.name} has request ${supervisor.name} to be their supervisor.`,
@@ -211,14 +283,6 @@ export const requestSupervisor = asyncHandler(async (req, res, next) => {
     "medium",
   );
 
-//   await notificationServices.notifyUser(
-//   teacherId,
-//   "Supervisor request submitted successfully",
-//   "request",
-//   "/teacher/request",
-//   "medium",
-// );
-
   res.status(201).json({
     success: true,
     data: { request },
@@ -226,75 +290,66 @@ export const requestSupervisor = asyncHandler(async (req, res, next) => {
   });
 });
 
-// export const requestSupervisor = createAsyncThunk(
-//   "student/requestSupervisor",
-//   async (data, thunkAPI) => {
-//     try {
-//       const res = await axiosInstance.post(
-//         "/student/request-supervisor",
-//         data
-//       );
-
-//       toast.success(
-//         res.data.message || "Supervisor request sent successfully"
-//       );
-
-//       thunkAPI.dispatch(getSupervisor());
-
-//       return res.data.data?.request;
-//     } catch (error) {
-//       toast.error(
-//         error.response?.data?.message ||
-//           "Failed to request supervisor"
-//       );
-
-//       return thunkAPI.rejectWithValue(
-//         error.response?.data?.message
-//       );
-//     }
-//   }
-// );
-
 // get dashboard stats
 export const getDashboardStats = asyncHandler(async (req, res, next) => {
   const studentId = req.user._id;
 
-  const project = await Project.findOne({ student: studentId })
+  const project = await Project.findOne({
+    student: studentId,
+  })
     .sort({ createdAt: -1 })
-    .populate("supervisor", "name")
+    .populate("supervisor", "name email department expertise")
     .lean();
 
-  const now = new Date();
-  const upcomingDeadlines = await Project.find({
+  const thesis = await Thesis.findOne({
     student: studentId,
-    deadline: { $gte: now },
   })
-    .select("title description")
-    .sort({ deadline: -1 })
+    .sort({ createdAt: -1 })
+    .populate("supervisor", "name email department expertise")
+    .lean();
+
+  const student = await User.findById(studentId)
+    .populate("supervisor", "name email department expertise")
+    .lean();
+
+  const proposal = project || thesis;
+
+  const supervisor =
+    project?.supervisor || thesis?.supervisor || student?.supervisor || null;
+
+  const supervisorName = supervisor?.name || null;
+  const upcomingDeadlines = proposal?.deadline ? [proposal] : [];
+  const topNotifications = await Notification.find({
+    user: studentId,
+  })
+    .sort({ createdAt: -1 })
     .limit(3)
     .lean();
 
-  const topNotifications = await Notification.find({ user: studentId })
-  .populate("user", "name")
-  .sort({ createdAt: -1 })
-   .limit(3)
-   .lean();
+  const feedbackNotifications =
+    proposal?.feedback?.length > 0
+      ? [...proposal.feedback]
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 2)
+      : [];
 
-  const feedbackNotifications = project?.feedback && project?.feedback.length>0? project?.feedback.sort((a, b)=>new Date(b.createdAt)- new Date(a.createdAt)).slice(0,2):[];
+  return res.status(200).json({
+    success: true,
+    message: "Dashboard stats fetched successfully",
 
-  const supervisorName = project?.supervisor?.name || null;
-  res.status(200).json({
-    success:true,
-    message:"Dashboard stats fetched successfully",
-    data:{
-      project,
+    data: {
+      project: project || null,
+      thesis: thesis || null,
+      proposal: proposal || null,
+
+      supervisor: supervisor,
+      supervisorName: supervisorName,
+
       upcomingDeadlines,
       topNotifications,
-      // feedbackNotifications,
       feedbackList: feedbackNotifications,
-      supervisorName,
-    }
-  })
+    },
+  });
 });
 
 // get feedback
@@ -302,25 +357,26 @@ export const getFeedback = asyncHandler(async (req, res, next) => {
   const { projectId } = req.params;
   const studentId = req.user._id;
 
-  const project = await projectService.getProjectById(projectId);
-
-  if (!project) {
-    return next(new ErrorHandler("Project not found", 404));
-  }
-
-  // if (project.student.toString() !== studentId.toString()) {
-  if (project.student._id.toString() !== studentId.toString()) {
-    return next(
-      new ErrorHandler(
-        "Not authorized to view feedback for this project",
-        403
-      )
+  let academicWork = await projectService.getProjectById(projectId);
+  if (!academicWork) {
+    academicWork = await Thesis.findById(projectId).populate(
+      "supervisor",
+      "name email department expertise",
     );
   }
 
-  const feedbackList = project.feedback || [];
+  if (!academicWork) {
+    return next(new ErrorHandler("Project or Thesis not found", 404));
+  }
 
-  const sortedFeedback = feedbackList
+  const workStudentId = academicWork.student?._id || academicWork.student;
+  if (workStudentId.toString() !== studentId.toString()) {
+    return next(new ErrorHandler("Not authorized to view feedback", 403));
+  }
+
+  // Get feedback
+  const feedbackList = academicWork.feedback || [];
+  const sortedFeedback = [...feedbackList]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .map((f) => ({
       _id: f._id,
@@ -328,42 +384,87 @@ export const getFeedback = asyncHandler(async (req, res, next) => {
       message: f.message,
       type: f.type,
       createdAt: f.createdAt,
-      supervisorName: f.supervisorId?.name,
-      supervisorEmail: f.supervisorId?.email,
+      supervisorName:
+        f.supervisorId?.name || academicWork.supervisor?.name || "Supervisor",
+      supervisorEmail:
+        f.supervisorId?.email || academicWork.supervisor?.email || null,
     }));
 
   return res.status(200).json({
     success: true,
-    data: { feedback: sortedFeedback },
+    data: {
+      feedback: sortedFeedback,
+    },
   });
 });
 
-
+// download files 
 export const downloadFiles = asyncHandler(async (req, res, next) => {
-  const { projectId, fileId } = req.params;
+  const { workId, fileId } = req.params;
   const studentId = req.user._id;
 
-  const project = await projectService.getProjectById(projectId);
+  // First check Project
+  let academicWork = await projectService.getProjectById(workId);
 
-  if (!project) {
-    return next(new ErrorHandler("Project not found", 404));
+  // If Project not found, check Thesis
+  if (!academicWork) {
+    academicWork = await Thesis.findById(workId);
   }
 
-  const projectStudentId = project.student?._id || project.student;
+  // Work not found
+  if (!academicWork) {
+    return next(new ErrorHandler("Project or Thesis not found", 404));
+  }
 
-  if (projectStudentId.toString() !== studentId.toString()) {
+  // Check ownership
+  const workStudentId = academicWork.student?._id || academicWork.student;
+
+  if (workStudentId.toString() !== studentId.toString()) {
     return next(new ErrorHandler("Not authorized to download file", 403));
   }
 
-  const file = project.files.id(fileId);
+  // Find file
+  const file = academicWork.files.id(fileId);
 
   if (!file) {
     return next(new ErrorHandler("File not found", 404));
   }
 
-  return fileServices.streamDownload(
-    file.fileUrl,
-    res,
-    file.originalName
-  );
+  return fileServices.streamDownload(file.fileUrl, res, file.originalName);
+});
+
+// delete files 
+export const deleteFile = asyncHandler(async (req, res, next) => {
+  const { workId, fileId } = req.params;
+  const studentId = req.user._id;
+  let academicWork = await projectService.getProjectById(workId);
+
+  let workType = "Project";
+  if (!academicWork) {
+    academicWork = await Thesis.findById(workId);
+    workType = "Thesis";
+  }
+
+  if (!academicWork) {
+    return next(new ErrorHandler("Project or Thesis not found", 404));
+  }
+  
+  const workStudentId = academicWork.student?._id || academicWork.student;
+  if (workStudentId.toString() !== studentId.toString()) {
+    return next(new ErrorHandler("Not authorized to delete this file", 403));
+  }
+  const file = academicWork.files.id(fileId);
+  if (!file) {
+    return next(new ErrorHandler("File not found", 404));
+  }
+  academicWork.files.pull(fileId);
+  await academicWork.save();
+  return res.status(200).json({
+    success: true,
+    message: "File deleted successfully",
+    data: {
+      workId,
+      fileId,
+    },
+  });
 });
