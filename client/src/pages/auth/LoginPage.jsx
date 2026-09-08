@@ -21,22 +21,12 @@ const LoginPage = () => {
 
   const [errors, setErrors] = useState({});
 
-  // Dropdown open/close state
+  // Dropdown open and close state
   const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const roles = ["Admin", "Co-Admin", "Teacher","Student"];
-
-
-  // useEffect(() => {
-  //   if (authUser) {
-  //     if (formData.role === "Student") navigate("/student");
-  //     else if (formData.role === "Teacher") navigate("/teacher");
-  //     else if (formData.role === "Admin") navigate("/admin");
-  //   }
-  // }, [authUser, navigate]);
+  const roles = ["Admin", "Co-Admin", "Teacher", "Student"];
 
   useEffect(() => {
     if (authUser) {
-      // switch (formData.role) change switch (formData.role) to  authUser.role
       switch (authUser.role) {
         case "Student":
           navigate("/student");
@@ -55,17 +45,6 @@ const LoginPage = () => {
       }
     }
   }, [authUser]);
-
-  // login Continue with Google
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-
-    if (token) {
-      localStorage.setItem("token", token);
-      navigate("/");
-    }
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -99,7 +78,6 @@ const LoginPage = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    //  JSON use kora hoyeche (FormData না)
     const data = {
       email: formData.email,
       password: formData.password,
@@ -108,17 +86,13 @@ const LoginPage = () => {
 
     dispatch(login(data));
   };
-  // handleGoogleLogin
-  // const handleGoogleLogin = () => {
-  //   window.location.href = "http://localhost:5000/api/auth/google";
-  // };
 
   return (
     <>
- <div className="min-h-screen bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed bg-slate-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full">
+      <div className="min-h-screen bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed bg-slate-50 flex items-center justify-center px-4">
+        <div className="relative z-10  max-w-md w-full">
           <div className="bg-white px-6 py-6 rounded-lg border shadow-[0px_0px_40px_rgba(0,0,0,0.35)]">
-          {/* Header */}
+            {/* login header */}
             <div className="text-center mb-2">
               <div className="inline-flex items-center justify-center w-12 h-12 bg-[#17a2b8] rounded-full">
                 <BookOpen className="w-5 h-5 text-white" />
@@ -131,7 +105,7 @@ const LoginPage = () => {
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Role - custom dropdown*/}
+              {/* Select Role*/}
               <div className="relative">
                 <label className="label block text-base font-medium text-slate-700">
                   Select Role
@@ -170,22 +144,6 @@ const LoginPage = () => {
                   </div>
                 )}
               </div>
-
-              {/* <div>
-                <label className="label">Select Role</label>
-                
-                <select
-                
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-  className="input focus:outline-none focus:ring-1 focus:ring-[#17a2b8]"
->
-                  <option value="Student bg-white hover:bg-[#17a2b8]">Student</option>
-                  <option value="Teacher">Teacher</option>
-                  <option value="Admin">Admin</option>
-                </select>
-              </div> */}
 
               {/* Email Address*/}
               <div>
@@ -255,30 +213,11 @@ const LoginPage = () => {
                   fontFamily: "Arial, sans-serif",
                 }}
                 disabled={isLoggingIn}
-                // className="w-full bg-[#17a2b8] hover:bg-[#138496] focus:ring-2 focus:ring-offset-2 focus:ring-[#17a2b8] text-white  py-2 rounded-lg transition-all tracking-wider text-mediam font-semibold"
-
-                className="w-full py-2 rounded-lg text-white tracking-[1px] text-[16px] transition-all
-  bg-[#17a2b8] hover:bg-[#138496]"
+                className="w-full py-2 rounded-lg text-white tracking-[1px] text-[16px] transition-all bg-[#17a2b8] hover:bg-[#138496]"
               >
                 {isLoggingIn ? "Signing in..." : "Sign In"}
               </button>
             </form>
-
-            <div className="mt-2">
-              <button
-                type="button"
-                // onClick={handleGoogleLogin}
-                className="w-full flex items-center justify-center gap-2 border py-2 rounded-lg hover:bg-gray-100 shadow-sm"
-              >
-                <img
-                  src="https://www.svgrepo.com/show/475656/google-color.svg"
-                  className="w-5 h-5"
-                />
-                Continue with Google
-              </button>
-
-              {/* <button onClick={handleGoogleLogin}>Continue with Google</button> */}
-            </div>
           </div>
         </div>
       </div>
