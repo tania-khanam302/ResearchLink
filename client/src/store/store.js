@@ -5,6 +5,7 @@ import adminReducer from "./slices/adminSlice";
 import deadlineReducer from "./slices/deadlineSlice";
 import notificationReducer from "./slices/notificationSlice";
 import projectReducer from "./slices/projectSlice";
+import thesisReducer from "./slices/thesisSlice";
 import requestReducer from "./slices/requestSlice";
 import studentReducer from "./slices/studentSlice";
 import teacherReducer from "./slices/teacherSlice";
@@ -17,6 +18,7 @@ export const store = configureStore({
     deadline: deadlineReducer,
     notification: notificationReducer,
     project: projectReducer,
+    thesis: thesisReducer,
     request: requestReducer,
     student: studentReducer,
     teacher: teacherReducer,
