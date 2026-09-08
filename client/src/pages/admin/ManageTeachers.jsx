@@ -1,8 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddTeacher from "../../components/modal/AddTeacher";
-import { deleteTeacher, getAllUsers, updateTeacher } from "../../store/slices/adminSlice";
-import { AlertTriangle, BadgeCheck, Plus, TriangleAlert, UserPlus, Users, X } from "lucide-react";
+import {
+  deleteTeacher,
+  getAllUsers,
+  updateTeacher,
+} from "../../store/slices/adminSlice";
+import {
+  AlertTriangle,
+  BadgeCheck,
+  Plus,
+  TriangleAlert,
+  UserPlus,
+  Users,
+  X,
+} from "lucide-react";
 import { toggleTeacherModal } from "../../store/slices/popupSlice";
 
 const ManageTeachers = () => {
@@ -14,6 +26,8 @@ const ManageTeachers = () => {
   const [filterDepartment, setFilterDepartment] = useState("all");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [teacherToDelete, setTeacherToDelete] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -37,7 +51,17 @@ const ManageTeachers = () => {
     return Array.from(set);
   }, [teachers]);
 
-  // filter teachers [akhane chane kora hoyeche]
+  const students = useMemo(() => {
+    return (users || []).filter((u) => u.role?.toLowerCase() === "student");
+  }, [users]);
+
+  const assignedStudentCount = useMemo(() => {
+    return students.filter(
+      (student) => student.supervisor && student.supervisor !== "Not Assigned",
+    ).length;
+  }, [students]);
+
+  // filter teachers
   const filteredTeachers = useMemo(() => {
     return teachers.filter((teacher) => {
       const matchesSearch =
@@ -48,6 +72,19 @@ const ManageTeachers = () => {
       return matchesSearch && matchesFilter;
     });
   }, [teachers, searchTerm, filterDepartment]);
+
+  const totalPages = Math.ceil(filteredTeachers.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+
+  const paginatedTeachers = filteredTeachers.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterDepartment]);
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -105,7 +142,7 @@ const ManageTeachers = () => {
 
   return (
     <>
-    <div className="space-y-6 bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed">
+      <div className="space-y-6 bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed">
         {/*header */}
         <div className="card shadow-lg rounded-md">
           <div className="card-header flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -155,11 +192,9 @@ const ManageTeachers = () => {
                 <p className="text-sm font-medium text-slate-600">
                   Assigned Student
                 </p>
+
                 <p className="text-lg font-semibold text-slate-800">
-                  {teachers.reduce(
-                    (sum, t) => sum + (t.assignedStudents?.length || 0),
-                    0,
-                  )}
+                  {assignedStudentCount}
                 </p>
               </div>
             </div>
@@ -176,7 +211,7 @@ const ManageTeachers = () => {
                   Departments
                 </p>
                 <p className="text-lg font-semibold text-slate-800">
-                  {departments.length} 
+                  {departments.length}
                 </p>
               </div>
             </div>
@@ -225,16 +260,18 @@ const ManageTeachers = () => {
               Teachers List
             </h2>
           </div>
-          <div className="w-full max-w-full overflow-auto max-h-[500px]
+          <div
+            className="w-full max-w-full overflow-auto max-h-[500px]
           
       [&::-webkit-scrollbar]:w-1.5
       [&::-webkit-scrollbar-track]:bg-slate-100
       [&::-webkit-scrollbar-thumb]:bg-[#b0cbcf]
       [&::-webkit-scrollbar-thumb]:rounded-full
-      [&::-webkit-scrollbar-thumb:hover]:bg-[#8fb8be]">
+      [&::-webkit-scrollbar-thumb:hover]:bg-[#8fb8be]"
+          >
             {filteredTeachers && filteredTeachers.length > 0 ? (
-      <table className="min-w-auto w-full text-left border-collapse">
-        <thead className="bg-slate-200 sticky top-0 z-10">
+              <table className="min-w-auto w-full text-left border-collapse">
+                <thead className="bg-slate-200 sticky top-0 z-10">
                   <tr className=" text-[#138496] text-xs font-semibold uppercase">
                     <th className="px-2 py-6 text-left tracking-wide">
                       Teacher Info
@@ -247,7 +284,7 @@ const ManageTeachers = () => {
                 </thead>
 
                 <tbody className=" bg-slate-50 divide-y divide-slate-200">
-                  {filteredTeachers.map((teacher) => {
+                  {paginatedTeachers.map((teacher) => {
                     return (
                       <tr key={teacher._id} className="hover:bg-white">
                         {/* Teacher Info */}
@@ -313,6 +350,78 @@ const ManageTeachers = () => {
               )
             )}
           </div>
+
+          {/* Teachers Pagination */}
+          {filteredTeachers.length > 0 && (
+            <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-slate-500">
+                Showing{" "}
+                <span className="font-semibold text-slate-700">
+                  {startIndex + 1}
+                </span>{" "}
+                to{" "}
+                <span className="font-semibold text-slate-700">
+                  {Math.min(startIndex + itemsPerPage, filteredTeachers.length)}
+                </span>{" "}
+                of{" "}
+                <span className="font-semibold text-slate-700">
+                  {filteredTeachers.length}
+                </span>{" "}
+                teachers
+              </p>
+
+              <div className="flex items-center gap-1.5">
+                {/* Previous */}
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
+                    currentPage === 1
+                      ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+                      : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+                  }`}
+                >
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                {Array.from(
+                  { length: totalPages },
+                  (_, index) => index + 1,
+                ).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`min-w-[38px] rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                      currentPage === page
+                        ? "border-[#17a2b8] bg-[#17a2b8] text-white"
+                        : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+                {/* Next */}
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
+                    currentPage === totalPages
+                      ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+                      : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* edit teacher model */}
           {showModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -482,8 +591,6 @@ const ManageTeachers = () => {
                       >
                         Update Teacher
                       </button>
-                      {/* <button type="submit" onClick={handleCloseModal} className="
-                      btn-secondary">Update Teacher</button> */}
                     </div>
                   </form>
                 </div>
@@ -518,7 +625,6 @@ const ManageTeachers = () => {
                       >
                         Cancel
                       </button>
-                      {/* btn-danger  */}
                       <button
                         onClick={confirmDelete}
                         className="py-2 bg-red-500 text-white hover:bg-red-600 px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
@@ -536,8 +642,6 @@ const ManageTeachers = () => {
           {isCreateTeacherModalOpen && <AddTeacher />}
         </div>
       </div>
-
-
     </>
   );
 };

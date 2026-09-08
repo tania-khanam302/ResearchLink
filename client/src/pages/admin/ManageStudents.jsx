@@ -2,78 +2,84 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddStudent from "../../components/modal/AddStudent";
 import {
-  createStudent,
   deleteStudent,
   getAllUsers,
   updateStudent,
+  getAllProjects,
+  getAllTheses,
 } from "../../store/slices/adminSlice";
-
 import {
   AlertTriangle,
   CheckCircle,
-  Plus,
   TriangleAlert,
-  Users,UserPlus,
+  Users,
+  UserPlus,
   X,
 } from "lucide-react";
 import { toggleStudentModal } from "../../store/slices/popupSlice";
 
 const ManageStudents = () => {
-  const { users, projects } = useSelector((state) => state.admin);
+  const { users, projects, theses } = useSelector((state) => state.admin);
+  console.log("USERS:", users);
+  console.log("THESES:", theses);
+  console.log("PROJECTS:", projects);
   const { isCreateStudentModalOpen } = useSelector((state) => state.popup);
   const [showModal, setShowModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDepartment, setFilterDepartment] = useState("all");
+  const [filterType, setFilterType] = useState("all");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [studentToDelete, setStudentToDelete] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     department: "",
-  type: "",
+    type: "",
   });
 
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(getAllUsers());
+    dispatch(getAllProjects());
+    dispatch(getAllTheses());
   }, [dispatch]);
 
-  // students get
   const students = useMemo(() => {
     const studentUsers = (users || []).filter(
       (u) => u.role?.toLowerCase() === "student",
     );
 
     return studentUsers.map((student) => {
-      // const studentProject = (projects || []).find(
-      //   (p) => p.student === student._id,
-      // );
-      // return {
-      //   ...student,
-      //   projectTitle: studentProject?.title || null,
-      //   supervisor: studentProject?.supervisor || null,
-      //   projectStatus: studentProject?.status || null,
-      // };
-      const studentProject = (projects || []).find(
-  (p) =>
-    p.student?._id === student._id ||
-    p.student === student._id
-);
+      const studentId = String(student._id);
 
-return {
-  ...student,
-  projectTitle: studentProject?.title || "No Project",
-  supervisor:
-    studentProject?.supervisor?._id ||
-    studentProject?.supervisor ||
-    null,
-  projectStatus: studentProject?.status || null,
-};
+      const thesis = (theses || []).find(
+        (t) => String(t.student?._id || t.student || "") === studentId,
+      );
+
+      const project = (projects || []).find(
+        (p) => String(p.student?._id || p.student || "") === studentId,
+      );
+
+      const work =
+        student.type?.toLowerCase() === "thesis"
+          ? thesis
+          : student.type?.toLowerCase() === "project"
+            ? project
+            : thesis || project;
+
+      return {
+        ...student,
+
+        projectTitle: work?.title || "No Title",
+        supervisor: work?.supervisor?._id || work?.supervisor || null,
+        projectStatus: work?.status || null,
+      };
     });
-  }, [users, projects]);
+  }, [users, projects, theses]);
 
   const departments = useMemo(() => {
     const set = new Set(
@@ -88,11 +94,27 @@ return {
       const matchesSearch =
         (student.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
         (student.email || "").toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesFilter =
+
+      const matchesDepartment =
         filterDepartment === "all" || student.department === filterDepartment;
-      return matchesSearch && matchesFilter;
+      const matchesType = filterType === "all" || student.type === filterType;
+      return matchesSearch && matchesDepartment && matchesType;
     });
-  }, [students, searchTerm, filterDepartment]); 
+  }, [students, searchTerm, filterDepartment, filterType]);
+
+  // Student Pagination
+  const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+
+  const paginatedStudents = filteredStudents.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterDepartment, filterType]);
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -101,6 +123,7 @@ return {
       name: "",
       email: "",
       department: "",
+      type: "",
     });
   };
 
@@ -109,7 +132,7 @@ return {
 
     if (editingStudent) {
       dispatch(updateStudent({ id: editingStudent._id, data: formData }));
-    }   
+    }
     handleCloseModal();
   };
 
@@ -119,6 +142,7 @@ return {
       name: student.name,
       email: student.email,
       department: student.department,
+      type: student.type || "",
     });
     setShowModal(true);
   };
@@ -191,10 +215,13 @@ return {
 
               <div className="ml-4">
                 <p className="text-sm font-medium text-slate-600">
-                  Completed Projects
+                  Completed Theses/Projects
                 </p>
                 <p className="text-lg font-semibold text-slate-800">
-                  {students.filter((s) => s.projectStatus === "completed").length}
+                  {
+                    students.filter((s) => s.projectStatus === "completed")
+                      .length
+                  }
                 </p>
               </div>
             </div>
@@ -219,7 +246,7 @@ return {
         {/* Search Students */}
         <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)] flex flex-col md:flex-row gap-4">
           <div className="flex-1">
-             <label className="block mb-2 card-title text-md font-semibold text-[#17a2b8]">
+            <label className="block mb-2 card-title text-md font-semibold text-[#17a2b8]">
               Search Students
             </label>
 
@@ -231,7 +258,23 @@ return {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+          {/* Type */}
+          <div className="w-full md:w-40">
+            <label className="block mb-2 text-md font-semibold text-[#17a2b8]">
+              Filter Type
+            </label>
 
+            <select
+              className="input-field w-full outline-none p-1 border border-slate-300"
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+            >
+              <option value="all">All Types</option>
+              <option value="Project">Project</option>
+              <option value="Thesis">Thesis</option>
+            </select>
+          </div>
+          {/* Filter Department */}
           <div className="w-full md:w-48">
             <label className="block mb-2 text-md font-semibold text-[#17a2b8]">
               Filter Department
@@ -257,44 +300,46 @@ return {
             <h2 className="card-title text-[20px] font-semibold text-[#17a2b8]">
               Students List
             </h2>
-          </div> 
-          <div className="w-full max-w-full overflow-auto max-h-[500px]
+          </div>
+          <div
+            className="w-full max-w-full overflow-auto 
           
       [&::-webkit-scrollbar]:w-1.5
       [&::-webkit-scrollbar-track]:bg-slate-100
       [&::-webkit-scrollbar-thumb]:bg-[#b0cbcf]
       [&::-webkit-scrollbar-thumb]:rounded-full
-      [&::-webkit-scrollbar-thumb:hover]:bg-[#8fb8be]">
-            {filteredStudents && filteredStudents.length > 0 ? ( 
-      <table className="min-w-auto w-full text-left border-collapse">
-        <thead className="bg-slate-200 sticky top-0 z-10">
-              <tr className="text-[#138496] text-[12px] font-semibold uppercase">
-                <th className="px-2 py-6">Student Info</th>
-                <th className="px-2 py-6">Department & Year</th>
-                <th className="px-2 py-6">Supervisor</th>
-<th className="px-2 py-6">Type</th>
-<th className="px-2 py-6">Thesis / Project Title</th>
-                <th className="px-2 py-6">Action</th>
-              </tr>
-            </thead>
-                <tbody className=" bg-slate-50 divide-y divide-slate-200">
-                  {filteredStudents.map((student) => {
-                    return (
+      [&::-webkit-scrollbar-thumb:hover]:bg-[#8fb8be]"
+          >
+            {filteredStudents && filteredStudents.length > 0 ? (
+              <div>
+                <table className="min-w-auto w-full text-left border-collapse">
+                  <thead className="bg-slate-200 sticky top-0 z-10">
+                    <tr className="text-[#138496] text-[12px] font-semibold uppercase">
+                      <th className="px-2 py-6">Student Info</th>
+                      <th className="px-2 py-6">Department & Year</th>
+                      <th className="px-2 py-6">Supervisor</th>
+                      <th className="px-2 py-6">Type</th>
+                      <th className="px-2 py-6">Thesis / Project Title</th>
+                      <th className="px-2 py-6">Action</th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="bg-slate-50 divide-y divide-slate-200">
+                    {paginatedStudents.map((student) => (
                       <tr key={student._id} className="hover:bg-white">
-                        {/* student info  */}
-                        <td className="px-2 py-6 font-xl">
+                        <td className="px-2 py-6">
                           <div>
                             <div className="text-[16px] font-medium text-slate-900">
                               {student.name}
                             </div>
+
                             <div className="text-sm font-medium text-slate-900">
                               {student.email}
                             </div>
                           </div>
                         </td>
 
-{/* department  */}
-                        <td className="px-2 py-4 whitespace-nowrapp">
+                        <td className="px-2 py-4 whitespace-nowrap">
                           <div className="text-[16px] text-slate-900">
                             {student.department || "-"}
                           </div>
@@ -306,14 +351,13 @@ return {
                           </div>
                         </td>
 
-{/* supervisor  */}
-                        <td className="px-2 py-4 whitespace-nowrapp text-center">
+                        <td className="px-2 py-4 text-center">
                           {student.supervisor ? (
-                            <span className="inline-flex flex-wrap items-center px-2 py-0.9 rounded-full text-center w-[130px] text-green-800 bg-gray-200 text-[14px] font-medium">
-                            
-                                {users?.find(
-                                  (u)=>u._id === student?.supervisor
-                                )?.name}
+                            <span className="inline-flex flex-wrap items-center px-2 py-1 rounded-full text-green-800 bg-gray-200 text-[14px] font-medium">
+                              {
+                                users?.find((u) => u._id === student.supervisor)
+                                  ?.name
+                              }
                             </span>
                           ) : (
                             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-red-800 bg-red-100 text-xs font-medium">
@@ -323,23 +367,23 @@ return {
                             </span>
                           )}
                         </td>
-<td className="px-2 py-4 text-center">
-  <span
-    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-      student.type === "Thesis"
-        ? "text-purple-800 bg-purple-100"
-        : "text-blue-800 bg-blue-100"
-    }`}
-  >
-    {student.type || "-"}
-  </span>
-</td>
-{/* project title */}
+
+                        <td className="px-2 py-4 text-center">
+                          <span
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                              student.type === "Thesis"
+                                ? "text-purple-800 bg-purple-100"
+                                : "text-blue-800 bg-blue-100"
+                            }`}
+                          >
+                            {student.type || "-"}
+                          </span>
+                        </td>
+
                         <td className="px-2 py-4">
                           <div className="text-[16px] text-slate-900">
                             {student.projectTitle}
                           </div>
-                          
                         </td>
 
                         <td className="px-2 py-4 whitespace-nowrap text-sm font-medium">
@@ -349,6 +393,7 @@ return {
                           >
                             Edit
                           </button>
+
                           <button
                             onClick={() => handleDelete(student)}
                             className="text-red-600 hover:text-red-900"
@@ -357,16 +402,75 @@ return {
                           </button>
                         </td>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            ) : (
-              filteredStudents.length === 0 && (
-                <div className="text-center py-8 text-slate-500">
-                  No students found matching your criteria.
+                    ))}
+                  </tbody>
+                </table>
+
+                {/* Pagination */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-4 bg-white border-t border-slate-200">
+                  <p className="text-sm text-slate-500">
+                    Showing{" "}
+                    <span className="font-medium text-slate-700">
+                      {filteredStudents.length === 0 ? 0 : startIndex + 1}
+                    </span>{" "}
+                    to{" "}
+                    <span className="font-medium text-slate-700">
+                      {Math.min(
+                        startIndex + itemsPerPage,
+                        filteredStudents.length,
+                      )}
+                    </span>{" "}
+                    of{" "}
+                    <span className="font-medium text-slate-700">
+                      {filteredStudents.length}
+                    </span>{" "}
+                    students
+                  </p>
+
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
+                      disabled={currentPage === 1}
+                      className="px-3 py-1.5 text-sm border border-slate-300 rounded-md text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      Previous
+                    </button>
+
+                    {Array.from(
+                      { length: totalPages },
+                      (_, index) => index + 1,
+                    ).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-1.5 text-sm rounded-md border ${
+                          currentPage === page
+                            ? "bg-[#17a2b8] text-white border-[#17a2b8]"
+                            : "border-slate-300 text-slate-600 hover:bg-slate-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+
+                    <button
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
+                      disabled={currentPage === totalPages || totalPages === 0}
+                      className="px-3 py-1.5 text-sm border border-slate-300 rounded-md text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
+                  </div>
                 </div>
-              )
+              </div>
+            ) : (
+              <div className="text-center py-8 text-slate-500">
+                No students found matching your criteria.
+              </div>
             )}
           </div>
           {/* edit student model */}
@@ -460,7 +564,30 @@ return {
                         </option>
                       </select>
                     </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">
+                        Type
+                      </label>
 
+                      <select
+                        className="input-field w-full p-2 border-b border-slate-400 focus:outline-none"
+                        required
+                        value={formData.type}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            type: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="" disabled>
+                          Select Type
+                        </option>
+
+                        <option value="Project">Project</option>
+                        <option value="Thesis">Thesis</option>
+                      </select>
+                    </div>
                     <div className="flex justify-end space-x-3 pt-4">
                       <button
                         type="button"
@@ -503,17 +630,13 @@ return {
                       </span>
                     </p>
 
-                    {/* stdent name font bold */}
-                    {/* <p className="text-sm text-slate-500 mb-4">Are you sure you want to delete this student
-                      {" "} <span  className="font-bold text-slate-700">{studentToDelete.name}? </span>This action cannot be undone.
-                    </p> */}
-                    {/* <p>Are you sure you want to delete</p> */}
-
                     <div className="flex justify-center space-x-3">
-                      <button onClick={cancelDelete} className="btn-secondary text-white px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md">
+                      <button
+                        onClick={cancelDelete}
+                        className="btn-secondary text-white px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
+                      >
                         Cancel
                       </button>
-                      {/* btn-danger  */}
                       <button
                         onClick={confirmDelete}
                         className="py-2 bg-red-500 text-white hover:bg-red-600 px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
@@ -535,4 +658,3 @@ return {
   );
 };
 export default ManageStudents;
-

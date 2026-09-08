@@ -13,7 +13,6 @@ import {
   updateCoAdmin,
   deleteCoAdmin,
 } from "../../store/slices/adminSlice";
-
 import { toggleCoAdminModal } from "../../store/slices/popupSlice";
 import AddCoAdmin from "../../components/modal/AddCoAdmin";
 
@@ -22,8 +21,12 @@ const ManageCoAdmin = () => {
 
   const { users } = useSelector((state) => state.admin);
   const { isCreateCoAdminModalOpen } = useSelector((state) => state.popup);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const [search, setSearch] = useState("");
+  const [departmentFilter, setDepartmentFilter] = useState("all");
+
   const [editingAdmin, setEditingAdmin] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -41,13 +44,38 @@ const ManageCoAdmin = () => {
     return (users || []).filter((u) => u.role?.toLowerCase() === "co-admin");
   }, [users]);
 
-  const filteredAdmins = useMemo(() => {
-    return (coAdmins || []).filter((c) =>
-      c.name?.toLowerCase()?.includes(search.toLowerCase()),
-    );
-  }, [coAdmins, search]);
+  const departments = useMemo(() => {
+    return [
+      ...new Set(coAdmins.map((admin) => admin.department).filter(Boolean)),
+    ];
+  }, [coAdmins]);
 
-  // edit
+  const filteredAdmins = useMemo(() => {
+    return coAdmins.filter((admin) => {
+      const matchesSearch = admin.name
+        ?.toLowerCase()
+        .includes(search.toLowerCase());
+
+      const matchesDepartment =
+        departmentFilter === "all" || admin.department === departmentFilter;
+
+      return matchesSearch && matchesDepartment;
+    });
+  }, [coAdmins, search, departmentFilter]);
+
+  const totalPages = Math.ceil(filteredAdmins.length / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+
+  const paginatedAdmins = filteredAdmins.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, departmentFilter]);
+
   const handleEdit = (admin) => {
     setEditingAdmin(admin);
     setFormData({
@@ -109,49 +137,100 @@ const ManageCoAdmin = () => {
           </div>
         </div>
 
-        {/* total co-admins active and inactive co-admins */}
-        <div className="grid grid-cols-3 gap-4 ">
-          <div className="bg-white p-4 rounded-xl shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
-            <p>Total</p>
-            <h2 className="text-xl font-bold">{filteredAdmins.length}</h2>
+        {/* total co-admins and deaprtment */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-200 p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-slate-500">
+                  Total Co-Admins
+                </p>
+                <h2 className="text-2xl font-bold text-slate-800 mt-2">
+                  {coAdmins.length}
+                </h2>
+              </div>
+
+              <div className="w-10 h-10 rounded-lg bg-[#17a2b8]/10 flex items-center justify-center">
+                <Users className="w-5 h-5 text-[#17a2b8]" />
+              </div>
+            </div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
-            <p>Active</p>
-            <h2 className="text-xl font-bold text-green-600">
-              {
-                filteredAdmins.filter(
-                  (a) => a.status?.toLowerCase() === "active",
-                ).length
-              }
-            </h2>
-          </div>
+          {/* Total Departments */}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-200 p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-slate-500">
+                  Total Departments
+                </p>
 
-          <div className="bg-white p-4 rounded-xl shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
-            <p>Inactive</p>
-            <h2 className="text-xl font-bold text-red-500">
-              {
-                filteredAdmins.filter(
-                  (a) => a.status?.toLowerCase() === "inactive",
-                ).length
-              }
-            </h2>
+                <h2 className="text-2xl font-bold text-slate-800 mt-2">
+                  {departments.length}
+                </h2>
+              </div>
+
+              <div className="w-10 h-10 rounded-lg bg-[#138496]/10 flex items-center justify-center">
+                <ShieldCheck className="w-5 h-5 text-[#138496]" />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Search Co-Admins Section */}
+        {/* Search & Filter Co-Admins Section */}
         <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
-          <label className="block mb-2 card-title text-md font-semibold text-[#17a2b8]">
-            Search Co-Admins
-          </label>
-          <div className="bg-white p-3 rounded-xl shadow-sm flex items-center gap-2 border border-slate-200">
-            <Search className="w-4 h-4 text-[#17a2b8]" />
-            <input
-              className="w-full outline-none text-sm"
-              placeholder="Search co-admin..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Search */}
+            <div>
+              <label className="block mb-2 text-sm font-semibold text-[#17a2b8]">
+                Search Co-Admins
+              </label>
+
+              <div className="bg-white p-3 rounded-xl shadow-sm flex items-center gap-2 border border-slate-200">
+                <Search className="w-4 h-4 text-[#17a2b8]" />
+
+                <input
+                  className="w-full outline-none text-sm"
+                  placeholder="Search co-admin..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Department Filter */}
+            <div>
+              <label className="block mb-2 text-md font-semibold text-[#17a2b8]">
+                Filter by Department
+              </label>
+
+              <select
+                value={departmentFilter}
+                onChange={(e) => setDepartmentFilter(e.target.value)}
+                className="
+          w-full
+          p-3
+          text-sm
+          bg-white
+          border
+          border-slate-200
+          rounded-xl
+          outline-none
+          shadow-sm
+          focus:border-[#17a2b8]
+          focus:ring-1
+          focus:ring-[#17a2b8]
+          transition
+        "
+              >
+                <option value="all">All Departments</option>
+
+                {departments.map((department) => (
+                  <option key={department} value={department}>
+                    {department}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -176,7 +255,7 @@ const ManageCoAdmin = () => {
               </thead>
 
               <tbody className="bg-white divide-y divide-slate-200">
-                {filteredAdmins.map((admin) => (
+                {paginatedAdmins.map((admin) => (
                   <tr key={admin._id} className="hover:bg-slate-50">
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-slate-900">
@@ -217,6 +296,73 @@ const ManageCoAdmin = () => {
                 ))}
               </tbody>
             </table>
+
+            {filteredAdmins.length > 0 && (
+              <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-slate-500">
+                  Showing{" "}
+                  <span className="font-semibold text-slate-700">
+                    {startIndex + 1}
+                  </span>{" "}
+                  to{" "}
+                  <span className="font-semibold text-slate-700">
+                    {Math.min(startIndex + itemsPerPage, filteredAdmins.length)}
+                  </span>{" "}
+                  of{" "}
+                  <span className="font-semibold text-slate-700">
+                    {filteredAdmins.length}
+                  </span>{" "}
+                  co-admins
+                </p>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    disabled={currentPage === 1}
+                    className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
+                      currentPage === 1
+                        ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+                        : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+                    }`}
+                  >
+                    Previous
+                  </button>
+
+                  {Array.from(
+                    { length: totalPages },
+                    (_, index) => index + 1,
+                  ).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`min-w-[38px] rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                        currentPage === page
+                          ? "border-[#17a2b8] bg-[#17a2b8] text-white"
+                          : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}
+                    className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
+                      currentPage === totalPages
+                        ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+                        : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+                    }`}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
 
             {filteredAdmins.length === 0 && (
               <div className="text-center py-8 text-slate-500">
@@ -335,7 +481,7 @@ const ManageCoAdmin = () => {
             <div className="fixed inset-0 bg-black/40 backdrop-blur-sm  z-40"></div>
 
             <div className="relative inset-0 z-50 w-full max-w-md mx-4 animate-fadeIn">
-               <div className="card bg-white rounded-sm w-full max-w-md mx-4 shadow-xl">
+              <div className="card bg-white rounded-sm w-full max-w-md mx-4 shadow-xl">
                 <div className="grid items-center mb-4 p-6">
                   <div className="flex-shrink-0 w-10 h-10 mx-auto flex items-center justify-center rounded-full bg-red-100">
                     <AlertTriangle className="w-6 h-6 text-red-600" />
