@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// deadline schema
 const deadlineSchema = new mongoose.Schema(
   {
     name: {
@@ -16,26 +17,35 @@ const deadlineSchema = new mongoose.Schema(
       type: Date,
       required: [true, "Due date is required"],
     },
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: [true, "Created By is required"],
     },
-    Project: {
+
+    project: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
+      default: null,
+    },
+
+    thesis: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Thesis",
       default: null,
     },
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-// Indexing for better quiry performance
 deadlineSchema.index({ dueDate: 1 });
-deadlineSchema.index({ project: 1 }); //akhane project capital
+deadlineSchema.index({ project: 1 });
+deadlineSchema.index({ thesis: 1 });
 deadlineSchema.index({ createdBy: 1 });
 
 export const Deadline =
-  mongoose.models.Deadline || mongoose.model("Deadline", deadlineSchema);
+  mongoose.models.Deadline ||
+  mongoose.model("Deadline", deadlineSchema);
