@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// feedback schema
 const feedbackSchema = new mongoose.Schema(
   {
     supervisorId: {
@@ -7,16 +8,11 @@ const feedbackSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    // type: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   enum: ["positive", "negative", "general"],
-    //   default: "general",
-    // },
     type: {
-  type: String,
-  enum: ["positive", "negative", "general"],
-  default: "general",
-},
+      type: String,
+      enum: ["positive", "negative", "general"],
+      default: "general",
+    },
     title: {
       type: String,
       required: true,
@@ -30,6 +26,7 @@ const feedbackSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+// project schema
 const projectSchema = new mongoose.Schema(
   {
     student: {
@@ -41,6 +38,11 @@ const projectSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null,
+    },
+    type: {
+      type: String,
+      enum: ["Project", "Thesis"],
+      required: [true, "Proposal type is required"],
     },
     title: {
       type: String,
@@ -95,6 +97,7 @@ const projectSchema = new mongoose.Schema(
 projectSchema.index({ student: 1 });
 projectSchema.index({ supervisor: 1 });
 projectSchema.index({ status: 1 });
+projectSchema.index({ type: 1 });
 
 export const Project =
   mongoose.models.Project || mongoose.model("Project", projectSchema);
