@@ -7,7 +7,16 @@ import {
   requestSupervisor,
 } from "../../store/slices/studentSlice";
 
-import { UserPlus, X } from "lucide-react";
+import {
+  AlertCircle,
+  FileText,
+  UserCheck,
+  UserPlus,
+  Users,
+  X,
+} from "lucide-react";
+
+
 
 const SupervisorPage = () => {
   const dispatch = useDispatch();
@@ -15,12 +24,13 @@ const SupervisorPage = () => {
 
   const {
     project,
+    thesis,
+    proposal,
     supervisors = [],
     supervisor,
   } = useSelector((state) => state.student);
 
   const safeSupervisors = Array.isArray(supervisors) ? supervisors : [];
-
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [requestMessage, setRequestMessage] = useState("");
   const [selectedSupervisor, setSelectedSupervisor] = useState(null);
@@ -37,7 +47,13 @@ const SupervisorPage = () => {
     [supervisor],
   );
 
-  const hasProject = useMemo(() => !!(project && project._id), [project]);
+  const work = thesis || project || proposal || null;
+  const workType = thesis
+    ? "Thesis"
+    : proposal?.type?.toLowerCase() === "thesis"
+      ? "Thesis"
+      : "Project";
+  const hasWork = !!work?._id;
 
   const formatDeadline = (dateStr) => {
     if (!dateStr) return "-";
@@ -64,53 +80,68 @@ const SupervisorPage = () => {
     setShowRequestModal(true);
   };
 
-const submitRequest = async () => {
-  if (!selectedSupervisor) return;
+  const submitRequest = async () => {
+    if (!selectedSupervisor) return;
 
-  const message =
-    requestMessage?.trim() ||
-    `${authUser.name || "Student"} has requested ${
-      selectedSupervisor.name
-    } to be their supervisor.`;
+    const message =
+      requestMessage?.trim() ||
+      `${authUser.name || "Student"} has requested ${
+        selectedSupervisor.name
+      } to be their supervisor.`;
 
-  const res = await dispatch(
-    requestSupervisor({
-      teacherId: selectedSupervisor._id,
-      message,
-    })
-  );
+    const res = await dispatch(
+      requestSupervisor({
+        teacherId: selectedSupervisor._id,
+        message,
+      }),
+    );
 
-  if (requestSupervisor.fulfilled.match(res)) {
-    // supervisor request pending
-    setRequestedSupervisorId(selectedSupervisor._id);
+    if (requestSupervisor.fulfilled.match(res)) {
+      // supervisor request pending
+      setRequestedSupervisorId(selectedSupervisor._id);
 
-    // modal close
-    setShowRequestModal(false);
-    setSelectedSupervisor(null);
-    setRequestMessage("");
-  }
-};
+      // modal close
+      setShowRequestModal(false);
+      setSelectedSupervisor(null);
+      setRequestMessage("");
+    }
+  };
 
-  
   return (
     <>
-
       <div className="space-y-6">
-        {/* Current Supervisor */}
-        <div className="card shadow-lg rounded-md">
-          <div className="card-header">
-            <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">
-              Current Supervisor
-            </h1>
-            {hasSupervisor && (
-              <span className="badge badge-approved">Assigned</span>
-            )}
+        {/* Current Supervisor section */}
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+          {/* current supervisor header */}
+          <div className="relative overflow-hidden bg-gradient-to-r from-[#17a2b8] to-[#138496] px-6 sm:px-8 py-7">
+            <div className="absolute -right-10 -top-12 w-40 h-40 rounded-full bg-white/5" />
+            <div className="absolute right-20 -bottom-20 w-32 h-32 rounded-full bg-white/5" />
+
+            <div className="relative flex items-center gap-4">
+              <div className="w-14 h-14 shrink-0 rounded-2xl bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-lg">
+                <UserCheck className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                    Current Supervisor
+                  </h1>
+                  {hasSupervisor && (
+                    <span className="badge badge-approved">Assigned</span>
+                  )}
+                </div>
+                <p className="mt-1.5 text-sm sm:text-base text-white/80">
+                  View your currently assigned supervisor and supervision
+                  details.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Supervisor Details */}
           {hasSupervisor ? (
             <div className="space-y-6">
-              <div className="flex items-start space-x-3">
+              <div className="flex items-start space-x-3 p-[30px]">
                 <img
                   src="/placeholder.jpg"
                   alt="Supervisor Avatar"
@@ -152,21 +183,59 @@ const submitRequest = async () => {
               </div>
             </div>
           ) : (
-            <div className="p-6 text-center">
-              <p className="text-slate-600 text-lg">
-                Supervisor not assigned yet.
-              </p>
+            <div className="px-6 py-10 sm:px-8">
+              <div className="mx-auto max-w-xl text-center">
+                {/* Icon */}
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#17a2b8]/20 bg-[#e8f7fa]">
+                  <UserCheck className="h-6  w-6 text-[#138496]" />
+                </div>
+
+                {/* Status */}
+                <span className="mb-3 inline-flex items-center rounded-full bg-amber-50 px-2 py-1 text-sm font-semibold text-amber-600 ring-1 ring-inset ring-amber-200">
+                  Not Assigned
+                </span>
+
+                {/* Title */}
+                <h3 className="text-xl font-bold text-slate-800">
+                  Supervisor Not Assigned Yet
+                </h3>
+
+                {/* Description */}
+                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500 sm:text-base">
+                  A supervisor has not been assigned to your thesis or project
+                  yet. Please wait until a supervisor is assigned.
+                </p>
+
+                {/* Bottom line */}
+                <div className="mx-auto mt-6 h-px w-20 bg-[#17a2b8]/30" />
+              </div>
             </div>
           )}
         </div>
 
-        {/* Project Details */}
-        {hasProject && (
-          <div className="bg-white rounded-2xl shadow-md overflow-hidden ">
-            <div className="bg-gradient-to-r from-[#138496] to-[#17a2b8] px-6 py-5 mb-3">
-              <h1 className="card-title text-3xl font-bold text-white mb-2">
-                Project Details
-              </h1>
+        {/* Project Details section*/}
+        {hasWork && (
+          <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+            {/* Thesis and Project Details  Header */}
+            <div className="relative overflow-hidden bg-gradient-to-r from-[#17a2b8] to-[#138496] px-6 sm:px-8 py-7">
+              <div className="absolute -right-10 -top-12 w-40 h-40 rounded-full bg-white/5" />
+              <div className="absolute right-20 -bottom-20 w-32 h-32 rounded-full bg-white/5" />
+              <div className="relative flex items-center gap-4">
+                <div className="w-14 h-14 shrink-0 rounded-2xl bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-lg">
+                  <FileText className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                    {workType === "Thesis"
+                      ? "Thesis Details"
+                      : "Project Details"}
+                  </h1>
+                  <p className="mt-1.5 text-sm sm:text-base text-white/80">
+                    View and manage your{" "}
+                    {workType === "Thesis" ? "thesis" : "project"} information.
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="space-y-6 px-6 py-6 mb-3">
@@ -174,10 +243,10 @@ const submitRequest = async () => {
                 {/* Project Title */}
                 <div className="bg-slate-50 border rounded-xl p-5">
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    Project Title
+                    {workType === "Thesis" ? "Thesis Title" : "Project Title"}
                   </p>
                   <h3 className="text-xl font-bold text-slate-800 mt-2">
-                    {project?.title || "-"}
+                    {work?.title || "-"}
                   </h3>
                 </div>
 
@@ -186,21 +255,25 @@ const submitRequest = async () => {
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
                     Status
                   </p>
-
                   <div className="mt-3">
                     <span
                       className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium capitalize
                         ${
-                          project?.status === "approved"
-                          ? "bg-green-100 text-green-700"
-                          : project?.status === "pending"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : project?.status === "rejected"
-                          ? "bg-red-100 text-red-700"
-                          : "bg-gray-100 text-gray-700"
-                        }`}
+                          // project?.status === "approved"
+                          work?.status === "approved"
+                            ? "bg-green-100 text-green-700"
+                            : work?.status === "pending"
+                              ? // : project?.status === "pending"
+                                "bg-yellow-100 text-yellow-700"
+                              : work?.status === "rejected"
+                                ? // : project?.status === "rejected"
+                                  "bg-red-100 text-red-700"
+                                : "bg-gray-100 text-gray-700"
+                        }
+                        
+                        `}
                     >
-                      {project?.status || "Invalid"}
+                      {work?.status || "Invalid"}
                     </span>
                   </div>
                 </div>
@@ -210,10 +283,9 @@ const submitRequest = async () => {
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
                     Deadline
                   </p>
-
                   <h3 className="text-xl font-bold text-slate-800 mt-2">
-                    {project?.deadline
-                      ? formatDeadline(project.deadline)
+                    {work?.deadline
+                      ? formatDeadline(work.deadline)
                       : "No deadline set"}
                   </h3>
                 </div>
@@ -223,25 +295,21 @@ const submitRequest = async () => {
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
                     Created
                   </p>
-
                   <h3 className="text-xl font-bold text-slate-800 mt-2">
-                    {project?.createdAt
-                      ? formatDeadline(project.createdAt)
+                    {work?.createdAt
+                      ? formatDeadline(work.createdAt)
                       : "Unknown"}
                   </h3>
                 </div>
               </div>
 
               {/* Description */}
-              {project?.description && (
+              {work?.description && (
                 <div className="mt-5 bg-slate-50 border rounded-xl p-5">
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8] mb-3">
                     Description
                   </p>
-
-                  <p className="text-slate-700 leading-7">
-                    {project.description}
-                  </p>
+                  <p className="text-slate-700 leading-7">{work.description}</p>
                 </div>
               )}
             </div>
@@ -249,35 +317,74 @@ const submitRequest = async () => {
         )}
 
         {/* If not project */}
-        {!hasProject && (
-          <div className="card shadow-lg rounded-md">
-            <div className="Card-header">
-              <h2 className="card-title text-2xl font-bold text-slate-800 mb-2">
-                Project Requirement
-              </h2>
+        {!hasWork && (
+          <div className="overflow-hidden rounded-md bg-white shadow-lg">
+            {/* Project Requirement Header */}
+            <div className="relative overflow-hidden bg-[#d9f3f7] px-6 py-7 sm:px-8">
+              <div className="absolute -right-10 -top-12 h-40 w-40 rounded-full bg-[#17a2b8]/15" />
+              <div className="absolute -bottom-20 right-20 h-32 w-32 rounded-full bg-[#138496]/10" />
+              <div className="absolute -bottom-12 -left-10 h-28 w-28 rounded-full bg-[#17a2b8]/10" />
+
+              <div className="relative flex items-center gap-4">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-[#17a2b8]/25 bg-white shadow-sm">
+                  <FileText className="h-7 w-7 text-[#087f8c]" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold tracking-tight text-[#087f8c] sm:text-3xl">
+                    Project Requirement
+                  </h1>
+                  <p className="mt-1.5 text-sm font-medium text-[#176b75] sm:text-base">
+                    Submit your project proposal before requesting a supervisor.
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="p-6 text-center">
-              <p className="text-slate-600 text-lg">
-                You haven't submitted any project proposal yet, so you cannot
-                request a supervisor.
-              </p>
+
+            {/* Content */}
+            <div className="p-6 sm:p-8">
+              <div className="mx-auto max-w-2xl rounded-xl border border-amber-200 bg-amber-50 p-5">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100">
+                    <AlertCircle className="h-5 w-5 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-slate-800">
+                      Proposal Required
+                    </h3>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                      You haven't submitted any proposal yet, so you cannot
+                      request a supervisor. Please submit your project proposal
+                      first.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
 
         {/* available supervisors */}
-        {hasProject && !hasSupervisor && (
+        {hasWork && !hasSupervisor && (
           <div className=" bg-slate-50 rounded-2xl">
-            {/* header */}
             <div className=" mx-auto bg-white rounded-2xl shadow-lg overflow-hidden mt-6">
-              <div className="bg-gradient-to-r from-[#138496] to-[#17a2b8] px-8 py-6">
-                <h2 className="text-3xl font-bold text-white">
-                  Available Supervisors
-                </h2>
-                <p className="text-cyan-50 mt-2 text-sm">
-                  Explore faculty members and request Supervisor based on their
-                  expertise and research interests.
-                </p>
+              {/* Available Supervisors header */}
+              <div className="relative overflow-hidden bg-gradient-to-r from-[#17a2b8] to-[#138496] px-6 sm:px-8 py-7">
+                <div className="absolute -right-10 -top-12 w-40 h-40 rounded-full bg-white/5" />
+                <div className="absolute right-20 -bottom-20 w-32 h-32 rounded-full bg-white/5" />
+                <div className="relative flex items-center gap-4">
+                  <div className="w-14 h-14 shrink-0 rounded-2xl bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-lg">
+                    <Users className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                      Available Supervisors
+                    </h1>
+                    <p className="mt-1.5 text-sm sm:text-base text-white/80">
+                      Explore faculty members and request a supervisor based on
+                      their expertise and research interests.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div className="p-8">
@@ -285,7 +392,7 @@ const submitRequest = async () => {
                   {supervisors.map((sup) => (
                     <div
                       key={sup._id}
-                      className="group relative bg-white border border-slate-200 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                      className="group relative bg-white border border-slate-200 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
                     >
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#138496] to-[#17a2b8]"></div>
 
@@ -350,22 +457,22 @@ const submitRequest = async () => {
                             Click to request Supervisor
                           </span>
 
-                            {requestedSupervisorId === sup._id ? (
-                              <button
-                                disabled
-                                className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-yellow-100 text-yellow-700 text-sm font-semibold cursor-not-allowed"
-                              >
-                                Request Pending
-                              </button>
-                            ) : (
-                              <button
-                                onClick={() => handleOpenRequest(sup)}
-                                className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#138496] to-[#17a2b8] text-white text-sm font-semibold shadow-sm hover:shadow-md hover:scale-105 transition-all"
-                              >
-                                <UserPlus size={16} />
-                                Request
-                              </button>
-                            )}
+                          {requestedSupervisorId === sup._id ? (
+                            <button
+                              disabled
+                              className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-yellow-100 text-yellow-700 text-sm font-semibold cursor-not-allowed"
+                            >
+                              Request Pending
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleOpenRequest(sup)}
+                              className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#138496] to-[#17a2b8] text-white text-sm font-semibold shadow-sm hover:shadow-md hover:scale-105 transition-all"
+                            >
+                              <UserPlus size={16} />
+                              Request
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -380,7 +487,7 @@ const submitRequest = async () => {
         {showRequestModal && selectedSupervisor && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
             <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
-              {/* Header */}
+              {/* Request Supervisor Header */}
               <div className="bg-gradient-to-r from-[#17a2b8] via-[#1599ad] to-[#138496] px-6 py-5 flex items-center justify-between">
                 <div>
                   <h3 className="text-2xl font-bold text-white">
@@ -406,12 +513,10 @@ const submitRequest = async () => {
 
               {/* Content */}
               <div className="p-6 space-y-6">
-                {/* Selected Supervisor */}
                 <div className="flex items-center gap-4 bg-slate-50 border border-slate-200 rounded-xl p-4">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#17a2b8] to-[#138496] flex items-center justify-center text-white text-lg font-bold shadow-md">
                     {selectedSupervisor?.name?.charAt(0) || "S"}
                   </div>
-
                   <div>
                     <h4 className="text-lg font-semibold text-slate-800">
                       {selectedSupervisor?.name}
@@ -440,7 +545,7 @@ const submitRequest = async () => {
                     onChange={(e) => setRequestMessage(e.target.value)}
                     placeholder="Introduce yourself, describe your project interests, and explain why you'd like this professor to supervise your work..."
                     className="w-full min-h-[150px] rounded-xl border border-[#17a2b8]/30 bg-white px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none outline-none focus:ring-0.5 focus:ring-[#17a2b8] focus:border-[#17a2b8] transition-all duration-200 resize-none"
-                    />
+                  />
                 </div>
 
                 {/* Footer Buttons */}
@@ -462,8 +567,8 @@ const submitRequest = async () => {
                     className={`px-5 py-2.5 rounded-xl text-white font-semibold shadow-md transition duration-200
                       ${
                         requestMessage.trim()
-                        ? "bg-gradient-to-r from-[#17a2b8] via-[#1599ad] to-[#138496] hover:from-[#138496] hover:to-[#11707f]"
-                        : "bg-slate-300 cursor-not-allowed"
+                          ? "bg-gradient-to-r from-[#17a2b8] via-[#1599ad] to-[#138496] hover:from-[#138496] hover:to-[#11707f]"
+                          : "bg-slate-300 cursor-not-allowed"
                       }`}
                   >
                     Send Request
