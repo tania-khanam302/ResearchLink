@@ -54,7 +54,7 @@ const AddTeacher = () => {
             </button>
           </div>
 
-          <div className="p-5 mb-2">
+          <div className="p-4 mb-2">
             <form
               onSubmit={handleCreateTeacher}
               className="space-y-4 max-h-96 overflow-y-auto pr-2"
@@ -96,7 +96,6 @@ const AddTeacher = () => {
                   Password
                 </label>
                 <input
-                  // type="password"
                   type={showPassword ? "text" : "password"}
                   required
                   value={formData.password}
@@ -109,7 +108,7 @@ const AddTeacher = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  className="absolute text-[10px] right-3 top-2/3 -translate-y-1/2 text-slate-400"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -209,7 +208,9 @@ const AddTeacher = () => {
                   className="input-feild w-full p-2 border-b border-slate-400 focus:outline-none"
                 />
               </div>
-              <div className="flex justify-end space-x-3 mt-2 pt-1">
+         
+            </form>
+                 <div className="flex justify-end space-x-3 mt-2 pt-1">
                 <button
                   type="button"
                   onClick={() => dispatch(toggleTeacherModal())}
@@ -225,7 +226,6 @@ const AddTeacher = () => {
                   Add Teacher
                 </button>
               </div>
-            </form>
           </div>
         </div>
       </div>

@@ -250,7 +250,6 @@ const ProjectsPage = () => {
 
         {/* seacrh and filter  */}
         <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
           <div className="p-5 sm:p-6">
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
@@ -267,7 +266,7 @@ const ProjectsPage = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 mt-[20px] gap-4 md:grid-cols-2 lg:grid-cols-3">
               <div>
                 <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
                   Search Projects

@@ -115,27 +115,43 @@ const ManageCoAdmin = () => {
   return (
     <>
       <div className="space-y-6 ">
-        {/* header section  */}
-        <div className="card shadow-lg rounded-md">
-          <div className="card-header flex flex-col md:flex-row justify-between items-start md:items-center">
-            <div>
-              <h1 className="card-title text-2xl font-bold text-slate-800 mb-2">
-                Manage Co-Admins
-              </h1>
-              <p className="card-subtitle text-[#17a2b8]">
-                Add, edit and manage co-admin accounts
-              </p>
-            </div>
-
-            <button
-              onClick={() => dispatch(toggleCoAdminModal())}
-              className="btn-primary bg-[#17a2b8] hover:bg-[#138496] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 mt-4 md:mt-0"
-            >
-              <UserPlus className="w-5 h-5" />
-              <span>Add New Co-Admin</span>
-            </button>
-          </div>
+      {/* manage co-admins header */}
+<div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
+  <div className="relative px-6 py-6 sm:px-8 sm:py-7">
+    <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+      
+      <div className="flex items-center gap-4">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
+          <UserPlus className="h-7 w-7" strokeWidth={1.8} />
         </div>
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Manage Co-Admins
+          </h1>
+          <p className="mt-1 text-sm leading-6 text-slate-500 sm:text-base">
+            Add, edit and manage co-admin accounts.
+          </p>
+        </div>
+      </div>
+
+      {/* Add button */}
+      <button
+        onClick={() => dispatch(toggleCoAdminModal())}
+        className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#17a2b8] px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#138496] hover:shadow-md"
+      >
+        <UserPlus className="h-5 w-5 transition-transform duration-200 group-hover:scale-110" />
+        <span>Add New Co-Admin</span>
+      </button>
+    </div>
+  </div>
+
+  {/* background elements */}
+  <div className="pointer-events-none absolute -bottom-24 -right-20 h-52 w-52 rounded-full bg-cyan-100/50 blur-3xl" />
+  <div className="pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full bg-cyan-500/5" />
+  <div className="pointer-events-none absolute bottom-0 right-48 h-24 w-24 rounded-full bg-indigo-500/5" />
+</div>
+
 
         {/* total co-admins and deaprtment */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

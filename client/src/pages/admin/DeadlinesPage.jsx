@@ -282,7 +282,7 @@ const DeadlinesPage = () => {
               w-full
               max-w-full
               overflow-auto
-              max-h-[500px]
+              max-h-[600px]
               [&::-webkit-scrollbar]:w-1.1
               [&::-webkit-scrollbar-track]:bg-slate-100
               [&::-webkit-scrollbar-thumb]:bg-[#b0cbcf]
