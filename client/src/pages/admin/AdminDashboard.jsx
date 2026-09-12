@@ -613,11 +613,11 @@ const AdminDashboard = () => {
 
                 <div className="flex items-center gap-4 text-xs font-medium">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-blue-600" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#0A523D]" />
                     <span className="text-slate-500">Project</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-violet-600" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#FF902A]" />
                     <span className="text-slate-500">Thesis</span>
                   </div>
                 </div>
@@ -698,7 +698,7 @@ const AdminDashboard = () => {
                         dataKey="projectCount"
                         name="Project"
                         stackId="a"
-                        fill="#2563EB"
+                        fill="#0A523D"
                         radius={[0, 0, 0, 0]}
                       />
 
@@ -706,7 +706,7 @@ const AdminDashboard = () => {
                         dataKey="thesisCount"
                         name="Thesis"
                         stackId="a"
-                        fill="#7C3AED"
+                        fill="#9E470D"
                         radius={[8, 8, 0, 0]}
                       />
                     </BarChart>

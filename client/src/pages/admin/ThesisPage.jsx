@@ -33,7 +33,10 @@ const ThesisPage = () => {
       setLoading(true);
       setError("");
 
-      const response = await axios.get("http://localhost:4000/api/v1/thesis", {
+      const response = await axios.get(
+        // "http://localhost:4000/api/v1/thesis", 
+        "https://researchlink-w4k2.onrender.com/api/v1/thesis",
+        {
         withCredentials: true,
       });
 
@@ -179,7 +182,8 @@ const ThesisPage = () => {
   const handleStatusChange = async (thesisId, newStatus) => {
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/v1/thesis/${thesisId}/status`,
+        // `http://localhost:4000/api/v1/thesis/${thesisId}/status`,
+        `https://researchlink-w4k2.onrender.com/api/v1/thesis/${thesisId}/status`,
         {
           status: newStatus,
         },
@@ -218,7 +222,10 @@ const ThesisPage = () => {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`http://localhost:4000/api/v1/thesis/${thesisId}`, {
+      await axios.delete(
+        // `http://localhost:4000/api/v1/thesis/${thesisId}`, 
+         `https://researchlink-w4k2.onrender.com/api/v1/thesis/${thesisId}`,
+        {
         withCredentials: true,
       });
 
@@ -243,7 +250,8 @@ const ThesisPage = () => {
       const fileId = file.fileId;
 
       const response = await axios.get(
-        `http://localhost:4000/api/v1/thesis/${thesisId}/files/${fileId}/download`,
+        // `http://localhost:4000/api/v1/thesis/${thesisId}/files/${fileId}/download`,
+        `https://researchlink-w4k2.onrender.com/api/v1/thesis/${thesisId}/files/${fileId}/download`,
         {
           withCredentials: true,
           responseType: "blob",

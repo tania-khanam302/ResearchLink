@@ -405,7 +405,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
                 open ? "opacity-100 max-h-20" : "opacity-0 max-h-0"
               }`}
             >
-              <p className="text-xs text-slate-500 text-start">Educational Research Link</p>
+              <p className="text-xs text-slate-500 text-start">Research Link</p>
             </div>
           </div>
         </div>

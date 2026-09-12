@@ -218,7 +218,7 @@
 
 /* =================== bg image =================== */
 body {
-  background-image: url("/bg.jpg");
+  /* background-image: url("/bg.jpg"); */
   background-size: auto;
   background-position: center;
 

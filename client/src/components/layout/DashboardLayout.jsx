@@ -7,7 +7,7 @@ const DashboardLayout = ({ userRole }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen  bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed pt-[66px]">
+    <div className="min-h-screen  bg-[#e4f6fa] bg-auto bg-repeat bg-fixed pt-[66px]">
       {/* Navbar */}
       <Navbar
         sidebarOpen={sidebarOpen}
