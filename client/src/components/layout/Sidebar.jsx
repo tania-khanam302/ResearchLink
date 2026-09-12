@@ -425,7 +425,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex flex-col h-full pt-16">
+        <div className="flex flex-col h-full pt-1">
           <nav className="flex-1 px-4 py-6 space-y-2">
             {navigationItems.map((item) => (
               <NavLink
