@@ -1,3 +1,24 @@
+// export const generateToken = (user, statusCode, message, res) => {
+//   const token = user.generateToken();
+
+//   res
+//     .status(statusCode)
+//     .cookie("token", token, {
+//       expires: new Date(
+//         Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000,
+//       ), // 7 days
+//       httpOnly: true,
+//     })
+//     .json({
+//       success: true,
+//       user,
+//       message,
+//       token,
+//     });
+// };
+
+
+
 export const generateToken = (user, statusCode, message, res) => {
   const token = user.generateToken();
 
@@ -6,8 +27,10 @@ export const generateToken = (user, statusCode, message, res) => {
     .cookie("token", token, {
       expires: new Date(
         Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000,
-      ), // 7 days
+      ),
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
     })
     .json({
       success: true,

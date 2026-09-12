@@ -23,13 +23,21 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 // cors frontend backend connect
+// app.use(
+//   cors({
+//     origin: [process.env.FRONTEND_URL],
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     credentials: true,
+//   }),
+// );
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: "https://research-link-ten.vercel.app",
     credentials: true,
-  }),
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  })
 );
+
 
 //  create folders 
 const uploadsDir = path.join(__dirname, "uploads");
