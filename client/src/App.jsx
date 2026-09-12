@@ -16,12 +16,14 @@ import UploadFiles from "./pages/student/UploadFiles";
 import SupervisorPage from "./pages/student/SupervisorPage";
 import FeedbackPage from "./pages/student/FeedbackPage";
 import NotificationsPage from "./pages/student/NotificationsPage";
+import StudentProfile from "./pages/student/StudentProfile";
 
 // Teacher Pages
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import PendingRequests from "./pages/teacher/PendingRequests";
 import AssignedStudents from "./pages/teacher/AssignedStudents";
 import TeacherFiles from "./pages/teacher/TeacherFiles";
+import TeacherProfile from "./pages/teacher/TeacherProfile";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -227,6 +229,8 @@ const App = () => {
           <Route path="supervisor" element={<SupervisorPage />} />
           <Route path="feedback" element={<FeedbackPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="profile" element={<StudentProfile />} />
+
         </Route>
 
         {/* Teacher Routes */}
@@ -242,6 +246,8 @@ const App = () => {
           <Route path="pending-requests" element={<PendingRequests />} />
           <Route path="assigned-students" element={<AssignedStudents />} />
           <Route path="files" element={<TeacherFiles />} />
+         <Route path="profile" element={<TeacherProfile />} />
+          
         </Route>
 
         <Route path="*" element={<NotFound />} />

@@ -141,6 +141,21 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
                       </p>
                     </div>
                     <button
+  onClick={() => {
+    setProfileDropdownOpen(false);
+
+    if (authUser?.role === "Student") {
+      navigate("/student/profile");
+    } else if (authUser?.role === "Teacher") {
+      navigate("/teacher/profile");
+    }
+  }}
+  className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 rounded-md mt-2"
+>
+  Profile
+</button>
+
+                    <button
                     onClick={handleLogout}
                       className="w-full text-left px-3 py-2 font-semibold  text-sm text-red-600 hover:bg-red-50 rounded-md mt-2 "
                     >
