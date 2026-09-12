@@ -421,7 +421,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 w-64 bg-white z-50 lg:hidden transform transition-transform duration-300 ${
+        className={`fixed top-16 bottom-0 left-0 w-64 bg-white z-50 lg:hidden transform transition-transform duration-300 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
