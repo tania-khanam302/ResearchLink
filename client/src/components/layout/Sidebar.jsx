@@ -73,11 +73,11 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             path: "/admin/assign-supervisor",
             icon: "link",
           },
-              {
-      name: "Thesis",
-      path: "/admin/thesis",
-      icon: "document",
-    },
+          {
+            name: "Thesis",
+            path: "/admin/thesis",
+            icon: "document",
+          },
           {
             name: "Project",
             path: "/admin/projects",
@@ -98,7 +98,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             path: "/co-admin",
             icon: "home",
           },
-                    {
+          {
             name: "Manage Teacher",
             path: "/co-admin/teachers",
             icon: "academic",
@@ -109,17 +109,16 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             icon: "users",
           },
 
-          
           {
             name: "Assign Supervisor",
             path: "/co-admin/assign-supervisor",
             icon: "link",
           },
-                        {
-      name: "Thesis",
-      path: "/co-admin/thesis",
-      icon: "document",
-    },
+          {
+            name: "Thesis",
+            path: "/co-admin/thesis",
+            icon: "document",
+          },
           {
             name: "Project",
             path: "/co-admin/projects",
@@ -414,7 +413,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
       {/* Mobile Overlay */}
       {open && (
         <div
-          className="fixed inset-0  z-10 lg:hidden"
+          className="fixed top-16 left-0 right-0 bottom-0 bg-black/40 z-40 lg:hidden"
           onClick={() => setOpen(false)}
         />
       )}
@@ -422,7 +421,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
       {/* Mobile Sidebar */}
       <div
         className={`fixed top-16 bottom-0 left-0 w-64 bg-white z-50 lg:hidden transform transition-transform duration-300 ${
-    open ? "translate-x-0" : "-translate-x-full"
+          open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full pt-1">
