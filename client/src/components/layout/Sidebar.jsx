@@ -411,12 +411,12 @@ const Sidebar = ({ open, setOpen, userRole }) => {
       </div>
 
       {/* Mobile Overlay */}
-      {open && (
+      {/* {open && (
         <div
          className="fixed top-16  lg:hidden"
     onClick={() => setOpen(false)}
         />
-      )}
+      )} */}
 
       {/* Mobile Sidebar */}
       <div
