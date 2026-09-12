@@ -151,7 +151,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
         navigate("/teacher/profile");
       }
     }}
-    className="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 rounded-md mt-2"
+    className="w-full text-left px-3 py-0 text-sm text-slate-700 hover:bg-slate-100 rounded-md mt-2"
   >
     Profile
   </button>
@@ -160,7 +160,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
 
                     <button
                     onClick={handleLogout}
-                      className="w-full text-left px-3 py-2 font-semibold  text-sm text-red-600 hover:bg-red-50 rounded-md mt-2 "
+                      className="w-full text-left px-3 py-0 font-semibold  text-sm text-red-600 hover:bg-red-50 rounded-md mt-1 "
                     >
                       Sign out
                     </button>
