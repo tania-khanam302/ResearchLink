@@ -142,7 +142,7 @@ const ManageTeachers = () => {
 
   return (
     <>
-      <div className="space-y-6 bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed">
+      <div className="space-y-6">
  {/* Header */}
 <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
   <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />

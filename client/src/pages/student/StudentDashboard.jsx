@@ -136,7 +136,7 @@ const StudentDashboard = () => {
 
                 <p className="mt-2 text-xs text-slate-400">
                   {academicWork?.deadline
-                    ? "Submission deadline"
+                    ? "Final Submission Deadline"
                     : "No deadline available"}
                 </p>
               </div>
@@ -259,11 +259,11 @@ const StudentDashboard = () => {
                 </span>
               </div>
 
-              {/* Submission Deadline */}
+              {/* Final Submission Deadline */}
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-[#17a2b8] mb-1">
-                    Submission Deadline
+                    Final Submission Deadline
                   </label>
 
                   <p className="text-sm font-semibold text-slate-800">

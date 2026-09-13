@@ -74,7 +74,7 @@ const ResetPasswordPage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed bg-slate-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full">
           {/* Header */}
           <div className="text-center mb-4">

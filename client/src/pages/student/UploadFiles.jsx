@@ -30,7 +30,9 @@ const UploadFiles = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [resourceUrl, setResourceUrl] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [resourceCurrentPage, setResourceCurrentPage] = useState(1);
   const filesPerPage = 5;
+  const resourceLinksPerPage = 5;
 
   const reportRef = useRef(null);
   const presRef = useRef(null);
@@ -156,6 +158,15 @@ const UploadFiles = () => {
     startIndex + filesPerPage,
   );
   const resourceLinks = (thesis || project)?.resourceLinks || [];
+  const totalResourcePages = Math.ceil(
+    resourceLinks.length / resourceLinksPerPage,
+  );
+  const resourceStartIndex =
+    (resourceCurrentPage - 1) * resourceLinksPerPage;
+  const currentResourceLinks = resourceLinks.slice(
+    resourceStartIndex,
+    resourceStartIndex + resourceLinksPerPage,
+  );
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
@@ -168,6 +179,12 @@ const UploadFiles = () => {
       setCurrentPage(totalPages);
     }
   }, [currentPage, totalPages]);
+
+  useEffect(() => {
+    if (resourceCurrentPage > totalResourcePages && totalResourcePages > 0) {
+      setResourceCurrentPage(totalResourcePages);
+    }
+  }, [resourceCurrentPage, totalResourcePages]);
 
   // handleDownloadFile
   const handleDownloadFile = async (file) => {
@@ -385,77 +402,35 @@ const UploadFiles = () => {
       </label>
     </div>
 
- {/* Uploaded Files Link */}
-<div className="group border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50/60 hover:bg-white hover:border-[#17a2b8]/50 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
-
-  <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-indigo-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-    <FolderOpen className="w-8 h-8 text-indigo-500" />
-  </div>
-
-  <h3 className="text-lg font-semibold text-slate-800 mb-2">
-    Uploaded Files Link
-  </h3>
-
-  <p className="text-sm leading-6 text-slate-500 mb-5">
-    Add your project files or resources
-    <br />
-    <span className="text-slate-400">
-      GitHub, Drive, OneDrive, Demo
-    </span>
-  </p>
-
-  <input
-    type="url"
-    value={resourceUrl}
-    onChange={(e) => setResourceUrl(e.target.value)}
-    onKeyDown={(e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleAddResourceLink();
-      }
-    }}
-    placeholder="Paste your file link"
-    className="w-full mb-3 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 placeholder:text-slate-400 outline-none focus:border-[#17a2b8] focus:ring-2 focus:ring-[#17a2b8]/10 transition-all"
-  />
-
-  <button
-    type="button"
-    onClick={handleAddResourceLink}
-    className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 cursor-pointer hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm transition-all duration-200"
-  >
-    Add Link
-  </button>
-
-  {resourceLinks.length > 0 && (
-    <div className="mt-5 space-y-2 text-left">
-      {resourceLinks.map((link) => (
-        <div
-          key={link._id}
-          className="flex items-center justify-between gap-3 rounded-lg border border-indigo-100 bg-white px-3 py-2"
-        >
-          <a
-            href={link.url}
-            target="_blank"
-            rel="noreferrer"
-            className="flex min-w-0 items-center gap-2 text-sm font-medium text-indigo-600 hover:underline"
-          >
-            <ExternalLink className="h-4 w-4 shrink-0" />
-            <span className="truncate">{link.url}</span>
-          </a>
-          <button
-            type="button"
-            onClick={() => handleDeleteResourceLink(link._id)}
-            className="shrink-0 text-xs font-semibold text-red-600 hover:text-red-700"
-          >
-            Delete
-          </button>
-        </div>
-      ))}
+    {/* Add external resource link */}
+    <div className="group border-2 border-dashed border-cyan-200 rounded-2xl p-6 text-center bg-cyan-50/40 hover:bg-white hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-100/60 transition-all duration-300">
+      <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-cyan-100 flex items-center justify-center">
+        <ExternalLink className="w-8 h-8 text-[#17a2b8]" />
+      </div>
+      <h3 className="text-lg font-semibold text-slate-800 mb-2">
+        Add Resource Link
+      </h3>
+      <p className="text-sm leading-6 text-slate-500 mb-5">
+        Add GitHub, Drive, OneDrive, or live demo links.
+      </p>
+      <input
+        type="url"
+        value={resourceUrl}
+        onChange={(e) => setResourceUrl(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            handleAddResourceLink();
+          }
+        }}
+        placeholder="Paste your GitHub, Drive, or demo link"
+        className="input mb-3 w-full placeholder-gray-400 focus:ring-1 focus:ring-[#17a2b8]"
+      />
+      <button type="button" onClick={handleAddResourceLink} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm">
+        <ExternalLink className="h-4 w-4" />
+        Add Link
+      </button>
     </div>
-  )}
-
-</div>
-
 
   </div>
 
@@ -526,16 +501,6 @@ const UploadFiles = () => {
     </div>
   </div>
 
-  {/* Upload Button */}
-  <div className="flex justify-end mt-6 pt-5 border-t border-slate-100">
-    <button
-      onClick={handleUpload}
-      className="inline-flex items-center justify-center gap-2 bg-[#17a2b8] hover:bg-[#138496] active:bg-[#117a8b] text-white px-4 py-3 rounded-md font-semibold shadow-md shadow-[#17a2b8]/20 hover:shadow-lg hover:shadow-[#17a2b8]/25 transition-all duration-200"
-    >
-      <FilePlus className="w-4 h-4" />
-      Upload Selected Files
-    </button>
-  </div>
 </div>
 
       </div>
@@ -598,41 +563,57 @@ const UploadFiles = () => {
                 </div>
               );
             })}
+
+            <div className="flex justify-end border-t border-slate-100 pt-5">
+              <button
+                onClick={handleUpload}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#17a2b8] px-5 py-3 font-semibold text-white shadow-md shadow-[#17a2b8]/20 transition-all duration-200 hover:bg-[#138496] hover:shadow-lg sm:w-auto"
+              >
+                <FilePlus className="h-4 w-4" />
+                Upload Selected Files
+              </button>
+            </div>
           </div>
         </div>
       )}
 
       {/* upload files section  */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/30 overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/40">
         {/* Uploaded Files Header */}
-        <div className="px-6 sm:px-8 py-5 border-b border-slate-100 bg-slate-50/60">
-          <div className="flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-[#17a2b8]/10 flex items-center justify-center">
-              <File className="w-5 h-5 text-[#17a2b8]" />
+        <div className="border-b border-slate-100 bg-gradient-to-r from-cyan-50/70 via-white to-slate-50 px-6 py-6 sm:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#17a2b8] text-white shadow-md shadow-[#17a2b8]/20">
+                <File className="h-6 w-6" />
+              </div>
+              <div>
+                <h2 className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">
+                  Uploaded Files
+                </h2>
+                <p className="mt-1 text-sm text-slate-500">
+                  Review, download, or remove your submitted files.
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl font-bold text-slate-800">
-                Uploaded Files
-              </h2>
-              <p className="text-sm text-slate-500 mt-1">
-                Manage your uploaded thesis and project files.
-              </p>
+            <div className="w-fit rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#138496] shadow-sm ring-1 ring-cyan-100">
+              {totalFiles} {totalFiles === 1 ? "File" : "Files"}
             </div>
           </div>
+
         </div>
 
         {/* Content */}
         <div className="p-6 sm:p-8">
           {(files || []).length === 0 ? (
-            <div className="py-12 text-center">
-              <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-slate-100 flex items-center justify-center">
-                <FilePlus className="w-8 h-8 text-slate-300" />
+            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 py-14 text-center">
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
+                <FilePlus className="h-8 w-8 text-[#17a2b8]/50" />
               </div>
-              <h3 className="text-lg font-semibold text-slate-700">
+              <h3 className="text-lg font-semibold text-slate-800">
                 No files uploaded yet
               </h3>
-              <p className="text-sm text-slate-400 mt-1">
-                Your thesis or project files will appear here.
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+                Your submitted reports, presentations, source code, and supporting files will appear here.
               </p>
             </div>
           ) : (
@@ -640,7 +621,7 @@ const UploadFiles = () => {
               {currentFiles.map((file) => (
                 <div
                   key={file._id || file.fileUrl}
-                  className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-white hover:border-slate-300 hover:shadow-sm transition-all duration-200"
+                  className="group flex flex-col justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition-all duration-200 hover:border-cyan-200 hover:bg-white hover:shadow-md sm:flex-row sm:items-center"
                 >
                   <div className="flex items-center gap-4 min-w-0">
                     <div className="w-12 h-12 shrink-0 rounded-xl bg-white border border-slate-200 flex items-center justify-center shadow-sm">
@@ -738,6 +719,102 @@ const UploadFiles = () => {
           )}
         </div>
       </div>
+
+      {/* Uploaded Files Link */}
+      <div className="overflow-hidden rounded-2xl border border-cyan-100 bg-white shadow-xl shadow-cyan-100/40">
+        <div className="border-b border-slate-100 bg-gradient-to-r from-cyan-50/70 via-white to-slate-50 px-6 py-6 sm:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#17a2b8] text-white shadow-md shadow-[#17a2b8]/20">
+                <ExternalLink className="h-6 w-6" />
+              </div>
+              <div>
+                <h2 className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">Uploaded Files Link</h2>
+                <p className="mt-1 text-sm text-slate-500">Review and manage your GitHub, Drive, OneDrive, or demo links.</p>
+              </div>
+            </div>
+            <div className="w-fit rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#138496] shadow-sm ring-1 ring-cyan-100">
+              {resourceLinks.length} {resourceLinks.length === 1 ? "Link" : "Links"}
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 sm:p-8">
+          {resourceLinks.length === 0 ? (
+            <div className="mt-5 rounded-xl border border-dashed border-indigo-200 bg-indigo-50/40 px-4 py-8 text-center">
+              <p className="text-sm font-medium text-slate-600">No external links added yet.</p>
+              <p className="mt-1 text-xs text-slate-400">Add a GitHub repository, Drive folder, or live demo link from the card above.</p>
+            </div>
+          ) : (
+            <div className="mt-5 space-y-3 border-t border-indigo-100 pt-5">
+              {currentResourceLinks.map((link) => (
+                <div key={link._id} className="flex flex-col gap-3 rounded-xl border border-indigo-100 bg-indigo-50/40 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                  <a href={link.url} target="_blank" rel="noreferrer" className="flex min-w-0 items-start gap-2 text-sm font-medium leading-6 text-indigo-600 hover:underline">
+                    <ExternalLink className="mt-1 h-4 w-4 shrink-0" />
+                    <span className="break-all">{link.url}</span>
+                  </a>
+                  <button type="button" onClick={() => handleDeleteResourceLink(link._id)} className="w-full shrink-0 rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 sm:w-auto">Delete</button>
+                </div>
+              ))}
+
+              {totalResourcePages > 1 && (
+                <div className="flex flex-col items-center justify-between gap-4 border-t border-indigo-100 pt-5 sm:flex-row">
+                  <p className="text-sm text-slate-500">
+                    Showing {resourceStartIndex + 1} to{" "}
+                    {Math.min(
+                      resourceStartIndex + resourceLinksPerPage,
+                      resourceLinks.length,
+                    )}{" "}
+                    of {resourceLinks.length} links
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setResourceCurrentPage((page) => Math.max(page - 1, 1))
+                      }
+                      disabled={resourceCurrentPage === 1}
+                      className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      Previous
+                    </button>
+                    {Array.from(
+                      { length: totalResourcePages },
+                      (_, index) => index + 1,
+                    ).map((page) => (
+                      <button
+                        type="button"
+                        key={page}
+                        onClick={() => setResourceCurrentPage(page)}
+                        className={`h-9 w-9 rounded-lg text-sm font-semibold ${
+                          resourceCurrentPage === page
+                            ? "bg-[#17a2b8] text-white"
+                            : "border border-slate-200 bg-white text-slate-600"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setResourceCurrentPage((page) =>
+                          Math.min(page + 1, totalResourcePages),
+                        )
+                      }
+                      disabled={resourceCurrentPage === totalResourcePages}
+                      className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
     </div>
   );
 };

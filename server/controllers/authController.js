@@ -68,6 +68,77 @@ export const getUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+// ====================== update profile =======================
+export const updateProfile = asyncHandler(async (req, res, next) => {
+  const { studentId, name, email, contact, gender, department, semester, year, type, expertise } = req.body;
+
+  if (!name?.trim() || !email?.trim()) {
+    return next(new ErrorHandler("Name and email are required", 400));
+  }
+
+  const existingUser = await User.findOne({
+    email: email.trim().toLowerCase(),
+    _id: { $ne: req.user._id },
+  });
+  if (existingUser) {
+    return next(new ErrorHandler("This email is already in use", 400));
+  }
+
+  if (studentId?.trim()) {
+    const existingStudentId = await User.findOne({
+      studentId: studentId.trim(),
+      _id: { $ne: req.user._id },
+    });
+    if (existingStudentId) {
+      return next(new ErrorHandler("This Student ID is already in use", 400));
+    }
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      studentId: studentId?.trim() || "",
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      contact: contact?.trim() || "",
+      gender: gender?.trim() || "",
+      department: department?.trim() || "",
+      semester: semester?.trim() || "",
+      year: year?.trim() || "",
+      expertise: Array.isArray(expertise)
+        ? expertise.map((item) => item.trim()).filter(Boolean)
+        : expertise?.split(",").map((item) => item.trim()).filter(Boolean) || [],
+      ...(type && ["Project", "Thesis"].includes(type) ? { type } : {}),
+    },
+    { new: true, runValidators: true },
+  ).select("-password -resetPasswordToken -resetPasswordExpire");
+
+  return res.status(200).json({
+    success: true,
+    message: "Profile updated successfully",
+    user,
+  });
+});
+
+// ====================== upload profile picture =======================
+export const uploadProfilePicture = asyncHandler(async (req, res, next) => {
+  if (!req.file) {
+    return next(new ErrorHandler("Please select an image", 400));
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { profilePicture: `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}` },
+    { new: true },
+  ).select("-password -resetPasswordToken -resetPasswordExpire");
+
+  return res.status(200).json({
+    success: true,
+    message: "Profile picture updated successfully",
+    user,
+  });
+});
+
 // ====================== forgotPassword =======================
 export const forgotPassword = asyncHandler(async (req, res, next) => {
   // console.log("1 NEXT:", typeof next);
@@ -143,4 +214,36 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
   await user.save();
 
   generateToken(user, 200, "Password reset successful", res);
+});
+
+// ====================== change password =======================
+export const changePassword = asyncHandler(async (req, res, next) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    return next(new ErrorHandler("Please provide all password fields", 400));
+  }
+
+  if (newPassword.length < 8) {
+    return next(new ErrorHandler("New password must be at least 8 characters", 400));
+  }
+
+  if (newPassword !== confirmPassword) {
+    return next(new ErrorHandler("New passwords do not match", 400));
+  }
+
+  const user = await User.findById(req.user._id).select("+password");
+  const passwordMatches = await user.comparePassword(currentPassword);
+
+  if (!passwordMatches) {
+    return next(new ErrorHandler("Current password is incorrect", 401));
+  }
+
+  user.password = newPassword;
+  await user.save();
+
+  return res.status(200).json({
+    success: true,
+    message: "Password changed successfully",
+  });
 });

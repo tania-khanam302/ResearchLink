@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { LogOut, UserRound } from "lucide-react";
 
 import { logout } from "../../store/slices/authSlice"
 
@@ -127,42 +128,45 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
 
               {/* Profile dropdown menu */}
               {profileDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 z-50">
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-200 z-50">
                   <div className="p-2">
-                    <div className="px-3 py-2 border-b border-slate-200">
-                      <p className="text-sm font-medium text-slate-800">
+                    <div className="px-3 py-3 border-b border-slate-200">
+                      <p className="text-base font-semibold text-slate-800">
                         {authUser?.name}
                       </p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-sm text-slate-500 mt-0.5">
                         {authUser?.email}
                       </p>
-                      <p className="text-xs text-[#17a2b8] capitalize font-medium mt-1">
+                      <p className="text-sm text-[#138496] capitalize font-semibold mt-1">
                         {authUser?.role}
                       </p>
                     </div>
-{(authUser?.role === "Student" || authUser?.role === "Teacher") && (
-  <button
-    onClick={() => {
-      setProfileDropdownOpen(false);
 
-      if (authUser.role === "Student") {
-        navigate("/student/profile");
-      } else if (authUser.role === "Teacher") {
-        navigate("/teacher/profile");
-      }
-    }}
-    className="w-full text-left px-3 py-0 text-sm text-slate-700 hover:bg-slate-100 rounded-md mt-2"
-  >
-    Profile
-  </button>
-)}
+                    {(authUser?.role === "Student" || authUser?.role === "Teacher") && (
+                      <button
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+
+                          if (authUser.role === "Student") {
+                            navigate("/student/profile");
+                          } else {
+                            navigate("/teacher/profile");
+                          }
+                        }}
+                        className="w-full flex items-center gap-3 text-left px-3 py-2.5 text-base font-semibold text-[#138496] hover:bg-cyan-50 rounded-lg mt-2 transition-colors"
+                      >
+                        <UserRound className="w-5 h-5" />
+                        <span>Profile</span>
+                      </button>
+                    )}
 
 
                     <button
-                    onClick={handleLogout}
-                      className="w-full text-left px-3 py-0 font-semibold  text-sm text-red-600 hover:bg-red-50 rounded-md mt-1 "
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 text-left px-3 py-2.5 font-semibold text-base text-red-600 hover:bg-red-50 rounded-lg mt-1 transition-colors"
                     >
-                      Sign out
+                      <LogOut className="w-5 h-5" />
+                      <span>Sign out</span>
                     </button>
                   </div>
                 </div>

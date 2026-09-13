@@ -36,7 +36,7 @@ const ForgotPasswordPage = () => {
   // ================= Check Your Email =================
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed">
+      <div className="min-h-screen">
         <div className="max-w-md w-full mx-auto px-4 ">
           {/* Header */}
           <div className="text-center mb-8 pt-[60px] p-3">
@@ -94,7 +94,7 @@ const ForgotPasswordPage = () => {
   // ============ forgot password? ============
   return (
     <>
-      <div className="min-h-screen bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed">
+      <div className="min-h-screen">
         <div className="max-w-md w-full mx-auto px-4 ">
           {/* Header */}
           <div className="text-center mb-8 pt-[40px] p-3">

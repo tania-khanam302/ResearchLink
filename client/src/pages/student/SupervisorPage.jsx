@@ -35,6 +35,7 @@ const SupervisorPage = () => {
   const [requestMessage, setRequestMessage] = useState("");
   const [selectedSupervisor, setSelectedSupervisor] = useState(null);
   const [requestedSupervisorId, setRequestedSupervisorId] = useState(null);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProject());
@@ -309,7 +310,18 @@ const SupervisorPage = () => {
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8] mb-3">
                     Description
                   </p>
-                  <p className="text-slate-700 leading-7">{work.description}</p>
+                  <p className={`text-slate-700 text-justify leading-7 ${!showFullDescription ? "line-clamp-3" : ""}`}>
+                    {work.description}
+                  </p>
+                  {work.description.length > 180 && (
+                    <button
+                      type="button"
+                      onClick={() => setShowFullDescription((current) => !current)}
+                      className="mt-2 text-sm font-semibold text-[#17a2b8] hover:text-[#138496]"
+                    >
+                      {showFullDescription ? "See less" : "See more"}
+                    </button>
+                  )}
                 </div>
               )}
             </div>

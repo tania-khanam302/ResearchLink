@@ -9,7 +9,7 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 bg-[url('/bg.jpg')] bg-auto bg-repeat bg-fixed">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="text-center">
         
         <h1 className="text-9xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-[#138496]">

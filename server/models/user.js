@@ -22,6 +22,20 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       match: [/\S+@\S+\.\S+/, "Please Use a Valid Email Address"],
     },
+    contact: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    studentId: {
+      type: String,
+      trim: true,
+      sparse: true,
+    },
+    profilePicture: {
+      type: String,
+      default: "",
+    },
     password: {
       type: String,
       required: [true, "Password is Required"],
@@ -40,6 +54,21 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: "null",
+    },
+    gender: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    semester: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    year: {
+      type: String,
+      trim: true,
+      default: "",
     },
     type: {
   type: String,

@@ -75,6 +75,57 @@ export const resetPassword = createAsyncThunk(
   },
 );
 
+export const changePassword = createAsyncThunk(
+  "auth/password/change",
+  async ({ currentPassword, newPassword, confirmPassword }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.put("/auth/password/change", {
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      });
+      toast.success(res.data.message || "Password changed successfully");
+      return res.data;
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to change password";
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
+export const updateProfile = createAsyncThunk(
+  "auth/profile/update",
+  async (profileData, thunkAPI) => {
+    try {
+      const res = await axiosInstance.put("/auth/profile", profileData);
+      toast.success(res.data.message || "Profile updated successfully");
+      return res.data.user;
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to update profile";
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
+export const uploadProfilePicture = createAsyncThunk(
+  "auth/profile/picture",
+  async (file, thunkAPI) => {
+    try {
+      const formData = new FormData();
+      formData.append("profilePicture", file);
+      const res = await axiosInstance.post("/auth/profile/picture", formData);
+      toast.success(res.data.message || "Profile picture updated successfully");
+      return res.data.user;
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to upload profile picture";
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
 // getUser =================
 export const getUser = createAsyncThunk("auth/me", async (_, thunkAPI) => {
   try {
@@ -169,6 +220,28 @@ const authSlice = createSlice({
       })
       .addCase(resetPassword.rejected, (state) => {
         state.isUpdatingPassword= false;
+      })
+      .addCase(changePassword.pending, (state) => {
+        state.isUpdatingPassword = true;
+      })
+      .addCase(changePassword.fulfilled, (state) => {
+        state.isUpdatingPassword = false;
+      })
+      .addCase(changePassword.rejected, (state) => {
+        state.isUpdatingPassword = false;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.isUpdatingProfile = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.isUpdatingProfile = false;
+        state.authUser = action.payload;
+      })
+      .addCase(updateProfile.rejected, (state) => {
+        state.isUpdatingProfile = false;
+      })
+      .addCase(uploadProfilePicture.fulfilled, (state, action) => {
+        state.authUser = action.payload;
       });
   },
 });

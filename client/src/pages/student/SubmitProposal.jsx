@@ -123,7 +123,7 @@ const SubmitProposal = () => {
                   key={item.value}
                   type="button"
                   onClick={() => handleTypeChange(item.value)}
-                  className={`group relative text-left p-5 rounded-xl border-2 transition-all duration-200 ${
+                  className={`group relative text-left p-5 rounded-xl border transition-all duration-200 ${
                     formData.type === item.value
                       ? "border-[#17a2b8] bg-[#17a2b8]/5 shadow-md shadow-[#17a2b8]/10"
                       : "border-slate-200 bg-slate-50 hover:bg-white hover:border-[#17a2b8]/40 hover:shadow-sm"
@@ -191,21 +191,12 @@ const SubmitProposal = () => {
               }
               maxLength={200}
               className="
-                w-full px-4 py-3.5 rounded-xl
-                border border-slate-200
-                bg-slate-50 text-slate-800
-                placeholder:text-slate-400
-                outline-none transition-all duration-200
-                hover:border-slate-300
-                focus:bg-white
-                focus:border-[#17a2b8]
-                focus:ring-4 focus:ring-[#17a2b8]/10
+                input w-full placeholder-gray-400 focus:ring-1 focus:ring-[#17a2b8]
               "
               required
             />
           </div>
 
-          {/* ================= RESEARCH AREA ================= */}
           {/* research area  */}
           {formData.type === "Thesis" && (
             <div>
@@ -224,15 +215,7 @@ const SubmitProposal = () => {
                 placeholder="Specify the main research area of your thesis."
                 maxLength={200}
                 className="
-                  w-full px-4 py-3.5 rounded-xl
-                  border border-slate-200
-                  bg-slate-50 text-slate-800
-                  placeholder:text-slate-400
-                  outline-none transition-all duration-200
-                  hover:border-slate-300
-                  focus:bg-white
-                  focus:border-[#17a2b8]
-                  focus:ring-4 focus:ring-[#17a2b8]/10
+                input w-full placeholder-gray-400 focus:ring-1 focus:ring-[#17a2b8]
                 "
                 required
               />
@@ -264,17 +247,7 @@ const SubmitProposal = () => {
               }
               maxLength={2000}
               className="
-                w-full min-h-[180px]
-                px-4 py-3.5 rounded-xl
-                border border-slate-200
-                bg-slate-50 text-slate-800
-                placeholder:text-slate-400
-                outline-none transition-all duration-200
-                resize-y
-                hover:border-slate-300
-                focus:bg-white
-                focus:border-[#17a2b8]
-                focus:ring-4 focus:ring-[#17a2b8]/10
+                w-full min-h-[180px] input  placeholder-gray-400 focus:ring-1 focus:ring-[#17a2b8]
               "
               required
             />
