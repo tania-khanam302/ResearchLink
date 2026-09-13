@@ -210,6 +210,38 @@ export const deleteFile = createAsyncThunk(
   },
 );
 
+// add external resource link
+export const addResourceLink = createAsyncThunk(
+  "student/addResourceLink",
+  async ({ workId, url }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.post(`/student/links/${workId}`, { url });
+      toast.success(res.data.message || "Link added successfully");
+      return res.data.data?.work;
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to add link";
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
+// delete external resource link
+export const deleteResourceLink = createAsyncThunk(
+  "student/deleteResourceLink",
+  async ({ workId, linkId }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.delete(`/student/links/${workId}/${linkId}`);
+      toast.success(res.data.message || "Link deleted successfully");
+      return res.data.data?.work;
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to delete link";
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
 const studentSlice = createSlice({
   name: "student",
   initialState: {
@@ -268,6 +300,18 @@ const studentSlice = createSlice({
         state.thesis = data.thesis;
         state.files = data.thesis.files || [];
       }
+    });
+
+    builder.addCase(addResourceLink.fulfilled, (state, action) => {
+      const work = action.payload;
+      if (work?.type === "Project") state.project = work;
+      else if (work) state.thesis = work;
+    });
+
+    builder.addCase(deleteResourceLink.fulfilled, (state, action) => {
+      const work = action.payload;
+      if (work?.type === "Project") state.project = work;
+      else if (work) state.thesis = work;
     });
 
     // get Feedback

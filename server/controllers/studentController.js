@@ -468,3 +468,80 @@ export const deleteFile = asyncHandler(async (req, res, next) => {
     },
   });
 });
+
+// add an external project or thesis resource link
+export const addResourceLink = asyncHandler(async (req, res, next) => {
+  const { workId } = req.params;
+  const { url } = req.body;
+  const studentId = req.user._id;
+
+  let academicWork = await projectService.getProjectById(workId);
+  if (!academicWork) academicWork = await Thesis.findById(workId);
+
+  if (!academicWork) {
+    return next(new ErrorHandler("Project or Thesis not found", 404));
+  }
+
+  const workStudentId = academicWork.student?._id || academicWork.student;
+  if (workStudentId.toString() !== studentId.toString()) {
+    return next(new ErrorHandler("Not authorized to add this link", 403));
+  }
+
+  let parsedUrl;
+  try {
+    parsedUrl = new URL(url);
+  } catch {
+    return next(new ErrorHandler("Please provide a valid URL", 400));
+  }
+
+  if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+    return next(new ErrorHandler("Only HTTP and HTTPS links are allowed", 400));
+  }
+
+  const normalizedUrl = parsedUrl.toString();
+  const alreadyAdded = academicWork.resourceLinks.some(
+    (link) => link.url === normalizedUrl,
+  );
+  if (alreadyAdded) {
+    return next(new ErrorHandler("This link has already been added", 400));
+  }
+
+  academicWork.resourceLinks.push({ url: normalizedUrl });
+  await academicWork.save();
+
+  return res.status(201).json({
+    success: true,
+    message: "Link added successfully",
+    data: { work: academicWork },
+  });
+});
+
+// delete an external project or thesis resource link
+export const deleteResourceLink = asyncHandler(async (req, res, next) => {
+  const { workId, linkId } = req.params;
+  const studentId = req.user._id;
+
+  let academicWork = await projectService.getProjectById(workId);
+  if (!academicWork) academicWork = await Thesis.findById(workId);
+
+  if (!academicWork) {
+    return next(new ErrorHandler("Project or Thesis not found", 404));
+  }
+
+  const workStudentId = academicWork.student?._id || academicWork.student;
+  if (workStudentId.toString() !== studentId.toString()) {
+    return next(new ErrorHandler("Not authorized to delete this link", 403));
+  }
+
+  const link = academicWork.resourceLinks.id(linkId);
+  if (!link) return next(new ErrorHandler("Link not found", 404));
+
+  academicWork.resourceLinks.pull(linkId);
+  await academicWork.save();
+
+  return res.status(200).json({
+    success: true,
+    message: "Link deleted successfully",
+    data: { work: academicWork },
+  });
+});

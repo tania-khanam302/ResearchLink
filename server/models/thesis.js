@@ -120,6 +120,13 @@ const thesisSchema = new mongoose.Schema(
       },
     ],
 
+    resourceLinks: [
+      {
+        url: { type: String, required: true, trim: true },
+        addedAt: { type: Date, default: Date.now },
+      },
+    ],
+
     feedback: [feedbackSchema],
 
     deadline: {

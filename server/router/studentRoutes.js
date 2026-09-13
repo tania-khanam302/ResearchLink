@@ -10,6 +10,8 @@ import {
   submitProposal,
   uploadFiles,
   deleteFile,
+  addResourceLink,
+  deleteResourceLink,
 
 } from "../controllers/studentController.js";
 import {
@@ -101,6 +103,20 @@ router.delete(
   isAuthenticated,
   isAuthorized("Student"),
   deleteFile,
+);
+
+router.post(
+  "/links/:workId",
+  isAuthenticated,
+  isAuthorized("Student"),
+  addResourceLink,
+);
+
+router.delete(
+  "/links/:workId/:linkId",
+  isAuthenticated,
+  isAuthorized("Student"),
+  deleteResourceLink,
 );
 
 export default router;
