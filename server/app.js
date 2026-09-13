@@ -30,14 +30,34 @@ const app = express();
 //     credentials: true,
 //   }),
 // );
+// app.use(
+//   cors({
+//     origin: "https://research-link-ten.vercel.app",
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+//   })
+// );
+
+
+// CORS frontend backend connect
+const allowedOrigins = [
+  "https://research-link-ten.vercel.app",
+  "http://localhost:5173",
+];
+
 app.use(
   cors({
-    origin: "https://research-link-ten.vercel.app",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   })
 );
-
 
 //  create folders 
 const uploadsDir = path.join(__dirname, "uploads");

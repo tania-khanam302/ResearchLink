@@ -190,7 +190,7 @@ const UploadFiles = () => {
   };
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full max-w-full overflow-x-hidden space-y-6">
       {/* upload section  */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden">
         {/* Upload Project & Thesis Files Header */}
@@ -336,52 +336,81 @@ const UploadFiles = () => {
                 />
               </label>
             </div>
+
+            {/* Uploaded Files Link */}
+<div className="mt-5 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-5">
+  <div className="mb-4">
+    <h3 className="text-base sm:text-lg font-bold text-slate-800">
+      Uploaded Files Link
+    </h3>
+
+    <p className="text-xs sm:text-sm text-slate-500 mt-1">
+      Add a link to your project files or related resources.
+    </p>
+  </div>
+
+  <div className="flex flex-col sm:flex-row gap-3">
+    <input
+      type="url"
+      placeholder="Paste GitHub, Google Drive, OneDrive, or other link"
+      className="flex-1 min-w-0 px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+    />
+
+    <button
+      type="button"
+      className="w-full sm:w-auto px-5 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold transition-all duration-200"
+    >
+      Add Link
+    </button>
+  </div>
+
+  <p className="mt-3 text-xs text-slate-400 leading-5">
+    You can add GitHub, Google Drive, OneDrive, live demo,
+    research paper, documentation, or any other relevant link.
+  </p>
+</div>
+
           </div>
 
           {/* ================= FILE UPLOAD GUIDE ================= */}
           <div className="mt-6 rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5">
             <div className="flex items-start gap-3">
-              <div className="text-xl">📌</div>
 
               <div>
                 <h3 className="text-base font-bold text-slate-800">
                   What Files Should You Upload?
                 </h3>
 
-                <div className="mt-3 space-y-2 text-sm text-slate-600">
-                  <p>
-                    📄{" "}
-                    <span className="font-semibold text-slate-700">
-                      Report:
-                    </span>{" "}
-                    Final thesis or project report
-                  </p>
+            <div className="mt-3 space-y-2 text-sm text-slate-600">
+  <p>
+    <span className="font-semibold text-slate-700">
+      Report:
+    </span>{" "}
+    Final thesis or project report
+  </p>
 
-                  <p>
-                    📊{" "}
-                    <span className="font-semibold text-slate-700">
-                      Presentation:
-                    </span>{" "}
-                    Presentation slides
-                  </p>
+  <p>
+    <span className="font-semibold text-slate-700">
+      Presentation:
+    </span>{" "}
+    Presentation slides
+  </p>
 
-                  <p>
-                    💻{" "}
-                    <span className="font-semibold text-slate-700">
-                      Source Code:
-                    </span>{" "}
-                    Your source code, if applicable
-                  </p>
+  <p>
+    <span className="font-semibold text-slate-700">
+      Source Code:
+    </span>{" "}
+    Your source code, if applicable
+  </p>
 
-                  <p>
-                    📁{" "}
-                    <span className="font-semibold text-slate-700">
-                      Supporting Files:
-                    </span>{" "}
-                    Dataset, research paper, questionnaire, diagram, database,
-                    documentation, screenshots, etc.
-                  </p>
-                </div>
+  <p>
+    <span className="font-semibold text-slate-700">
+      Supporting Files:
+    </span>{" "}
+    Dataset, research paper, questionnaire, diagram, database,
+    documentation, screenshots, etc.
+  </p>
+</div>
 
                 <div className="mt-4 rounded-xl bg-white/70 border border-cyan-100 px-4 py-3">
                   <p className="text-xs sm:text-sm text-slate-500 leading-6">
@@ -567,7 +596,7 @@ const UploadFiles = () => {
                     files
                   </p>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 max-w-full overflow-x-auto">
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
