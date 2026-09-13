@@ -4,7 +4,11 @@ import ErrorHandler from "./error.js";
 import { User } from "../models/user.js";
 
 export const isAuthenticated = asyncHandler(async (req, res, next) => {
-  const { token } = req.cookies;
+  const cookieToken = req.cookies.token;
+  const headerToken = req.headers.authorization?.startsWith("Bearer ")
+    ? req.headers.authorization.split(" ")[1]
+    : null;
+  const token = headerToken || cookieToken;
   if (!token) {
     return next(new ErrorHandler("Please login to access this resource.", 401)); //401 Unauthorized
   }

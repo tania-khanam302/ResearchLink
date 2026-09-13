@@ -213,230 +213,241 @@ const UploadFiles = () => {
             </div>
           </div>
         </div>
+{/* Upload Cards */}
+<div className="p-6 sm:p-8">
+  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
 
-        {/* Upload Cards */}
-        <div className="p-6 sm:p-8">
-          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-5"> */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-            {/* Report */}
-            <div className="group border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50/60 hover:bg-white hover:border-[#17a2b8]/50 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
-              <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-red-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                <FileText className="w-8 h-8 text-red-500" />
-              </div>
+    {/* Report */}
+    <div className="group border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50/60 hover:bg-white hover:border-[#17a2b8]/50 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
+      <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-red-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+        <FileText className="w-8 h-8 text-red-500" />
+      </div>
 
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">
-                Report / Document
-              </h3>
+      <h3 className="text-lg font-semibold text-slate-800 mb-2">
+        Report / Document
+      </h3>
 
-              <p className="text-sm leading-6 text-slate-500 mb-5">
-                {/* Upload your project report */}
-                Upload your thesis or project report
-                <br />
-                <span className="text-slate-400">PDF, DOC, DOCX</span>
-              </p>
+      <p className="text-sm leading-6 text-slate-500 mb-5">
+        Upload your thesis or project report
+        <br />
+        <span className="text-slate-400">
+          PDF, DOC, DOCX
+        </span>
+      </p>
 
-              <label className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 cursor-pointer hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm transition-all duration-200">
-                Choose File
-                <input
-                  type="file"
-                  ref={reportRef}
-                  className="hidden"
-                  accept=".pdf,.doc,.docx"
-                  onChange={handleFilePick}
-                  multiple
-                />
-              </label>
-            </div>
+      <label className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 cursor-pointer hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm transition-all duration-200">
+        Choose File
+        <input
+          type="file"
+          ref={reportRef}
+          className="hidden"
+          accept=".pdf,.doc,.docx"
+          onChange={handleFilePick}
+          multiple
+        />
+      </label>
+    </div>
 
-            {/* Presentation */}
-            <div className="group border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50/60 hover:bg-white hover:border-[#17a2b8]/50 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
-              <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-orange-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                <Archive className="w-8 h-8 text-orange-500" />
-              </div>
+    {/* Presentation */}
+    <div className="group border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50/60 hover:bg-white hover:border-[#17a2b8]/50 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
+      <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-orange-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+        <Archive className="w-8 h-8 text-orange-500" />
+      </div>
 
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">
-                Presentation
-              </h3>
+      <h3 className="text-lg font-semibold text-slate-800 mb-2">
+        Presentation
+      </h3>
 
-              <p className="text-sm leading-6 text-slate-500 mb-5">
-                Upload your presentation
-                <br />
-                <span className="text-slate-400">PPT, PPTX, PDF</span>
-              </p>
+      <p className="text-sm leading-6 text-slate-500 mb-5">
+        Upload your presentation
+        <br />
+        <span className="text-slate-400">
+          PPT, PPTX, PDF
+        </span>
+      </p>
 
-              <label className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 cursor-pointer hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm transition-all duration-200">
-                Choose File
-                <input
-                  type="file"
-                  ref={presRef}
-                  className="hidden"
-                  accept=".ppt,.pptx,.pdf"
-                  onChange={handleFilePick}
-                  multiple
-                />
-              </label>
-            </div>
+      <label className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 cursor-pointer hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm transition-all duration-200">
+        Choose File
+        <input
+          type="file"
+          ref={presRef}
+          className="hidden"
+          accept=".ppt,.pptx,.pdf"
+          onChange={handleFilePick}
+          multiple
+        />
+      </label>
+    </div>
 
-            {/* Code Files */}
-            <div className="group border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50/60 hover:bg-white hover:border-[#17a2b8]/50 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
-              <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-blue-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                <FileCode className="w-8 h-8 text-blue-500" />
-              </div>
+    {/* Source Code */}
+    <div className="group border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50/60 hover:bg-white hover:border-[#17a2b8]/50 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
+      <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-blue-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+        <FileCode className="w-8 h-8 text-blue-500" />
+      </div>
 
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">
-                Source Code
-              </h3>
+      <h3 className="text-lg font-semibold text-slate-800 mb-2">
+        Source Code
+      </h3>
 
-              <p className="text-sm leading-6 text-slate-500 mb-5">
-                Upload your source code
-                <br />
-                <span className="text-slate-400">ZIP, RAR, TAR, GZ</span>
-              </p>
+      <p className="text-sm leading-6 text-slate-500 mb-5">
+        Upload your source code
+        <br />
+        <span className="text-slate-400">
+          ZIP, RAR, TAR, GZ
+        </span>
+      </p>
 
-              <label className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 cursor-pointer hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm transition-all duration-200">
-                Choose File
-                <input
-                  type="file"
-                  ref={codeRef}
-                  className="hidden"
-                  accept=".zip,.rar,.tar,.gz"
-                  onChange={handleFilePick}
-                  multiple
-                />
-              </label>
-            </div>
+      <label className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 cursor-pointer hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm transition-all duration-200">
+        Choose File
+        <input
+          type="file"
+          ref={codeRef}
+          className="hidden"
+          accept=".zip,.rar,.tar,.gz"
+          onChange={handleFilePick}
+          multiple
+        />
+      </label>
+    </div>
 
-            {/* Supporting Files */}
-            <div className="group border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50/60 hover:bg-white hover:border-[#17a2b8]/50 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
-              <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-emerald-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                <FolderOpen className="w-8 h-8 text-emerald-500" />
-              </div>
+    {/* Supporting Files */}
+    <div className="group border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50/60 hover:bg-white hover:border-[#17a2b8]/50 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
+      <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-emerald-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+        <FolderOpen className="w-8 h-8 text-emerald-500" />
+      </div>
 
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">
-                Supporting Files
-              </h3>
+      <h3 className="text-lg font-semibold text-slate-800 mb-2">
+        Supporting Files
+      </h3>
 
-              <p className="text-sm leading-6 text-slate-500 mb-5">
-                Upload datasets, research materials,
-                <br />
-                diagrams, documentation, or other files.
-                <br />
-                <span className="text-slate-400">Optional</span>
-              </p>
+      <p className="text-sm leading-6 text-slate-500 mb-5">
+        Upload datasets, research materials,
+        <br />
+        diagrams, documentation, or other files.
+        <br />
+        <span className="text-slate-400">
+          Optional
+        </span>
+      </p>
 
-              <label className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 cursor-pointer hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm transition-all duration-200">
-                Choose File
-                <input
-                  type="file"
-                  ref={supportingRef}
-                  className="hidden"
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.rar,.png,.jpg,.jpeg"
-                  onChange={handleFilePick}
-                  multiple
-                />
-              </label>
-            </div>
+      <label className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 cursor-pointer hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm transition-all duration-200">
+        Choose File
+        <input
+          type="file"
+          ref={supportingRef}
+          className="hidden"
+          accept=".pdf,.doc,.docx,.xls,.xlsx,.zip,.rar,.png,.jpg,.jpeg"
+          onChange={handleFilePick}
+          multiple
+        />
+      </label>
+    </div>
 
-            {/* Uploaded Files Link */}
-<div className="mt-5 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-5">
-  <div className="mb-4">
-    <h3 className="text-base sm:text-lg font-bold text-slate-800">
-      Uploaded Files Link
-    </h3>
+ {/* Uploaded Files Link */}
+<div className="group border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center bg-slate-50/60 hover:bg-white hover:border-[#17a2b8]/50 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
 
-    <p className="text-xs sm:text-sm text-slate-500 mt-1">
-      Add a link to your project files or related resources.
-    </p>
+  <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-indigo-50 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+    <FolderOpen className="w-8 h-8 text-indigo-500" />
   </div>
 
-  <div className="flex flex-col sm:flex-row gap-3">
-    <input
-      type="url"
-      placeholder="Paste GitHub, Google Drive, OneDrive, or other link"
-      className="flex-1 min-w-0 px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
-    />
+  <h3 className="text-lg font-semibold text-slate-800 mb-2">
+    Uploaded Files Link
+  </h3>
 
+  <p className="text-sm leading-6 text-slate-500 mb-5">
+    Add your project files or resources
+    <br />
+    <span className="text-slate-400">
+      GitHub, Drive, OneDrive, Demo
+    </span>
+  </p>
+
+  <input
+    type="url"
+    placeholder="Paste your file link"
+    className="w-full mb-3 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-700 placeholder:text-slate-400 outline-none focus:border-[#17a2b8] focus:ring-2 focus:ring-[#17a2b8]/10 transition-all"
+  />
+
+  <button
+    type="button"
+    className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-700 cursor-pointer hover:border-[#17a2b8] hover:text-[#17a2b8] hover:shadow-sm transition-all duration-200"
+  >
+    Add Link
+  </button>
+
+</div>
+
+
+  </div>
+
+  {/* ================= FILE UPLOAD GUIDE ================= */}
+  <div className="mt-6 rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5">
+    <div className="flex items-start gap-3">
+      <div>
+        <h3 className="text-base font-bold text-slate-800">
+          What Files Should You Upload?
+        </h3>
+
+        <div className="mt-3 space-y-2 text-sm text-slate-600">
+          <p>
+            <span className="font-semibold text-slate-700">
+              Report:
+            </span>{" "}
+            Final thesis or project report
+          </p>
+
+          <p>
+            <span className="font-semibold text-slate-700">
+              Presentation:
+            </span>{" "}
+            Presentation slides
+          </p>
+
+          <p>
+            <span className="font-semibold text-slate-700">
+              Source Code:
+            </span>{" "}
+            Your source code, if applicable
+          </p>
+
+          <p>
+            <span className="font-semibold text-slate-700">
+              Supporting Files:
+            </span>{" "}
+            Dataset, research paper, questionnaire, diagram,
+            database, documentation, screenshots, etc.
+          </p>
+        </div>
+
+        <div className="mt-4 rounded-xl bg-white/70 border border-cyan-100 px-4 py-3">
+          <p className="text-xs sm:text-sm text-slate-500 leading-6">
+            <span className="font-semibold text-slate-700">
+              Note:
+            </span>{" "}
+            Report is required. Presentation is recommended.
+            Source Code is required only for projects/theses that
+            involve programming. Supporting Files may include
+            datasets, research papers, questionnaires, diagrams,
+            database files, documentation, screenshots, or other
+            relevant materials.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Upload Button */}
+  <div className="flex justify-end mt-6 pt-5 border-t border-slate-100">
     <button
-      type="button"
-      className="w-full sm:w-auto px-5 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold transition-all duration-200"
+      onClick={handleUpload}
+      className="inline-flex items-center justify-center gap-2 bg-[#17a2b8] hover:bg-[#138496] active:bg-[#117a8b] text-white px-4 py-3 rounded-md font-semibold shadow-md shadow-[#17a2b8]/20 hover:shadow-lg hover:shadow-[#17a2b8]/25 transition-all duration-200"
     >
-      Add Link
+      <FilePlus className="w-4 h-4" />
+      Upload Selected Files
     </button>
   </div>
-
-  <p className="mt-3 text-xs text-slate-400 leading-5">
-    You can add GitHub, Google Drive, OneDrive, live demo,
-    research paper, documentation, or any other relevant link.
-  </p>
 </div>
 
-          </div>
-
-          {/* ================= FILE UPLOAD GUIDE ================= */}
-          <div className="mt-6 rounded-2xl border border-cyan-100 bg-cyan-50/60 p-5">
-            <div className="flex items-start gap-3">
-
-              <div>
-                <h3 className="text-base font-bold text-slate-800">
-                  What Files Should You Upload?
-                </h3>
-
-            <div className="mt-3 space-y-2 text-sm text-slate-600">
-  <p>
-    <span className="font-semibold text-slate-700">
-      Report:
-    </span>{" "}
-    Final thesis or project report
-  </p>
-
-  <p>
-    <span className="font-semibold text-slate-700">
-      Presentation:
-    </span>{" "}
-    Presentation slides
-  </p>
-
-  <p>
-    <span className="font-semibold text-slate-700">
-      Source Code:
-    </span>{" "}
-    Your source code, if applicable
-  </p>
-
-  <p>
-    <span className="font-semibold text-slate-700">
-      Supporting Files:
-    </span>{" "}
-    Dataset, research paper, questionnaire, diagram, database,
-    documentation, screenshots, etc.
-  </p>
-</div>
-
-                <div className="mt-4 rounded-xl bg-white/70 border border-cyan-100 px-4 py-3">
-                  <p className="text-xs sm:text-sm text-slate-500 leading-6">
-                    <span className="font-semibold text-slate-700">Note:</span>{" "}
-                    Report is required. Presentation is recommended. Source Code
-                    is required only for projects/theses that involve
-                    programming. Supporting Files may include datasets, research
-                    papers, questionnaires, diagrams, database files,
-                    documentation, screenshots, or other relevant materials.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Upload Button */}
-          <div className="flex justify-end mt-6 pt-5 border-t border-slate-100">
-            <button
-              onClick={handleUpload}
-              className="inline-flex items-center justify-center gap-2 bg-[#17a2b8] hover:bg-[#138496] active:bg-[#117a8b] text-white px-4 py-3 rounded-md font-semibold shadow-md shadow-[#17a2b8]/20 hover:shadow-lg hover:shadow-[#17a2b8]/25 transition-all duration-200"
-            >
-              <FilePlus className="w-4 h-4" />
-              Upload Selected Files
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* selected files section  */}
