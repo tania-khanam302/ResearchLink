@@ -142,16 +142,18 @@ const Navbar = ({ sidebarOpen, setSidebarOpen }) => {
                       </p>
                     </div>
 
-                    {(authUser?.role === "Student" || authUser?.role === "Teacher") && (
+                    {(authUser?.role === "Student" || authUser?.role === "Teacher" || authUser?.role === "Admin" || authUser?.role === "Co-Admin") && (
                       <button
                         onClick={() => {
                           setProfileDropdownOpen(false);
 
-                          if (authUser.role === "Student") {
-                            navigate("/student/profile");
-                          } else {
-                            navigate("/teacher/profile");
-                          }
+                          const profilePaths = {
+                            Student: "/student/profile",
+                            Teacher: "/teacher/profile",
+                            Admin: "/admin/profile",
+                            "Co-Admin": "/co-admin/profile",
+                          };
+                          navigate(profilePaths[authUser.role]);
                         }}
                         className="w-full flex items-center gap-3 text-left px-3 py-2.5 text-base font-semibold text-[#138496] hover:bg-cyan-50 rounded-lg mt-2 transition-colors"
                       >

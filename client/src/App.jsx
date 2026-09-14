@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Children, useEffect } from "react";
+import { Children, useEffect, useState } from "react";
 
 // Auth Pages
 import LoginPage from "./pages/auth/LoginPage";
@@ -24,6 +24,7 @@ import PendingRequests from "./pages/teacher/PendingRequests";
 import AssignedStudents from "./pages/teacher/AssignedStudents";
 import TeacherFiles from "./pages/teacher/TeacherFiles";
 import TeacherProfile from "./pages/teacher/TeacherProfile";
+import AccountProfile from "./pages/profile/AccountProfile";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -37,7 +38,7 @@ import ProjectsPage from "./pages/admin/ProjectsPage";
 
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import { Loader, Loader2 } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { getUser } from "./store/slices/authSlice";
 import { all } from "axios";
 import { getAllTheses, getAllProjects, getAllUsers } from "./store/slices/adminSlice";
@@ -56,13 +57,60 @@ import CoAdminDeadlinesPage from "./pages/coadmin/CoAdminDeadlinesPage";
 import NotFound from "./pages/NotFound";
 import { fetchDashboardStats } from "./store/slices/studentSlice";
 
+const LoadingScreen = ({ isReady }) => {
+  const [progress, setProgress] = useState(8);
+
+  useEffect(() => {
+    if (isReady) {
+      setProgress(100);
+      return undefined;
+    }
+
+    const timer = window.setInterval(() => {
+      setProgress((current) => (current >= 92 ? 92 : current + 4));
+    }, 180);
+
+    return () => window.clearInterval(timer);
+  }, [isReady]);
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
+      <div className="w-full max-w-xs text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#17a2b8] shadow-lg shadow-[#17a2b8]/25">
+          <BookOpen className="h-8 w-8 text-white" />
+        </div>
+        <h1 className="mt-5 text-xl font-bold text-slate-800">Research Link</h1>
+        {/* <p className="mt-1 text-sm text-slate-500">Preparing your workspace...</p> */}
+
+        <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-200">
+          <div
+            className="h-full rounded-full bg-[#17a2b8] transition-all duration-200 ease-out"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <p className="mt-3 text-sm font-semibold text-[#138496]">{progress}%</p>
+      </div>
+    </div>
+  );
+};
+
 const App = () => {
   const { authUser, isCheckingAuth } = useSelector((state) => state.auth);
+  const [loadingComplete, setLoadingComplete] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!isCheckingAuth) {
+      const timer = window.setTimeout(() => setLoadingComplete(true), 450);
+      return () => window.clearTimeout(timer);
+    }
+
+    setLoadingComplete(false);
+  }, [isCheckingAuth]);
 
   // useEffect(() => {
   //   if (authUser?.role === "Admin") {
@@ -121,12 +169,8 @@ const App = () => {
   };
 
   // loading page
-  if (isCheckingAuth && !authUser) {
-    return (
-      <div className="flex justify-center items-center m-auto h-screen">
-        <Loader className="size-20 animate-spin text-[#17a2b8]" />
-      </div>
-    );
+  if (!loadingComplete) {
+    return <LoadingScreen isReady={!isCheckingAuth} />;
   }
 
   return (
@@ -177,6 +221,7 @@ const App = () => {
           <Route path="deadlines" element={<DeadlinesPage />} />
           <Route path="thesis" element={<ThesisPage />} />
           <Route path="projects" element={<ProjectsPage />} />
+          <Route path="profile" element={<AccountProfile />} />
         </Route>
 
         {/* Co-Admin Routes */}
@@ -212,6 +257,7 @@ const App = () => {
     path="deadlines"
     element={<CoAdminDeadlinesPage />}
   />
+  <Route path="profile" element={<AccountProfile />} />
         </Route>
 
         {/* Student Routes */}

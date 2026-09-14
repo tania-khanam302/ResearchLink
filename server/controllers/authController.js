@@ -94,22 +94,27 @@ export const updateProfile = asyncHandler(async (req, res, next) => {
     }
   }
 
+  const updateData = {
+    name: name.trim(),
+    email: email.trim().toLowerCase(),
+  };
+
+  if (studentId !== undefined) updateData.studentId = studentId.trim();
+  if (contact !== undefined) updateData.contact = contact.trim();
+  if (gender !== undefined) updateData.gender = gender.trim();
+  if (department !== undefined) updateData.department = department.trim();
+  if (semester !== undefined) updateData.semester = semester.trim();
+  if (year !== undefined) updateData.year = year.trim();
+  if (expertise !== undefined) {
+    updateData.expertise = Array.isArray(expertise)
+      ? expertise.map((item) => item.trim()).filter(Boolean)
+      : expertise.split(",").map((item) => item.trim()).filter(Boolean);
+  }
+  if (type && ["Project", "Thesis"].includes(type)) updateData.type = type;
+
   const user = await User.findByIdAndUpdate(
     req.user._id,
-    {
-      studentId: studentId?.trim() || "",
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      contact: contact?.trim() || "",
-      gender: gender?.trim() || "",
-      department: department?.trim() || "",
-      semester: semester?.trim() || "",
-      year: year?.trim() || "",
-      expertise: Array.isArray(expertise)
-        ? expertise.map((item) => item.trim()).filter(Boolean)
-        : expertise?.split(",").map((item) => item.trim()).filter(Boolean) || [],
-      ...(type && ["Project", "Thesis"].includes(type) ? { type } : {}),
-    },
+    updateData,
     { new: true, runValidators: true },
   ).select("-password -resetPasswordToken -resetPasswordExpire");
 
