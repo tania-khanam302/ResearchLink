@@ -11,11 +11,20 @@ import {
   Upload,
 } from "lucide-react";
 
+// import {
+//   createDeadline,
+//   getTeacherDeadlines,
+//   getTeacherResearch,
+// } from "../../store/slices/deadlineSlice";
 import {
   createDeadline,
   getTeacherDeadlines,
-  getTeacherResearch,
 } from "../../store/slices/deadlineSlice";
+
+import {
+  getAssignedStudents,
+} from "../../store/slices/teacherSlice";
+
 
 const TeacherDeadlinesPage = () => {
   const dispatch = useDispatch();
@@ -24,10 +33,12 @@ const TeacherDeadlinesPage = () => {
   // Redux
   // ----------------------------------------------------
 
-  const { projects = [], theses = [] } = useSelector(
-    (state) => state.deadline.research || {},
-  );
-
+  // const { projects = [], theses = [] } = useSelector(
+  //   (state) => state.deadline.research || {},
+  // );
+const { assignedStudents = [] } = useSelector(
+  (state) => state.teacher,
+);
   const {
     deadlines = [],
     loading,
@@ -76,32 +87,99 @@ const TeacherDeadlinesPage = () => {
   // Load Data
   // ----------------------------------------------------
 
-  useEffect(() => {
-    dispatch(getTeacherDeadlines());
-    dispatch(getTeacherResearch());
-  }, [dispatch]);
-
+  // useEffect(() => {
+  //   dispatch(getTeacherDeadlines());
+  //   dispatch(getTeacherResearch());
+  // }, [dispatch]);
+useEffect(() => {
+  dispatch(getTeacherDeadlines());
+  dispatch(getAssignedStudents());
+}, [dispatch]);
   // ----------------------------------------------------
   // Combine Projects + Theses
   // ----------------------------------------------------
 
-  const allItems = useMemo(() => {
-    const projectData = Array.isArray(projects)
-      ? projects.map((project) => ({
-          ...project,
-          type: "Project",
-        }))
-      : [];
+  // const allItems = useMemo(() => {
+  //   const projectData = Array.isArray(projects)
+  //     ? projects.map((project) => ({
+  //         ...project,
+  //         type: "Project",
+  //       }))
+  //     : [];
 
-    const thesisData = Array.isArray(theses)
-      ? theses.map((thesis) => ({
-          ...thesis,
-          type: "Thesis",
-        }))
-      : [];
+  //   const thesisData = Array.isArray(theses)
+  //     ? theses.map((thesis) => ({
+  //         ...thesis,
+  //         type: "Thesis",
+  //       }))
+  //     : [];
 
-    return [...projectData, ...thesisData];
-  }, [projects, theses]);
+  //   return [...projectData, ...thesisData];
+  // }, [projects, theses]);
+
+const allItems = useMemo(() => {
+  if (!Array.isArray(assignedStudents)) {
+    return [];
+  }
+
+  return assignedStudents
+    .map((student) => {
+      const project = student.project;
+      const thesis = student.thesis;
+
+      let work = null;
+      let type = "";
+
+      if (project && thesis) {
+        const projectDate = new Date(
+          project.updatedAt ||
+            project.createdAt ||
+            0
+        );
+
+        const thesisDate = new Date(
+          thesis.updatedAt ||
+            thesis.createdAt ||
+            0
+        );
+
+        if (thesisDate > projectDate) {
+          work = thesis;
+          type = "Thesis";
+        } else {
+          work = project;
+          type = "Project";
+        }
+      } else if (thesis) {
+        work = thesis;
+        type = "Thesis";
+      } else if (project) {
+        work = project;
+        type = "Project";
+      }
+
+      if (!work) {
+        return null;
+      }
+
+      return {
+        ...work,
+        type,
+        student: {
+          _id: student._id,
+          name: student.name,
+          email: student.email,
+          department: student.department,
+        },
+        supervisor:
+          work.supervisor ||
+          student.supervisor ||
+          null,
+      };
+    })
+    .filter(Boolean);
+}, [assignedStudents]);
+
 
   // ----------------------------------------------------
   // Date Helper
@@ -468,57 +546,108 @@ const TeacherDeadlinesPage = () => {
       return;
     }
 
-    if (!formData.finalSubmitDate) {
-      alert(
-        "Please select final submission date.",
-      );
+    // if (!formData.finalSubmitDate) {
+    //   alert(
+    //     "Please select final submission date.",
+    //   );
 
-      return;
-    }
+    //   return;
+    // }
+
+    // const deadlineDate = new Date(
+    //   formData.deadlineDate,
+    // );
+
+    // const finalDate = new Date(
+    //   formData.finalSubmitDate,
+    // );
+
+    // deadlineDate.setHours(0, 0, 0, 0);
+    // finalDate.setHours(0, 0, 0, 0);
+
+    // if (finalDate < deadlineDate) {
+    //   alert(
+    //     "Final submission date cannot be earlier than the milestone deadline.",
+    //   );
+
+    //   return;
+    // }
 
     const deadlineDate = new Date(
-      formData.deadlineDate,
+  formData.deadlineDate,
+);
+
+deadlineDate.setHours(0, 0, 0, 0);
+
+if (formData.finalSubmitDate) {
+  const finalDate = new Date(
+    formData.finalSubmitDate,
+  );
+
+  finalDate.setHours(0, 0, 0, 0);
+
+  if (finalDate < deadlineDate) {
+    alert(
+      "Final submission date cannot be earlier than the milestone deadline.",
     );
 
-    const finalDate = new Date(
-      formData.finalSubmitDate,
-    );
+    return;
+  }
+}
 
-    deadlineDate.setHours(0, 0, 0, 0);
-    finalDate.setHours(0, 0, 0, 0);
+    // const deadlineData = {
+    //   name: formData.title.trim(),
 
-    if (finalDate < deadlineDate) {
-      alert(
-        "Final submission date cannot be earlier than the milestone deadline.",
-      );
+    //   type: formData.deadlineType,
 
-      return;
-    }
+    //   description:
+    //     formData.description.trim(),
+
+    //   dueDate:
+    //     formData.deadlineDate,
+
+    //   finalSubmitDate:
+    //     formData.finalSubmitDate,
+
+    //   ...(selectedItem.type === "Thesis"
+    //     ? {
+    //         thesis:
+    //           selectedItem._id,
+    //       }
+    //     : {
+    //         project:
+    //           selectedItem._id,
+    //       }),
+    // };
 
     const deadlineData = {
-      name: formData.title.trim(),
+  name: formData.title.trim(),
 
-      type: formData.deadlineType,
+  type: formData.deadlineType,
 
-      description:
-        formData.description.trim(),
+  description:
+    formData.description.trim(),
 
-      dueDate:
-        formData.deadlineDate,
+  dueDate:
+    formData.deadlineDate,
 
-      finalSubmitDate:
-        formData.finalSubmitDate,
+  ...(formData.finalSubmitDate
+    ? {
+        finalSubmitDate:
+          formData.finalSubmitDate,
+      }
+    : {}),
 
-      ...(selectedItem.type === "Thesis"
-        ? {
-            thesis:
-              selectedItem._id,
-          }
-        : {
-            project:
-              selectedItem._id,
-          }),
-    };
+  ...(selectedItem.type === "Thesis"
+    ? {
+        thesis:
+          selectedItem._id,
+      }
+    : {
+        project:
+          selectedItem._id,
+      }),
+};
 
     try {
       setSaving(true);
@@ -1724,7 +1853,7 @@ const TeacherDeadlinesPage = () => {
                     Cancel
                   </button>
 
-                  <button
+                  {/* <button
                     type="submit"
                     disabled={
                       saving ||
@@ -1756,7 +1885,39 @@ const TeacherDeadlinesPage = () => {
                         Save Deadline
                       </>
                     )}
-                  </button>
+                  </button> */}
+
+                  <button
+  type="submit"
+  disabled={
+    saving ||
+    !selectedItem ||
+    !formData.title.trim() ||
+    !formData.deadlineDate
+  }
+  className={`inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition ${
+    saving ||
+    !selectedItem ||
+    !formData.title.trim() ||
+    !formData.deadlineDate
+      ? "cursor-not-allowed bg-slate-300"
+      : "bg-[#17a2b8] hover:bg-[#138496]"
+  }`}
+>
+  {saving ? (
+    <>
+      <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+
+      Saving...
+    </>
+  ) : (
+    <>
+      <CalendarDays className="h-4 w-4" />
+
+      Save Deadline
+    </>
+  )}
+</button>
                 </div>
               </form>
             </div>

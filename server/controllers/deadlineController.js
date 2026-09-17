@@ -197,382 +197,330 @@ const populateDeadline = async (deadline) => {
 
 
 
-export const createDeadline = asyncHandler(
-  async (req, res, next) => {
-    const { id } = req.params;
+export const createDeadline = asyncHandler(async (req, res) => {
+  const { id } = req.params;
 
-    const {
-      name,
-      type,
-      description,
-      dueDate,
-      finalSubmitDate,
-      isFinal,
-      project,
-      thesis,
-    } = req.body;
+  const {
+    name,
+    type,
+    description,
+    dueDate,
+    finalSubmitDate,
+    isFinal,
+    project,
+    thesis,
+  } = req.body;
 
+  // -----------------------------
+  // Basic validation
+  // -----------------------------
+  if (!name?.trim()) {
+    throw new ErrorHandler(
+      "Deadline name or title is required",
+      400
+    );
+  }
 
+  if (!dueDate) {
+    throw new ErrorHandler(
+      "Due date is required",
+      400
+    );
+  }
 
-    if (!name?.trim()) {
-      return next(
-        new ErrorHandler(
-          "Deadline name or title is required",
-          400
-        )
+  // -----------------------------
+  // Project / Thesis ID
+  // -----------------------------
+  let projectId = project || null;
+  let thesisId = thesis || null;
+
+  // Support old route style /:id if used
+  if (!projectId && !thesisId && id) {
+    if (!isValidObjectId(id)) {
+      throw new ErrorHandler(
+        "Invalid project or thesis ID",
+        400
       );
     }
 
-    if (!dueDate) {
-      return next(
-        new ErrorHandler(
-          "Due date is required",
-          400
-        )
-      );
-    }
+    const projectExists = await Project.exists({
+      _id: id,
+    });
 
-
-
-    let projectId = project || null;
-    let thesisId = thesis || null;
-
-
-    if (!projectId && !thesisId && id) {
-      if (!isValidObjectId(id)) {
-        return next(
-          new ErrorHandler(
-            "Invalid project or thesis ID",
-            400
-          )
-        );
-      }
-
-      const projectExists =
-        await Project.exists({
-          _id: id,
-        });
-
-      if (projectExists) {
-        projectId = id;
-      } else {
-        const thesisExists =
-          await Thesis.exists({
-            _id: id,
-          });
-
-        if (thesisExists) {
-          thesisId = id;
-        }
-      }
-    }
-
-
-    if (!projectId && !thesisId) {
-      return next(
-        new ErrorHandler(
-          "Please provide either project or thesis",
-          400
-        )
-      );
-    }
-
-
-    if (projectId && thesisId) {
-      return next(
-        new ErrorHandler(
-          "Deadline cannot belong to both project and thesis",
-          400
-        )
-      );
-    }
-
-
-
-    const parsedDueDate = new Date(dueDate);
-
-    if (isNaN(parsedDueDate.getTime())) {
-      return next(
-        new ErrorHandler(
-          "Please provide a valid due date",
-          400
-        )
-      );
-    }
-
-
-    if (parsedDueDate <= new Date()) {
-      return next(
-        new ErrorHandler(
-          "Due date must be in the future",
-          400
-        )
-      );
-    }
-
-    let parsedFinalSubmitDate = null;
-
-    if (finalSubmitDate) {
-      parsedFinalSubmitDate = new Date(finalSubmitDate);
-
-      if (isNaN(parsedFinalSubmitDate.getTime())) {
-        return next(
-          new ErrorHandler(
-            "Please provide a valid final submission date",
-            400
-          )
-        );
-      }
-
-      if (parsedFinalSubmitDate < parsedDueDate) {
-        return next(
-          new ErrorHandler(
-            "Final submission date cannot be earlier than the deadline date",
-            400
-          )
-        );
-      }
-    }
-
-    if (projectId) {
-      if (!isValidObjectId(projectId)) {
-        return next(
-          new ErrorHandler(
-            "Invalid project ID",
-            400
-          )
-        );
-      }
-
-      const projectData =
-        await Project.findById(projectId)
-          .populate(
-            "student",
-            "name email department"
-          )
-          .populate(
-            "supervisor",
-            "name email"
-          );
-
-      if (!projectData) {
-        return next(
-          new ErrorHandler(
-            "Project not found",
-            404
-          )
-        );
-      }
-
-      if (!projectData.student) {
-        return next(
-          new ErrorHandler(
-            "No student assigned to this project",
-            400
-          )
-        );
-      }
-
-
-      const isSupervisor =
-        projectData.supervisor &&
-        projectData.supervisor._id.toString() ===
-          req.user._id.toString();
-
-      if (!isSupervisor) {
-        return next(
-          new ErrorHandler(
-            "You are not allowed to create a deadline for this project",
-            403
-          )
-        );
-      }
-
-
-
-      const existingDeadline =
-        await Deadline.findOne({
-          project: projectData._id,
-          name: name.trim(),
-        });
-
-      if (existingDeadline) {
-        return next(
-          new ErrorHandler(
-            "A deadline with this name already exists for this project",
-            409
-          )
-        );
-      }
-
-
-      const deadline =
-        await Deadline.create({
-          name: name.trim(),
-
-          type:
-            type || "Weekly Progress",
-
-          description:
-            description?.trim() || "",
-
-          dueDate: parsedDueDate,
-
-          finalSubmitDate:
-            parsedFinalSubmitDate,
-
-          isFinal:
-            Boolean(isFinal),
-
-          createdBy:
-            req.user._id,
-
-          student:
-            projectData.student._id,
-
-          project:
-            projectData._id,
-
-          thesis: null,
-        });
-
-      await populateDeadline(
-        deadline
-      );
-
-      return res.status(201).json({
-        success: true,
-
-        message:
-          "Project deadline created successfully",
-
-        data: {
-          deadline,
-        },
+    if (projectExists) {
+      projectId = id;
+    } else {
+      const thesisExists = await Thesis.exists({
+        _id: id,
       });
-    }
 
-    if (thesisId) {
-      if (!isValidObjectId(thesisId)) {
-        return next(
-          new ErrorHandler(
-            "Invalid thesis ID",
-            400
-          )
-        );
+      if (thesisExists) {
+        thesisId = id;
       }
-
-      const thesisData =
-        await Thesis.findById(thesisId)
-          .populate(
-            "student",
-            "name email department"
-          )
-          .populate(
-            "supervisor",
-            "name email"
-          );
-
-      if (!thesisData) {
-        return next(
-          new ErrorHandler(
-            "Thesis not found",
-            404
-          )
-        );
-      }
-
-      if (!thesisData.student) {
-        return next(
-          new ErrorHandler(
-            "No student assigned to this thesis",
-            400
-          )
-        );
-      }
-
-
-      const isSupervisor =
-        thesisData.supervisor &&
-        thesisData.supervisor._id.toString() ===
-          req.user._id.toString();
-
-      if (!isSupervisor) {
-        return next(
-          new ErrorHandler(
-            "You are not allowed to create a deadline for this thesis",
-            403
-          )
-        );
-      }
-
-
-
-      const existingDeadline =
-        await Deadline.findOne({
-          thesis: thesisData._id,
-          name: name.trim(),
-        });
-
-      if (existingDeadline) {
-        return next(
-          new ErrorHandler(
-            "A deadline with this name already exists for this thesis",
-            409
-          )
-        );
-      }
-
-
-
-      const deadline =
-        await Deadline.create({
-          name: name.trim(),
-
-          type:
-            type || "Weekly Progress",
-
-          description:
-            description?.trim() || "",
-
-          dueDate: parsedDueDate,
-
-          finalSubmitDate:
-            parsedFinalSubmitDate,
-
-          isFinal:
-            Boolean(isFinal),
-
-          createdBy:
-            req.user._id,
-
-          student:
-            thesisData.student._id,
-
-          project: null,
-
-          thesis:
-            thesisData._id,
-        });
-
-      await populateDeadline(
-        deadline
-      );
-
-      return res.status(201).json({
-        success: true,
-
-        message:
-          "Thesis deadline created successfully",
-
-        data: {
-          deadline,
-        },
-      });
     }
   }
-);
 
+  if (!projectId && !thesisId) {
+    throw new ErrorHandler(
+      "Please provide either project or thesis",
+      400
+    );
+  }
+
+  if (projectId && thesisId) {
+    throw new ErrorHandler(
+      "Deadline cannot belong to both project and thesis",
+      400
+    );
+  }
+
+  // -----------------------------
+  // Due date validation
+  // -----------------------------
+  const parsedDueDate = new Date(dueDate);
+
+  if (isNaN(parsedDueDate.getTime())) {
+    throw new ErrorHandler(
+      "Please provide a valid due date",
+      400
+    );
+  }
+
+  if (parsedDueDate <= new Date()) {
+    throw new ErrorHandler(
+      "Due date must be in the future",
+      400
+    );
+  }
+
+  // -----------------------------
+  // Final submission date
+  // OPTIONAL
+  // -----------------------------
+  let parsedFinalSubmitDate = null;
+
+  if (finalSubmitDate) {
+    parsedFinalSubmitDate = new Date(finalSubmitDate);
+
+    if (isNaN(parsedFinalSubmitDate.getTime())) {
+      throw new ErrorHandler(
+        "Please provide a valid final submission date",
+        400
+      );
+    }
+
+    if (parsedFinalSubmitDate < parsedDueDate) {
+      throw new ErrorHandler(
+        "Final submission date cannot be earlier than the deadline date",
+        400
+      );
+    }
+  }
+
+  // =====================================================
+  // PROJECT DEADLINE
+  // =====================================================
+  if (projectId) {
+    if (!isValidObjectId(projectId)) {
+      throw new ErrorHandler(
+        "Invalid project ID",
+        400
+      );
+    }
+
+    const projectData = await Project.findById(projectId)
+      .populate(
+        "student",
+        "name email department"
+      )
+      .populate(
+        "supervisor",
+        "name email"
+      );
+
+    if (!projectData) {
+      throw new ErrorHandler(
+        "Project not found",
+        404
+      );
+    }
+
+    if (!projectData.student) {
+      throw new ErrorHandler(
+        "No student assigned to this project",
+        400
+      );
+    }
+
+    // Teacher must be the supervisor
+    const isSupervisor =
+      projectData.supervisor &&
+      projectData.supervisor._id.toString() ===
+        req.user._id.toString();
+
+    if (!isSupervisor) {
+      throw new ErrorHandler(
+        "You are not allowed to create a deadline for this project",
+        403
+      );
+    }
+
+    // Check duplicate milestone
+    const existingDeadline =
+      await Deadline.findOne({
+        project: projectData._id,
+        name: name.trim(),
+      });
+
+    if (existingDeadline) {
+      throw new ErrorHandler(
+        "A deadline with this name already exists for this project",
+        409
+      );
+    }
+
+    // Create deadline
+    const deadline = await Deadline.create({
+      name: name.trim(),
+
+      type: type || "Weekly Progress",
+
+      description: description?.trim() || "",
+
+      dueDate: parsedDueDate,
+
+      finalSubmitDate: parsedFinalSubmitDate,
+
+      isFinal: Boolean(isFinal),
+
+      createdBy: req.user._id,
+
+      student: projectData.student._id,
+
+      project: projectData._id,
+
+      thesis: null,
+    });
+
+    await populateDeadline(deadline);
+
+    return res.status(201).json({
+      success: true,
+
+      message:
+        "Project deadline created successfully",
+
+      data: {
+        deadline,
+      },
+    });
+  }
+
+  // =====================================================
+  // THESIS DEADLINE
+  // =====================================================
+  if (thesisId) {
+    if (!isValidObjectId(thesisId)) {
+      throw new ErrorHandler(
+        "Invalid thesis ID",
+        400
+      );
+    }
+
+    const thesisData = await Thesis.findById(thesisId)
+      .populate(
+        "student",
+        "name email department"
+      )
+      .populate(
+        "supervisor",
+        "name email"
+      );
+
+    if (!thesisData) {
+      throw new ErrorHandler(
+        "Thesis not found",
+        404
+      );
+    }
+
+    if (!thesisData.student) {
+      throw new ErrorHandler(
+        "No student assigned to this thesis",
+        400
+      );
+    }
+
+    // Teacher must be the supervisor
+    const isSupervisor =
+      thesisData.supervisor &&
+      thesisData.supervisor._id.toString() ===
+        req.user._id.toString();
+
+    if (!isSupervisor) {
+      throw new ErrorHandler(
+        "You are not allowed to create a deadline for this thesis",
+        403
+      );
+    }
+
+    // Check duplicate milestone
+    const existingDeadline =
+      await Deadline.findOne({
+        thesis: thesisData._id,
+        name: name.trim(),
+      });
+
+    if (existingDeadline) {
+      throw new ErrorHandler(
+        "A deadline with this name already exists for this thesis",
+        409
+      );
+    }
+
+    // Create deadline
+    const deadline = await Deadline.create({
+      name: name.trim(),
+
+      type: type || "Weekly Progress",
+
+      description: description?.trim() || "",
+
+      dueDate: parsedDueDate,
+
+      finalSubmitDate: parsedFinalSubmitDate,
+
+      isFinal: Boolean(isFinal),
+
+      createdBy: req.user._id,
+
+      student: thesisData.student._id,
+
+      project: null,
+
+      thesis: thesisData._id,
+    });
+
+    await populateDeadline(deadline);
+
+    return res.status(201).json({
+      success: true,
+
+      message:
+        "Thesis deadline created successfully",
+
+      data: {
+        deadline,
+      },
+    });
+  }
+
+  // Safety fallback
+  throw new ErrorHandler(
+    "Unable to create deadline",
+    400
+  );
+});
 
 export const getTeacherDeadlines =
   asyncHandler(

@@ -252,6 +252,34 @@ const AssignSupervisor = () => {
   <div className="pointer-events-none absolute bottom-0 right-48 h-24 w-24 rounded-full bg-indigo-500/5" />
 </div>
 
+
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+          {dashboardCards.map((card, index) => {
+            const Icon = card.icon;
+
+            return (
+              <div key={index} className="card">
+                <div className="flex items-center">
+                  <div className={`p-3 ${card.bg} rounded-lg`}>
+                    <Icon className={`w-6 h-6 ${card.color}`} />
+                  </div>
+
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-slate-500">
+                      {card.title}
+                    </p>
+
+                    <p className="text-lg font-semibold text-slate-800">
+                      {card.value}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         {/* Search and Filters */}
         <div className="card bg-white shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
           <div className="flex flex-col lg:flex-row gap-4">
@@ -647,32 +675,6 @@ const AssignSupervisor = () => {
           )}
         </div>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-          {dashboardCards.map((card, index) => {
-            const Icon = card.icon;
-
-            return (
-              <div key={index} className="card">
-                <div className="flex items-center">
-                  <div className={`p-3 ${card.bg} rounded-lg`}>
-                    <Icon className={`w-6 h-6 ${card.color}`} />
-                  </div>
-
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-slate-500">
-                      {card.title}
-                    </p>
-
-                    <p className="text-lg font-semibold text-slate-800">
-                      {card.value}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
       </div>
     </>
   );
