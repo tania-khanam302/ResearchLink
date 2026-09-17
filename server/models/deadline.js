@@ -243,34 +243,54 @@ const deadlineSchema = new mongoose.Schema(
 );
 
 
-deadlineSchema.pre("validate", function (next) {
+// deadlineSchema.pre("validate", function (next) {
+//   const hasProject = !!this.project;
+//   const hasThesis = !!this.thesis;
+
+//   if (!hasProject && !hasThesis) {
+//     return next(
+//       new mongoose.Error.ValidationError(
+//         new Error(
+//           "Deadline must belong to either a project or a thesis"
+//         )
+//       )
+//     );
+//   }
+
+//   if (hasProject && hasThesis) {
+//     return next(
+//       new mongoose.Error.ValidationError(
+//         new Error(
+//           "Deadline cannot belong to both a project and a thesis"
+//         )
+//       )
+//     );
+//   }
+
+//   next();
+// });
+
+
+deadlineSchema.pre("validate", function () {
   const hasProject = !!this.project;
   const hasThesis = !!this.thesis;
 
   if (!hasProject && !hasThesis) {
-    return next(
-      new mongoose.Error.ValidationError(
-        new Error(
-          "Deadline must belong to either a project or a thesis"
-        )
+    throw new mongoose.Error.ValidationError(
+      new Error(
+        "Deadline must belong to either a project or a thesis"
       )
     );
   }
 
   if (hasProject && hasThesis) {
-    return next(
-      new mongoose.Error.ValidationError(
-        new Error(
-          "Deadline cannot belong to both a project and a thesis"
-        )
+    throw new mongoose.Error.ValidationError(
+      new Error(
+        "Deadline cannot belong to both a project and a thesis"
       )
     );
   }
-
-  next();
 });
-
-
 
 deadlineSchema.index({
   dueDate: 1,
