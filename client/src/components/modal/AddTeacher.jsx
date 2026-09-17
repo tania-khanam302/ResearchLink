@@ -151,6 +151,7 @@ const AddTeacher = () => {
                   <option value="Business Administration">
                     Business Administration
                   </option>
+                
                 </select>
               </div>
 
@@ -185,6 +186,15 @@ const AddTeacher = () => {
                     Computer Networking
                   </option>
                   <option value="Operating System">Operating System</option>
+                    <option value="Human Resource Management">
+                    Human Resource Management
+                  </option>
+                  <option value="Organizational Behavior">
+                Organizational Behavior
+                  </option>
+                  <option value="Talent Management & Retention">
+                    Talent Management & Retention
+                  </option>
                 </select>
               </div>
 
@@ -209,7 +219,7 @@ const AddTeacher = () => {
                 />
               </div>
          
-            </form>
+           
                  <div className="flex justify-end space-x-3 mt-2 pt-1">
                 <button
                   type="button"
@@ -226,6 +236,7 @@ const AddTeacher = () => {
                   Add Teacher
                 </button>
               </div>
+               </form>
           </div>
         </div>
       </div>

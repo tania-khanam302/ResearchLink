@@ -38,6 +38,9 @@ const ManageTeachers = () => {
   });
 
   const dispatch = useDispatch();
+useEffect(() => {
+  dispatch(getAllUsers());
+}, [dispatch]);
 
   // teachers get
   const teachers = useMemo(() => {

@@ -55,7 +55,9 @@ export const getAllUsers = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res = await axiosInstance.get(`/admin/users`);
-      console.log(res);
+      // console.log(res);
+      console.log("USERS API DATA:", res.data.data);
+
       return res.data.data;
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch users");
