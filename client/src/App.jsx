@@ -16,15 +16,20 @@ import UploadFiles from "./pages/student/UploadFiles";
 import SupervisorPage from "./pages/student/SupervisorPage";
 import FeedbackPage from "./pages/student/FeedbackPage";
 import NotificationsPage from "./pages/student/NotificationsPage";
-import StudentProfile from "./pages/student/StudentProfile";
+import StudentDeadlinePage from "./pages/student/StudentDeadlinePage";
 
 // Teacher Pages
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import PendingRequests from "./pages/teacher/PendingRequests";
 import AssignedStudents from "./pages/teacher/AssignedStudents";
 import TeacherFiles from "./pages/teacher/TeacherFiles";
-import TeacherProfile from "./pages/teacher/TeacherProfile";
+import TeacherResearchLink from "./pages/teacher/TeacherResearchLink";
+import TeacherDeadlinesPage from "./pages/teacher/TeacherDeadlinesPage";
+
+// Account profile
 import AccountProfile from "./pages/profile/AccountProfile";
+import TeacherProfile from "./pages/profile/TeacherProfile";
+import StudentProfile from "./pages/profile/StudentProfile";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -32,7 +37,7 @@ import ManageStudents from "./pages/admin/ManageStudents";
 import ManageTeachers from "./pages/admin/ManageTeachers";
 import ManageCoAdmin from "./pages/admin/ManageCoAdmin";
 import AssignSupervisor from "./pages/admin/AssignSupervisor";
-import DeadlinesPage from "./pages/admin/DeadlinesPage";
+// import DeadlinesPage from "./pages/admin/DeadlinesPage";
 import ThesisPage from "./pages/admin/ThesisPage";
 import ProjectsPage from "./pages/admin/ProjectsPage";
 
@@ -50,7 +55,7 @@ import CoAdminTeachers from "./pages/coadmin/CoAdminTeachers";
 import CoAdminAssignSupervisor from "./pages/coadmin/CoAdminAssignSupervisor";
 import CoAdminThesisPage from "./pages/coadmin/CoAdminThesisPage";
 import CoAdminProjectsPage from "./pages/coadmin/CoAdminProjectsPage";
-import CoAdminDeadlinesPage from "./pages/coadmin/CoAdminDeadlinesPage";
+// import CoAdminDeadlinesPage from "./pages/coadmin/CoAdminDeadlinesPage";
 
 
 // not found
@@ -183,7 +188,7 @@ const App = () => {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         {/* login  */}
-        <Route
+        {/* <Route
           path="/"
           element={
             authUser ? (
@@ -201,7 +206,30 @@ const App = () => {
               <Navigate to="/login" replace />
             )
           }
-        />
+        /> */}
+
+<Route
+  path="/"
+  element={
+    authUser ? (
+      <Navigate
+        to={
+          authUser.role === "Admin"
+            ? "/admin"
+            : authUser.role === "Co-Admin"
+              ? "/co-admin"
+              : authUser.role === "Teacher"
+                ? "/teacher"
+                : "/student"
+        }
+        replace
+      />
+    ) : (
+      <Navigate to="/login" replace />
+    )
+  }
+/>
+
 
         {/* Admin Routes */}
         <Route
@@ -218,7 +246,7 @@ const App = () => {
           {/* <Route path="/admin/co-admin" element={<ManageCoAdmin />} /> */}
           <Route path="co-admin" element={<ManageCoAdmin />} />
           <Route path="assign-supervisor" element={<AssignSupervisor />} />
-          <Route path="deadlines" element={<DeadlinesPage />} />
+          {/* <Route path="deadlines" element={<DeadlinesPage />} /> */}
           <Route path="thesis" element={<ThesisPage />} />
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="profile" element={<AccountProfile />} />
@@ -253,10 +281,10 @@ const App = () => {
   />
 
   {/* Co-Admin Deadlines */}
-  <Route
+  {/* <Route
     path="deadlines"
     element={<CoAdminDeadlinesPage />}
-  />
+  /> */}
   <Route path="profile" element={<AccountProfile />} />
         </Route>
 
@@ -275,6 +303,7 @@ const App = () => {
           <Route path="supervisor" element={<SupervisorPage />} />
           <Route path="feedback" element={<FeedbackPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
+           <Route  path="student-deadlines"  element={<StudentDeadlinePage />} />
           <Route path="profile" element={<StudentProfile />} />
 
         </Route>
@@ -288,11 +317,13 @@ const App = () => {
             </ProtectedRoutes>
           }
         >
-          <Route index element={<TeacherDashboard />} />
-          <Route path="pending-requests" element={<PendingRequests />} />
-          <Route path="assigned-students" element={<AssignedStudents />} />
-          <Route path="files" element={<TeacherFiles />} />
-         <Route path="profile" element={<TeacherProfile />} />
+  <Route index element={<TeacherDashboard />} />
+  <Route path="pending-requests" element={<PendingRequests />} />
+  <Route path="assigned-students" element={<AssignedStudents />} />
+  <Route path="files" element={<TeacherFiles />} />
+  <Route path="research-links" element={<TeacherResearchLink />} />
+  <Route path="profile" element={<TeacherProfile />} />
+   <Route  path="deadlines"  element={<TeacherDeadlinesPage />} />
           
         </Route>
 

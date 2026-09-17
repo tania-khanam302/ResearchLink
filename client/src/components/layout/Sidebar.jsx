@@ -6,44 +6,79 @@ const Sidebar = ({ open, setOpen, userRole }) => {
   const getNavigationItems = () => {
     switch (userRole) {
       // Student sidebar
-      case "Student":
-        return [
-          { name: "Home", path: "/student", icon: "home" },
-          {
-            name: "Submit Proposal",
-            path: "/student/submit-proposal",
-            icon: "document",
-          },
-          {
-            name: "Upload Files",
-            path: "/student/upload-files",
-            icon: "upload",
-          },
-          { name: "Supervisor", path: "/student/supervisor", icon: "user" },
-          { name: "Feedback", path: "/student/feedback", icon: "chat" },
-          {
-            name: "Notifications",
-            path: "/student/notifications",
-            icon: "bell",
-          },
-        ];
+  case "Student":
+  return [
+    {
+      name: "Home",
+      path: "/student",
+      icon: "home",
+    },
+    {
+      name: "Submit Proposal",
+      path: "/student/submit-proposal",
+      icon: "document",
+    },
+    {
+      name: "Upload Files",
+      path: "/student/upload-files",
+      icon: "upload",
+    },
+    {
+      name: "Supervisor",
+      path: "/student/supervisor",
+      icon: "user",
+    },
+    {
+      name: "Feedback",
+      path: "/student/feedback",
+      icon: "chat",
+    },
+    {
+      name: "Deadlines",
+      path: "/student/student-deadlines",
+      icon: "calendar",
+    },
+    {
+      name: "Notifications",
+      path: "/student/notifications",
+      icon: "bell",
+    },
+  ];
 
       // Teacher sidebar
-      case "Teacher":
-        return [
-          { name: "Home", path: "/teacher", icon: "home" },
-          {
-            name: "Pending Requests",
-            path: "/teacher/pending-requests",
-            icon: "clock",
-          },
-          {
-            name: "Assigned Students",
-            path: "/teacher/assigned-students",
-            icon: "users",
-          },
-          { name: "Files", path: "/teacher/files", icon: "folder" },
-        ];
+   case "Teacher":
+  return [
+    {
+      name: "Home",
+      path: "/teacher",
+      icon: "home",
+    },
+    {
+      name: "Pending Requests",
+      path: "/teacher/pending-requests",
+      icon: "clock",
+    },
+    {
+      name: "Assigned Students",
+      path: "/teacher/assigned-students",
+      icon: "users",
+    },
+    {
+      name: "Files",
+      path: "/teacher/files",
+      icon: "folder",
+    },
+    {
+      name: "Research Links",
+      path: "/teacher/research-links",
+      icon: "link",
+    },
+        {
+      name: "Deadlines",
+      path: "/teacher/deadlines",
+      icon: "calendar",
+    },
+  ];
 
       // Admin sidebar
       case "Admin":
@@ -83,11 +118,11 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             path: "/admin/projects",
             icon: "folder",
           },
-          {
-            name: "Deadline",
-            path: "/admin/deadlines",
-            icon: "calendar",
-          },
+          // {
+          //   name: "Deadline",
+          //   path: "/admin/deadlines",
+          //   icon: "calendar",
+          // },
         ];
 
       // Co-Admin sidebar
@@ -124,11 +159,11 @@ const Sidebar = ({ open, setOpen, userRole }) => {
             path: "/co-admin/projects",
             icon: "folder",
           },
-          {
-            name: "Deadline",
-            path: "/co-admin/deadlines",
-            icon: "calendar",
-          },
+          // {
+          //   name: "Deadline",
+          //   path: "/co-admin/deadlines",
+          //   icon: "calendar",
+          // },
         ];
 
       default:

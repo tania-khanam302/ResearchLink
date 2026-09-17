@@ -174,16 +174,13 @@ const StudentProfile = () => {
             </div>
           </div>
 
-          <div>
-            <label className="label">Semester</label>
+            <div>
+            <label className="label">Type</label>
             <div className="relative">
-              <CalendarDays className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <select name="semester" value={profileData.semester} onChange={handleProfileChange} className="input w-full pl-10 focus:ring-1 focus:ring-[#17a2b8]">
-                <option value="">Select semester</option>
-                {Array.from({ length: 8 }, (_, index) => {
-                  const semester = `${index + 1}${["st", "nd", "rd"][index] || "th"} Semester`;
-                  return <option key={semester} value={semester}>{semester}</option>;
-                })}
+              <BookOpen className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <select name="type" value={profileData.type} onChange={handleProfileChange} className="input w-full pl-10 focus:ring-1 focus:ring-[#17a2b8]">
+                <option value="Project">Project</option>
+                <option value="Thesis">Thesis</option>
               </select>
             </div>
           </div>
@@ -203,14 +200,21 @@ const StudentProfile = () => {
           </div>
 
           <div>
-            <label className="label">Type</label>
-            <div className="relative">
-              <BookOpen className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <select name="type" value={profileData.type} onChange={handleProfileChange} className="input w-full pl-10 focus:ring-1 focus:ring-[#17a2b8]">
-                <option value="Project">Project</option>
-                <option value="Thesis">Thesis</option>
-              </select>
-            </div>
+            <label className="label">Semester</label>
+      <div className="relative">
+  <CalendarDays className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+
+  <select
+    name="semester"
+    value={profileData.semester}
+    onChange={handleProfileChange}
+    className="input w-full pl-10 focus:ring-1 focus:ring-[#17a2b8]"
+  >
+    <option value="">Select semester</option>
+    <option value="1st">1st</option>
+    <option value="2nd">2nd</option>
+  </select>
+</div>
           </div>
 
           <div>
