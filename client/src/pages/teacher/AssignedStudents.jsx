@@ -180,10 +180,6 @@ const AssignedStudents = () => {
   const submitFeedback = () => {
     const workInfo = getWorkInfo(selectedStudent);
 
-    console.log("SELECTED STUDENT:", selectedStudent);
-    console.log("WORK INFO:", workInfo);
-    console.log("WORK ID:", workInfo.id);
-    console.log("WORK TYPE:", workInfo.typeKey);
 
     if (
       workInfo.id &&

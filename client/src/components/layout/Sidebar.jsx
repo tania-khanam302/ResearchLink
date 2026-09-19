@@ -64,7 +64,7 @@ const Sidebar = ({ open, setOpen, userRole }) => {
       icon: "users",
     },
     {
-      name: "Files",
+      name: "Student Files",
       path: "/teacher/files",
       icon: "folder",
     },

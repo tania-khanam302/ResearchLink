@@ -36,9 +36,6 @@ const PendingRequests = () => {
   };
 
   const handleAccept = async (request) => {
-    console.log("REQUEST:", request);
-    console.log("REQUEST ID:", request._id);
-    console.log("TEACHER ID:", authUser?._id);
     const id = request._id;
     setLoading(id, "accepting", true);
     try {
@@ -221,7 +218,6 @@ const PendingRequests = () => {
         {/* request */}
         <div className="space-y-4">
           {currentRequests.map((req) => {
-            console.log("TEACHER REQUEST DATA:", req);
             const id = req._id;
             // const project = req.latestProject;
             //             const project =

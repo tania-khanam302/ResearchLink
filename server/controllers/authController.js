@@ -146,17 +146,14 @@ export const uploadProfilePicture = asyncHandler(async (req, res, next) => {
 
 // ====================== forgotPassword =======================
 export const forgotPassword = asyncHandler(async (req, res, next) => {
-  // console.log("1 NEXT:", typeof next);
 
   const user = await User.findOne({ email: req.body.email });
 
-  // console.log("2 NEXT:", typeof next);
 
   if (!user) {
     return next(new ErrorHandler("User not found with this email", 404));
   }
 
-  // console.log("3 NEXT:", typeof next);
 
   const resetToken = user.getResetPasswordToken();
 
@@ -165,7 +162,6 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
   const resetPasswordUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
   const message = generateForgotPasswordEmailTemplate(resetPasswordUrl);
 
-  // console.log("4 NEXT:", typeof next);
 
   try {
     await sendEmail({
@@ -174,14 +170,12 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
       message,
     });
 
-    // console.log("5 EMAIL SENT");
 
     res.status(200).json({
       success: true,
       message: `Email sent to ${user.email} successfully`,
     });
   } catch (error) {
-    console.log("6 EMAIL ERROR:", error);
     return next(new ErrorHandler(error.message || "Cannot send E-mail", 500));
   }
 });

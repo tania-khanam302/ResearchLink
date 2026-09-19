@@ -344,12 +344,13 @@ const AdminDashboard = () => {
         {/* Dashboard Header */}
         <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
           <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
-          <div className="relative px-6 py-6 sm:px-8 sm:py-7">
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
+
+          <div className="relative p-4 sm:px-8 sm:py-7">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
                   <svg
-                    className="h-6 w-6"
+                    className="h-5 w-5 sm:h-6 sm:w-6"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -363,36 +364,36 @@ const AdminDashboard = () => {
                   </svg>
                 </div>
 
-                <div>
-                  <div className="mb-1 flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-[0.15em] text-cyan-600">
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.12em] sm:tracking-[0.15em] text-cyan-600">
                       Administration
                     </span>
-                    <span className="h-1 w-1 rounded-full bg-slate-300" />
-                    <span className="text-xs text-slate-400">
+                    <span className="h-1 w-1 rounded-full bg-slate-300 hidden xs:block" />
+                    <span className="text-[10px] sm:text-xs text-slate-400">
                       Control Panel
                     </span>
                   </div>
-                  <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+
+                  <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-3xl">
                     Admin Dashboard
                   </h1>
-                  <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
+                  <p className="mt-1 max-w-2xl text-xs sm:text-sm leading-relaxed sm:leading-6 text-slate-500">
                     Manage your project management system, monitor activities,
                     and oversee users and academic projects from one place.
                   </p>
                 </div>
               </div>
 
-              {/* Right Status Card */}
-              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100">
-                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 sm:px-4 sm:py-3 w-full lg:w-auto">
+                <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-100">
+                  <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                  <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-slate-400 leading-none mb-0.5">
                     System Status
                   </p>
-                  <p className="text-sm font-semibold text-slate-700">
+                  <p className="text-xs sm:text-sm font-semibold text-slate-700 leading-none">
                     All Systems Operational
                   </p>
                 </div>
@@ -400,6 +401,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
+          {/* Background Gradients */}
           <div className="pointer-events-none absolute -right-20 -bottom-20 h-48 w-48 rounded-full bg-cyan-100/50 blur-3xl" />
           <div className="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-cyan-500/5" />
           <div className="pointer-events-none absolute right-20 -bottom-20 h-32 w-32 rounded-full bg-indigo-500/5" />
@@ -419,19 +421,18 @@ const AdminDashboard = () => {
                 )}`}
               />
 
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-slate-500">
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm font-medium text-slate-500 truncate">
                     {item.title}
                   </p>
-
-                  <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                  <p className="mt-1 sm:mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 truncate">
                     {item.value}
                   </p>
                 </div>
 
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-xl ${item.iconBg}`}
+                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${item.iconBg}`}
                 >
                   <item.Icon className={`h-6 w-6 ${item.iconColor}`} />
                 </div>
@@ -439,7 +440,8 @@ const AdminDashboard = () => {
 
               <div className="mt-4 flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                <span className="text-xs font-medium text-slate-400">
+
+                <span className="text-[11px] sm:text-xs font-medium text-slate-400">
                   Current overview
                 </span>
               </div>
@@ -592,53 +594,57 @@ const AdminDashboard = () => {
         {/* charts and activity */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Thesis / Project Distribution */}
-          <div className="lg:col-span-2 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-slate-100 px-6 py-5">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50">
-                      <FileTextIcon className="h-5 w-5 text-indigo-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-bold text-slate-900">
-                        Thesis / Project Distribution
-                      </h3>
-                      <p className="mt-0.5 text-xs text-slate-400">
-                        Academic work assigned to each supervisor
-                      </p>
-                    </div>
+          <div className="lg:col-span-2 min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            {/* Header */}
+            <div className="border-b border-slate-100 px-4 py-4 sm:px-6 sm:py-5">
+              <div className="flex flex-col gap-4">
+                {/* Title */}
+                <div className="flex min-w-0 items-start gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-50 sm:h-10 sm:w-10">
+                    <FileTextIcon className="h-4.5 w-4.5 text-indigo-600 sm:h-5 sm:w-5" />
+                  </div>
+
+                  <div className="min-w-0">
+                    <h3 className="break-words text-sm font-bold leading-5 text-slate-900 sm:text-base">
+                      Thesis / Project Distribution
+                    </h3>
+
+                    <p className="mt-1 text-[11px] leading-4 text-slate-400 sm:text-xs">
+                      Academic work assigned to each supervisor
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs font-medium">
+                {/* Legend */}
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-medium sm:text-xs">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#0A523D]" />
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-green-600" />
                     <span className="text-slate-500">Project</span>
                   </div>
+
                   <div className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#FF902A]" />
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-yellow-600" />
                     <span className="text-slate-500">Thesis</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* // No supervisor data available */}
-            <div className="p-5">
+            {/* Chart */}
+            <div className="w-full min-w-0 p-3 sm:p-5">
               {supervisorBucket.length === 0 ? (
-                <div className="flex h-[300px] items-center justify-center rounded-xl bg-slate-50 text-sm text-slate-400">
+                <div className="flex h-[260px] items-center justify-center rounded-xl bg-slate-50 px-4 text-center text-sm text-slate-400 sm:h-[300px]">
                   No supervisor data available
                 </div>
               ) : (
-                <div className="h-[300px] w-full">
-                  <ResponsiveContainer width="100%" height={300}>
+                <div className="w-full min-w-0 overflow-hidden">
+                  <ResponsiveContainer width="100%" height={260} minWidth={0}>
                     <BarChart
                       data={supervisorBucket}
                       margin={{
-                        top: 15,
-                        right: 10,
-                        bottom: 10,
+                        top: 10,
+                        right: 5,
+                        bottom: 35,
                         left: 0,
                       }}
                       barCategoryGap="25%"
@@ -651,24 +657,60 @@ const AdminDashboard = () => {
 
                       <XAxis
                         dataKey="name"
-                        tick={{
-                          fontSize: 12,
-                          fill: "#64748B",
-                        }}
                         axisLine={false}
                         tickLine={false}
                         interval={0}
-                        height={45}
+                        height={55}
+                        tick={({ x, y, payload }) => {
+                          const value = payload.value;
+
+                          if (value === "Not Assigned") {
+                            return (
+                              <text
+                                x={x}
+                                y={y + 10}
+                                textAnchor="middle"
+                                fill="#64748B"
+                                fontSize={10}
+                              >
+                                <tspan x={x} dy="0">
+                                  Not
+                                </tspan>
+                                <tspan x={x} dy="13">
+                                  Assigned
+                                </tspan>
+                              </text>
+                            );
+                          }
+
+                          const shortName =
+                            value?.length > 12
+                              ? `${value.substring(0, 12)}...`
+                              : value;
+
+                          return (
+                            <text
+                              x={x}
+                              y={y + 10}
+                              textAnchor="middle"
+                              fill="#64748B"
+                              fontSize={10}
+                            >
+                              {shortName}
+                            </text>
+                          );
+                        }}
                       />
 
                       <YAxis
                         allowDecimals={false}
-                        tick={{
-                          fontSize: 12,
-                          fill: "#64748B",
-                        }}
+                        width={28}
                         axisLine={false}
                         tickLine={false}
+                        tick={{
+                          fontSize: 10,
+                          fill: "#64748B",
+                        }}
                       />
 
                       <Tooltip
@@ -676,9 +718,11 @@ const AdminDashboard = () => {
                           fill: "rgba(99, 102, 241, 0.04)",
                         }}
                         contentStyle={{
-                          borderRadius: 12,
+                          borderRadius: 10,
                           border: "1px solid #E2E8F0",
                           boxShadow: "0 8px 20px rgba(15,23,42,0.08)",
+                          fontSize: 12,
+                          maxWidth: "220px",
                         }}
                         labelFormatter={(label) => `Supervisor: ${label}`}
                         formatter={(value, name) => {
@@ -698,16 +742,18 @@ const AdminDashboard = () => {
                         dataKey="projectCount"
                         name="Project"
                         stackId="a"
-                        fill="#0A523D"
+                        fill="#16a34a"
                         radius={[0, 0, 0, 0]}
+                        maxBarSize={42}
                       />
 
                       <Bar
                         dataKey="thesisCount"
                         name="Thesis"
                         stackId="a"
-                        fill="#9E470D"
-                        radius={[8, 8, 0, 0]}
+                        fill="#ca8a04"
+                        radius={[7, 7, 0, 0]}
+                        maxBarSize={42}
                       />
                     </BarChart>
                   </ResponsiveContainer>
@@ -936,14 +982,14 @@ const AdminDashboard = () => {
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-1.5 sm:gap-3">
               {actionButtons.map((btn, index) => (
                 <button
                   key={index}
-                  className={`${btn.btnClass} flex h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition`}
+                  className={`${btn.btnClass} flex h-7 sm:h-10 items-center justify-center gap-1 sm:gap-2 rounded-md sm:rounded-lg px-2 sm:px-4 text-[10px] sm:text-sm font-medium transition`}
                   onClick={btn.onClick}
                 >
-                  <btn.Icon className="h-4 w-4" />
+                  <btn.Icon className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>{btn.label}</span>
                 </button>
               ))}
@@ -952,72 +998,68 @@ const AdminDashboard = () => {
         </div>
 
         {isReportModalOpen && (
-     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
-  <div className="bg-white rounded-sm w-full max-w-lg mx-4 overflow-hidden max-h-[90vh] flex flex-col">
-    
-    {/* Header */}
-    <div className="card-header rounded-t-lg py-4 p-3 mb-0 bg-blue-50 sticky top-0 z-10 shrink-0">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-slate-900">
-          All Files
-        </h3>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
+            <div className="bg-white rounded-sm w-full max-w-lg mx-4 overflow-hidden max-h-[90vh] flex flex-col">
+              {/* Header */}
+              <div className="card-header rounded-t-lg py-4 p-3 mb-0 bg-blue-50 sticky top-0 z-10 shrink-0">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    All Files
+                  </h3>
 
-        <button
-          onClick={() => setIsReportModalOpen(false)}
-          className="text-slate-400 hover:text-slate-600"
-        >
-          <X className="w-5 h-5" />
-        </button>
-      </div>
-
-      <div className="mt-4">
-        <input
-          type="text"
-          className="input w-full"
-          placeholder="Search by file name, thesis and project title, or student name"
-          value={reportSearch}
-          onChange={(e) => setReportSearch(e.target.value)}
-        />
-      </div>
-    </div>
-
-    {/* Scrollable Files */}
-    <div className="flex-1 overflow-y-auto p-3">
-      {filteredFiles.length === 0 ? (
-        <div className="text-slate-500">
-          No files found.
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {filteredFiles.map((f, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-between p-3 bg-slate-50 rounded"
-            >
-              <div className="min-w-0">
-                <div className="font-medium text-slate-800 truncate">
-                  {f.originalName}
+                  <button
+                    onClick={() => setIsReportModalOpen(false)}
+                    className="text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
 
-                <div className="text-sm text-slate-500 truncate">
-                  {f.type} - {f.title} - {f.studentName}
+                <div className="mt-4">
+                  <input
+                    type="text"
+                    className="input w-full"
+                    placeholder="Search by file name, thesis and project title, or student name"
+                    value={reportSearch}
+                    onChange={(e) => setReportSearch(e.target.value)}
+                  />
                 </div>
               </div>
 
-              <button
-                className="btn-outline btn-small ml-3 shrink-0"
-                onClick={() => handleDownload(f)}
-              >
-                Download
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  </div>
-</div>
+              {/* Scrollable Files */}
+              <div className="flex-1 overflow-y-auto p-3">
+                {filteredFiles.length === 0 ? (
+                  <div className="text-slate-500">No files found.</div>
+                ) : (
+                  <div className="space-y-2">
+                    {filteredFiles.map((f, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between p-3 bg-slate-50 rounded"
+                      >
+                        <div className="min-w-0">
+                          <div className="font-medium text-slate-800 truncate">
+                            {f.originalName}
+                          </div>
 
+                          <div className="text-sm text-slate-500 truncate">
+                            {f.type} - {f.title} - {f.studentName}
+                          </div>
+                        </div>
+
+                        <button
+                          className="btn-outline btn-small ml-3 shrink-0"
+                          onClick={() => handleDownload(f)}
+                        >
+                          Download
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         )}
         {isCreateStudentModalOpen && <AddStudent />}
         {isCreateTeacherModalOpen && <AddTeacher />}

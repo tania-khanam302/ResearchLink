@@ -1,8 +1,8 @@
+
 import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-import { error } from "console";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,38 +13,121 @@ const ensureDirExists = (dir) => {
   }
 };
 
+
+const getBangladeshDate = () => {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Dhaka",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+
+  const year = parts.find(
+    (p) => p.type === "year"
+  )?.value;
+
+  const month = parts.find(
+    (p) => p.type === "month"
+  )?.value;
+
+  const day = parts.find(
+    (p) => p.type === "day"
+  )?.value;
+
+  return `${year}-${month}-${day}`;
+};
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let uploadPath;
 
-    if (req.route.path.includes("/upload/:projectId")) {
+    if (
+      req.route.path.includes(
+        "/upload/:projectId"
+      )
+    ) {
       uploadPath = path.join(
         __dirname,
         "../uploads/projects",
-        req.params.projectId,
+        req.params.projectId
       );
-    } else if (req.route.path.includes("/upload/:thesisId")) {
+    }
+
+    else if (
+      req.route.path.includes(
+        "/upload/:thesisId"
+      )
+    ) {
       uploadPath = path.join(
         __dirname,
         "../uploads/theses",
-        req.params.thesisId,
+        req.params.thesisId
       );
-    } else if (req.route.path.includes("/upload/userId")) {
-      uploadPath = path.join(__dirname, "../uploads/users", req.params.userId);
-    } else {
-      uploadPath = path.join(__dirname, "../uploads/temp");
+    }
+
+    else if (
+      req.route.path.includes(
+        "/upload/userId"
+      )
+    ) {
+      uploadPath = path.join(
+        __dirname,
+        "../uploads/users",
+        req.params.userId
+      );
+    }
+
+   
+    else if (
+      req.route.path.includes(
+        "/submit/:id"
+      )
+    ) {
+      const deadlineId =
+        req.params.id;
+
+      const uploadDate =
+        getBangladeshDate();
+
+      uploadPath = path.join(
+        __dirname,
+        "../uploads/deadlines",
+        deadlineId,
+        uploadDate,
+        "files"
+      );
+    }
+
+    else {
+      uploadPath = path.join(
+        __dirname,
+        "../uploads/temp"
+      );
     }
 
     ensureDirExists(uploadPath);
+
     cb(null, uploadPath);
   },
 
+
   filename: (req, file, cb) => {
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    const ext = path.extname(file.originalname);
-    cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+    const uniqueSuffix =
+      `${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}`;
+
+    const ext = path.extname(
+      file.originalname
+    );
+
+    cb(
+      null,
+      `${file.fieldname}-${uniqueSuffix}${ext}`
+    );
   },
 });
+
 
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [
@@ -56,7 +139,6 @@ const fileFilter = (req, file, cb) => {
     "application/zip",
     "application/x-zip-compressed",
     "application/x-rar-compressed",
-    "application/x-rar",
     "application/vnd.rar",
     "application/octet-stream",
     "image/jpeg",
@@ -88,55 +170,89 @@ const fileFilter = (req, file, cb) => {
     ".json",
   ];
 
-  const fileExt = path.extname(file.originalname).toLowerCase();
+  const fileExt =
+    path
+      .extname(file.originalname)
+      .toLowerCase();
+
   if (
-    allowedTypes.includes(file.mimetype) ||
-    allowedExtensions.includes(fileExt)
+    allowedTypes.includes(
+      file.mimetype
+    ) ||
+    allowedExtensions.includes(
+      fileExt
+    )
   ) {
     cb(null, true);
   } else {
     cb(
       new Error(
-        "Invalid file type. Only PDF, DOC, DOCX, PPTX, ZIP, RAR, images, code files are allowed.",
+        "Invalid file type. Only PDF, DOC, DOCX, PPTX, ZIP, RAR, images, and code files are allowed."
       ),
-      false,
+      false
     );
   }
 };
 
+
 const upload = multer({
   storage,
   fileFilter,
+
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB
+    fileSize: 10 * 1024 * 1024,
     files: 10,
   },
 });
 
-const handleUploadError = (err, req, res, next) => {
-  if (err instanceof multer.MulterError) {
-    if (err.code === "LIMIT_FILE_SIZE") {
+const handleUploadError = (
+  err,
+  req,
+  res,
+  next
+) => {
+  if (
+    err instanceof multer.MulterError
+  ) {
+    if (
+      err.code ===
+      "LIMIT_FILE_SIZE"
+    ) {
       return res.status(400).json({
         success: false,
-        error: "File too large. Maximum size is 10MB.",
+        error:
+          "File too large. Maximum size is 10MB.",
       });
     }
 
-    if (err.code === "LIMIT_FILE_COUNT") {
+    if (
+      err.code ===
+      "LIMIT_FILE_COUNT"
+    ) {
       return res.status(400).json({
         success: false,
-        error: "Too many files uploaded. Maximum 10 files allowed.",
-      });
-    }
-
-    if (err.message && err.message.includes("Invalid file type")) {
-      return res.status(400).json({
-        success: false,
-        error: err.message,
+        error:
+          "Too many files uploaded. Maximum 10 files allowed.",
       });
     }
   }
+
+  if (
+    err?.message &&
+    err.message.includes(
+      "Invalid file type"
+    )
+  ) {
+    return res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
+
   next(err);
 };
 
-export { upload, handleUploadError };
+export {
+  upload,
+  handleUploadError,
+};

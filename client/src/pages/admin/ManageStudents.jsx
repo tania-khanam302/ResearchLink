@@ -20,9 +20,6 @@ import { toggleStudentModal } from "../../store/slices/popupSlice";
 
 const ManageStudents = () => {
   const { users, projects, theses } = useSelector((state) => state.admin);
-  console.log("USERS:", users);
-  console.log("THESES:", theses);
-  console.log("PROJECTS:", projects);
   const { isCreateStudentModalOpen } = useSelector((state) => state.popup);
   const [showModal, setShowModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);

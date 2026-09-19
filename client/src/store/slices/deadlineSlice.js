@@ -43,11 +43,12 @@
 
 // export default deadlineSlice.reducer;
 
+
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../lib/axios";
 import { toast } from "react-toastify";
 
-//  * CREATE DEADLINE
  
 export const createDeadline = createAsyncThunk(
   "deadline/createDeadline",
@@ -81,13 +82,7 @@ export const createDeadline = createAsyncThunk(
   }
 );
 
-/**
- * =========================================================
- * GET TEACHER DEADLINES
- * =========================================================
- *
- * Teacher gets only the deadlines created by them.
- */
+
 export const getTeacherDeadlines = createAsyncThunk(
   "deadline/getTeacherDeadlines",
 
@@ -126,13 +121,7 @@ export const getTeacherResearch = createAsyncThunk(
   },
 );
 
-/**
- * =========================================================
- * GET STUDENT DEADLINES
- * =========================================================
- *
- * Student gets only their assigned deadlines.
- */
+
 export const getStudentDeadlines = createAsyncThunk(
   "deadline/getStudentDeadlines",
 
@@ -157,20 +146,7 @@ export const getStudentDeadlines = createAsyncThunk(
   }
 );
 
-/**
- * =========================================================
- * SUBMIT DEADLINE
- * =========================================================
- *
- * Student submits:
- * - files
- * - studentComment
- *
- * formData should contain:
- *
- * files
- * studentComment
- */
+// File delete
 export const submitDeadline = createAsyncThunk(
   "deadline/submitDeadline",
 
@@ -189,7 +165,7 @@ export const submitDeadline = createAsyncThunk(
 
       toast.success(
         res.data.message ||
-          "Work submitted successfully"
+          "Your work has been submitted successfully."
       );
 
       return (
@@ -209,13 +185,90 @@ export const submitDeadline = createAsyncThunk(
   }
 );
 
-/**
- * =========================================================
- * REVIEW DEADLINE
- * =========================================================
- *
- * Teacher reviews student's submission.
- */
+// Link delete
+export const deleteDeadlineSubmissionLink =
+  createAsyncThunk(
+    "deadline/deleteDeadlineSubmissionLink",
+
+    async (
+      {
+        deadlineId,
+        submissionId,
+        linkId,
+      },
+      thunkAPI
+    ) => {
+      try {
+        const res =
+          await axiosInstance.delete(
+            `/deadline/submit/${deadlineId}/submission/${submissionId}/link/${linkId}`
+          );
+
+        toast.success(
+          res.data.message ||
+            "Link deleted successfully"
+        );
+
+        return (
+          res.data.data?.deadline ||
+          res.data.data ||
+          res.data
+        );
+      } catch (error) {
+        const message =
+          error.response?.data?.message ||
+          "Failed to delete link";
+
+        toast.error(message);
+
+        return thunkAPI.rejectWithValue(
+          message
+        );
+      }
+    }
+  );
+export const deleteDeadlineSubmissionFile =
+  createAsyncThunk(
+    "deadline/deleteDeadlineSubmissionFile",
+
+    async (
+      {
+        deadlineId,
+        submissionId,
+        fileId,
+      },
+      thunkAPI
+    ) => {
+      try {
+        const res =
+          await axiosInstance.delete(
+            `/deadline/submit/${deadlineId}/submission/${submissionId}/file/${fileId}`
+          );
+
+        toast.success(
+          res.data.message ||
+            "File deleted successfully"
+        );
+
+        return (
+          res.data.data?.deadline ||
+          res.data.data ||
+          res.data
+        );
+      } catch (error) {
+        const message =
+          error.response?.data?.message ||
+          "Failed to delete file";
+
+        toast.error(message);
+
+        return thunkAPI.rejectWithValue(
+          message
+        );
+      }
+    }
+  );
+
 export const reviewDeadline = createAsyncThunk(
   "deadline/reviewDeadline",
 
@@ -250,69 +303,87 @@ export const reviewDeadline = createAsyncThunk(
   }
 );
 
-/**
- * =========================================================
- * SLICE
- * =========================================================
- */
+export const replyToDeadlineFeedback = createAsyncThunk(
+  "deadline/replyToDeadlineFeedback",
+
+  async (
+    {
+      deadlineId,
+      submissionId,
+      studentReply,
+    },
+    thunkAPI
+  ) => {
+    try {
+      const res = await axiosInstance.patch(
+        `/deadline/reply/${deadlineId}/submission/${submissionId}`,
+        {
+          studentReply,
+        }
+      );
+
+      toast.success(
+        res.data.message || "Reply sent successfully"
+      );
+
+      return (
+        res.data.data?.deadline ||
+        res.data.data ||
+        res.data
+      );
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        "Failed to send reply";
+
+      toast.error(message);
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+
 const deadlineSlice = createSlice({
   name: "deadline",
 
   initialState: {
-    // Teacher deadlines
     deadlines: [],
 
-    // Student deadlines
     studentDeadlines: [],
 
-    // Teacher-owned projects and theses
     research: { projects: [], theses: [] },
 
-    // Selected deadline
     selected: null,
 
-    // General loading
     loading: false,
 
-    // Submission loading
     submitting: false,
 
-    // Review loading
     reviewing: false,
 
-    // Error
     error: null,
   },
 
   reducers: {
-    /**
-     * Clear error
-     */
+  
     clearDeadlineError: (state) => {
       state.error = null;
     },
 
-    /**
-     * Clear selected deadline
-     */
+ 
     clearSelectedDeadline: (state) => {
       state.selected = null;
     },
 
-    /**
-     * Select a deadline
-     */
+   
     setSelectedDeadline: (state, action) => {
       state.selected = action.payload;
     },
   },
 
   extraReducers: (builder) => {
-    /**
-     * =======================================================
-     * CREATE DEADLINE
-     * =======================================================
-     */
+ 
     builder
       .addCase(
         createDeadline.pending,
@@ -356,11 +427,7 @@ const deadlineSlice = createSlice({
         }
       );
 
-    /**
-     * =======================================================
-     * GET TEACHER DEADLINES
-     * =======================================================
-     */
+
     builder
       .addCase(getTeacherResearch.fulfilled, (state, action) => {
         state.research = action.payload || { projects: [], theses: [] };
@@ -396,11 +463,7 @@ const deadlineSlice = createSlice({
         }
       );
 
-    /**
-     * =======================================================
-     * GET STUDENT DEADLINES
-     * =======================================================
-     */
+
     builder
       .addCase(
         getStudentDeadlines.pending,
@@ -428,11 +491,6 @@ const deadlineSlice = createSlice({
         }
       );
 
-    /**
-     * =======================================================
-     * SUBMIT DEADLINE
-     * =======================================================
-     */
     builder
       .addCase(
         submitDeadline.pending,
@@ -454,9 +512,7 @@ const deadlineSlice = createSlice({
             return;
           }
 
-          /**
-           * Update student deadline
-           */
+       
           state.studentDeadlines =
             state.studentDeadlines.map(
               (item) =>
@@ -464,11 +520,6 @@ const deadlineSlice = createSlice({
                   ? updated
                   : item
             );
-
-          /**
-           * Update teacher deadline
-           * if it exists in state.
-           */
           state.deadlines =
             state.deadlines.map(
               (item) =>
@@ -477,9 +528,7 @@ const deadlineSlice = createSlice({
                   : item
             );
 
-          /**
-           * Set selected
-           */
+     
           state.selected = updated;
         }
       )
@@ -492,11 +541,7 @@ const deadlineSlice = createSlice({
         }
       );
 
-    /**
-     * =======================================================
-     * REVIEW DEADLINE
-     * =======================================================
-     */
+  
     builder
       .addCase(
         reviewDeadline.pending,
@@ -518,9 +563,7 @@ const deadlineSlice = createSlice({
             return;
           }
 
-          /**
-           * Update teacher deadline
-           */
+          
           state.deadlines =
             state.deadlines.map(
               (item) =>
@@ -529,10 +572,7 @@ const deadlineSlice = createSlice({
                   : item
             );
 
-          /**
-           * Update student deadline
-           * if it exists in state.
-           */
+        
           state.studentDeadlines =
             state.studentDeadlines.map(
               (item) =>
@@ -541,9 +581,7 @@ const deadlineSlice = createSlice({
                   : item
             );
 
-          /**
-           * Update selected
-           */
+        
           state.selected = updated;
         }
       )
@@ -555,23 +593,134 @@ const deadlineSlice = createSlice({
           state.error = action.payload;
         }
       );
+builder
+  .addCase(
+    replyToDeadlineFeedback.pending,
+    (state) => {
+      state.error = null;
+    }
+  )
+
+  .addCase(
+    replyToDeadlineFeedback.fulfilled,
+    (state, action) => {
+      const updated = action.payload;
+
+      if (!updated?._id) {
+        return;
+      }
+
+      state.studentDeadlines =
+        state.studentDeadlines.map(
+          (item) =>
+            item._id === updated._id
+              ? updated
+              : item
+        );
+
+      state.deadlines =
+        state.deadlines.map(
+          (item) =>
+            item._id === updated._id
+              ? updated
+              : item
+        );
+
+      state.selected = updated;
+    }
+  )
+
+  .addCase(
+    replyToDeadlineFeedback.rejected,
+    (state, action) => {
+      state.error = action.payload;
+    }
+  );
+
+builder
+  .addCase(
+    deleteDeadlineSubmissionFile.fulfilled,
+    (state, action) => {
+      const updated =
+        action.payload;
+
+      if (!updated?._id) {
+        return;
+      }
+
+      state.studentDeadlines =
+        state.studentDeadlines.map(
+          (item) =>
+            item._id === updated._id
+              ? updated
+              : item
+        );
+
+      state.deadlines =
+        state.deadlines.map(
+          (item) =>
+            item._id === updated._id
+              ? updated
+              : item
+        );
+
+      state.selected = updated;
+    }
+  )
+
+  .addCase(
+    deleteDeadlineSubmissionFile.rejected,
+    (state, action) => {
+      state.error = action.payload;
+    }
+  )
+
+  .addCase(
+    deleteDeadlineSubmissionLink.fulfilled,
+    (state, action) => {
+      const updated =
+        action.payload;
+
+      if (!updated?._id) {
+        return;
+      }
+
+      state.studentDeadlines =
+        state.studentDeadlines.map(
+          (item) =>
+            item._id === updated._id
+              ? updated
+              : item
+        );
+
+      state.deadlines =
+        state.deadlines.map(
+          (item) =>
+            item._id === updated._id
+              ? updated
+              : item
+        );
+
+      state.selected = updated;
+    }
+  )
+
+  .addCase(
+    deleteDeadlineSubmissionLink.rejected,
+    (state, action) => {
+      state.error = action.payload;
+    }
+  );
+
   },
 });
 
-/**
- * =========================================================
- * ACTIONS
- * =========================================================
- */
+
 export const {
   clearDeadlineError,
   clearSelectedDeadline,
   setSelectedDeadline,
 } = deadlineSlice.actions;
 
-/**
- * =========================================================
- * REDUCER
- * =========================================================
- */
+
 export default deadlineSlice.reducer;

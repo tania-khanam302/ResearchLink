@@ -1,61 +1,4 @@
-// import mongoose from "mongoose";
-
-// // deadline schema
-// const deadlineSchema = new mongoose.Schema(
-//   {
-//     name: {
-//       type: String,
-//       required: [true, "Deadline name or title is required"],
-//       trim: true,
-//       maxlength: [
-//         100,
-//         "Deadline name or title cannot be more than 100 characters",
-//       ],
-//     },
-
-//     dueDate: {
-//       type: Date,
-//       required: [true, "Due date is required"],
-//     },
-
-//     createdBy: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "User",
-//       required: [true, "Created By is required"],
-//     },
-
-//     project: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "Project",
-//       default: null,
-//     },
-
-//     thesis: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: "Thesis",
-//       default: null,
-//     },
-//   },
-//   {
-//     timestamps: true,
-//   }
-// );
-
-// deadlineSchema.index({ dueDate: 1 });
-// deadlineSchema.index({ project: 1 });
-// deadlineSchema.index({ thesis: 1 });
-// deadlineSchema.index({ createdBy: 1 });
-
-// export const Deadline =
-//   mongoose.models.Deadline ||
-//   mongoose.model("Deadline", deadlineSchema);
-
-
-
-
-
 import mongoose from "mongoose";
-
 
 const submissionFileSchema = new mongoose.Schema(
   {
@@ -86,12 +29,96 @@ const submissionFileSchema = new mongoose.Schema(
   },
   {
     _id: true,
-  }
+  },
+);
+
+const submissionLinkSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: [true, "Link title is required"],
+      trim: true,
+      maxlength: 200,
+    },
+
+    url: {
+      type: String,
+      required: [true, "Link URL is required"],
+      trim: true,
+    },
+  },
+  {
+    _id: true,
+  },
+);
+
+const submissionSchema = new mongoose.Schema(
+  {
+    submissionNumber: {
+      type: Number,
+      required: true,
+    },
+
+    files: {
+      type: [submissionFileSchema],
+      default: [],
+    },
+
+    links: {
+      type: [submissionLinkSchema],
+      default: [],
+    },
+
+    submittedAt: {
+      type: Date,
+      default: Date.now,
+    },
+
+    studentComment: {
+      type: String,
+      trim: true,
+      maxlength: [2000, "Student comment cannot be more than 2000 characters"],
+      default: "",
+    },
+
+    teacherFeedback: {
+      type: String,
+      trim: true,
+      maxlength: [2000, "Teacher feedback cannot be more than 2000 characters"],
+      default: "",
+    },
+studentReply: {
+  type: String,
+  trim: true,
+  maxlength: [2000, "Student reply cannot be more than 2000 characters"],
+  default: "",
+},
+
+studentReplyAt: {
+  type: Date,
+  default: null,
+},
+    status: {
+      type: String,
+      enum: {
+        values: ["Submitted", "Reviewed"],
+        message: "Invalid submission status",
+      },
+      default: "Submitted",
+    },
+
+    reviewedAt: {
+      type: Date,
+      default: null,
+    },
+  },
+  {
+    _id: true,
+  },
 );
 
 const deadlineSchema = new mongoose.Schema(
   {
- 
     name: {
       type: String,
       required: [true, "Deadline name or title is required"],
@@ -124,10 +151,7 @@ const deadlineSchema = new mongoose.Schema(
     description: {
       type: String,
       trim: true,
-      maxlength: [
-        1000,
-        "Description cannot be more than 1000 characters",
-      ],
+      maxlength: [1000, "Description cannot be more than 1000 characters"],
       default: "",
     },
 
@@ -147,9 +171,11 @@ const deadlineSchema = new mongoose.Schema(
       default: null,
       validate: {
         validator: function (value) {
-          return value === null || value === undefined
-            ? true
-            : value instanceof Date && !isNaN(value.getTime());
+          return (
+            value === null ||
+            value === undefined ||
+            (value instanceof Date && !isNaN(value.getTime()))
+          );
         },
         message: "Please provide a valid final submission date",
       },
@@ -172,7 +198,6 @@ const deadlineSchema = new mongoose.Schema(
       required: [true, "Student is required"],
     },
 
-
     project: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
@@ -185,91 +210,79 @@ const deadlineSchema = new mongoose.Schema(
       default: null,
     },
 
-
-    submission: {
-      status: {
-        type: String,
-        enum: {
-          values: [
-            "Not Submitted",
-            "Submitted",
-            "Reviewed",
-            "Overdue",
-          ],
-          message: "Invalid submission status",
-        },
-        default: "Not Submitted",
-      },
-
-      files: {
-        type: [submissionFileSchema],
-        default: [],
-      },
-
-      submittedAt: {
-        type: Date,
-        default: null,
-      },
-
-      studentComment: {
-        type: String,
-        trim: true,
-        maxlength: [
-          2000,
-          "Student comment cannot be more than 2000 characters",
-        ],
-        default: "",
-      },
-
-      teacherFeedback: {
-        type: String,
-        trim: true,
-        maxlength: [
-          2000,
-          "Teacher feedback cannot be more than 2000 characters",
-        ],
-        default: "",
-      },
-
-      reviewedAt: {
-        type: Date,
-        default: null,
-      },
+    submissions: {
+      type: [submissionSchema],
+      default: [],
     },
+
+   submission: {
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null,
+  },
+
+  status: {
+    type: String,
+    enum: [
+      "Not Submitted",
+      "Submitted",
+      "Reviewed",
+      "Overdue",
+    ],
+    default: "Not Submitted",
+  },
+
+  files: {
+    type: [submissionFileSchema],
+    default: [],
+  },
+
+  links: {
+    type: [submissionLinkSchema],
+    default: [],
+  },
+
+  submittedAt: {
+    type: Date,
+    default: null,
+  },
+
+  studentComment: {
+    type: String,
+    trim: true,
+    maxlength: 2000,
+    default: "",
+  },
+
+  teacherFeedback: {
+    type: String,
+    trim: true,
+    maxlength: 2000,
+    default: "",
+  },
+
+  studentReply: {
+    type: String,
+    trim: true,
+    maxlength: 2000,
+    default: "",
+  },
+
+  studentReplyAt: {
+    type: Date,
+    default: null,
+  },
+
+  reviewedAt: {
+    type: Date,
+    default: null,
+  },
+},
   },
   {
     timestamps: true,
-  }
+  },
 );
-
-
-// deadlineSchema.pre("validate", function (next) {
-//   const hasProject = !!this.project;
-//   const hasThesis = !!this.thesis;
-
-//   if (!hasProject && !hasThesis) {
-//     return next(
-//       new mongoose.Error.ValidationError(
-//         new Error(
-//           "Deadline must belong to either a project or a thesis"
-//         )
-//       )
-//     );
-//   }
-
-//   if (hasProject && hasThesis) {
-//     return next(
-//       new mongoose.Error.ValidationError(
-//         new Error(
-//           "Deadline cannot belong to both a project and a thesis"
-//         )
-//       )
-//     );
-//   }
-
-//   next();
-// });
-
 
 deadlineSchema.pre("validate", function () {
   const hasProject = !!this.project;
@@ -277,17 +290,13 @@ deadlineSchema.pre("validate", function () {
 
   if (!hasProject && !hasThesis) {
     throw new mongoose.Error.ValidationError(
-      new Error(
-        "Deadline must belong to either a project or a thesis"
-      )
+      new Error("Deadline must belong to either a project or a thesis"),
     );
   }
 
   if (hasProject && hasThesis) {
     throw new mongoose.Error.ValidationError(
-      new Error(
-        "Deadline cannot belong to both a project and a thesis"
-      )
+      new Error("Deadline cannot belong to both a project and a thesis"),
     );
   }
 });
@@ -316,7 +325,6 @@ deadlineSchema.index({
   "submission.status": 1,
 });
 
-
 deadlineSchema.index({
   student: 1,
   dueDate: 1,
@@ -328,5 +336,4 @@ deadlineSchema.index({
 });
 
 export const Deadline =
-  mongoose.models.Deadline ||
-  mongoose.model("Deadline", deadlineSchema);
+  mongoose.models.Deadline || mongoose.model("Deadline", deadlineSchema);

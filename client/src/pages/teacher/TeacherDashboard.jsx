@@ -41,13 +41,11 @@ const { authUser, isCheckingAuth } = useSelector(
 
 // Fetch teacher dashboard data
 useEffect(() => {
-  // Auth check এখনো চলছে
   if (isCheckingAuth) {
     console.log("TeacherDashboard: checking authentication...");
     return;
   }
 
-  // Auth check শেষ কিন্তু user নেই
   if (!authUser?._id) {
     console.log("TeacherDashboard: no authenticated teacher");
     return;
