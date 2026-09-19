@@ -411,26 +411,85 @@ const StudentDeadlinePage = () => {
       );
     }
   };
+
+
+  // const getSubmissions = (deadline) => {
+  //   if (
+  //     Array.isArray(deadline?.submissions) &&
+  //     deadline.submissions.length > 0
+  //   ) {
+  //     return deadline.submissions;
+  //   }
+
+  //   if (deadline?.submission) {
+  //     return [
+  //       {
+  //         ...deadline.submission,
+  //         _id:
+  //           deadline.submission._id || deadline.submission.submissionId || null,
+  //       },
+  //     ];
+  //   }
+
+  //   return [];
+  // };
+
+
   const getSubmissions = (deadline) => {
-    if (
-      Array.isArray(deadline?.submissions) &&
-      deadline.submissions.length > 0
-    ) {
-      return deadline.submissions;
-    }
+  const submissions = Array.isArray(deadline?.submissions)
+    ? deadline.submissions
+    : deadline?.submission
+      ? [deadline.submission]
+      : [];
 
-    if (deadline?.submission) {
-      return [
-        {
-          ...deadline.submission,
-          _id:
-            deadline.submission._id || deadline.submission.submissionId || null,
-        },
-      ];
-    }
+  return submissions
+    .filter(Boolean)
+    .map((submission) => ({
+      ...submission,
 
-    return [];
-  };
+      _id:
+        submission?._id ||
+        submission?.submissionId ||
+        null,
+
+      submittedAt:
+        submission?.submittedAt ||
+        submission?.createdAt ||
+        submission?.updatedAt ||
+        null,
+
+      files: Array.isArray(submission?.files)
+        ? submission.files
+        : [],
+
+      links: Array.isArray(submission?.links)
+        ? submission.links
+        : [],
+
+      studentComment:
+        submission?.studentComment ||
+        submission?.comment ||
+        "",
+
+      teacherFeedback:
+        submission?.teacherFeedback ||
+        submission?.feedback ||
+        "",
+
+      studentReply:
+        submission?.studentReply ||
+        "",
+
+      studentReplyAt:
+        submission?.studentReplyAt ||
+        null,
+    }))
+    .sort(
+      (a, b) =>
+        new Date(a.submittedAt || 0) -
+        new Date(b.submittedAt || 0)
+    );
+};
 
   const canDeleteSubmissionItem = (deadline) => {
     if (!deadline?.dueDate) return true;
@@ -522,11 +581,19 @@ const StudentDeadlinePage = () => {
 
               const submissionCount = submissions.length;
 
-              const lastSubmission =
-                submissions.length > 0
-                  ? submissions[submissions.length - 1]
-                  : deadline?.submission;
-
+              // const lastSubmission =
+              //   submissions.length > 0
+              //     ? submissions[submissions.length - 1]
+              //     : deadline?.submission;
+const lastSubmission =
+  submissions.length > 0
+    ? [...submissions].sort(
+        (a, b) =>
+          new Date(b.submittedAt || 0) -
+          new Date(a.submittedAt || 0)
+      )[0]
+    : null;
+              
               const canSubmit = status !== "Overdue";
 
               return (
