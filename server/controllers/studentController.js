@@ -8,6 +8,7 @@ import * as notificationServices from "../services/notificationServices.js";
 import { Project } from "../models/project.js";
 import { Thesis } from "../models/thesis.js";
 import { Notification } from "../models/notification.js";
+import { Deadline } from "../models/deadline.js";
 import * as fileServices from "../services/fileServices.js";
 
 
@@ -317,8 +318,60 @@ export const getDashboardStats = asyncHandler(async (req, res, next) => {
   const supervisor =
     project?.supervisor || thesis?.supervisor || student?.supervisor || null;
 
+  // const supervisorName = supervisor?.name || null;
+  // const upcomingDeadlines = proposal?.deadline ? [proposal] : [];
   const supervisorName = supervisor?.name || null;
-  const upcomingDeadlines = proposal?.deadline ? [proposal] : [];
+
+// Get student's future deadlines
+const now = new Date();
+
+const deadlineDocs = await Deadline.find({
+  student: studentId,
+  dueDate: { $gt: now },
+})
+  .select(
+    "name type description dueDate finalSubmitDate isFinal project thesis createdAt updatedAt"
+  )
+  .populate({
+    path: "project",
+    select: "_id title",
+  })
+  .populate({
+    path: "thesis",
+    select: "_id title",
+  })
+  .sort({ dueDate: 1 })
+  .lean();
+
+const upcomingDeadlines = deadlineDocs.map((deadline) => ({
+  _id: deadline._id,
+  name: deadline.name,
+  type: deadline.type,
+  description: deadline.description,
+  dueDate: deadline.dueDate,
+  finalSubmitDate: deadline.finalSubmitDate,
+  isFinal: deadline.isFinal,
+
+  workTitle:
+    deadline.project?.title ||
+    deadline.thesis?.title ||
+    null,
+
+  workType:
+    deadline.project
+      ? "Project"
+      : deadline.thesis
+        ? "Thesis"
+        : null,
+
+  workId:
+    deadline.project?._id ||
+    deadline.thesis?._id ||
+    null,
+
+  createdAt: deadline.createdAt,
+  updatedAt: deadline.updatedAt,
+}));
   const topNotifications = await Notification.find({
     user: studentId,
   })

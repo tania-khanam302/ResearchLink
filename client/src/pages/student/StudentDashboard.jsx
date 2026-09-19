@@ -35,6 +35,58 @@ const StudentDashboard = () => {
 
   const supervisorName = dashboardStats?.supervisorName || "N/A";
   const upcomingDeadlines = dashboardStats?.upcomingDeadlines || [];
+  
+  // const nextDeadline = upcomingDeadlines
+  // .filter((d) => d?.deadline && new Date(d.deadline) > new Date())
+  // .sort(
+  //   (a, b) =>
+  //     new Date(a.deadline) - new Date(b.deadline)
+  // )[0] || null;
+
+const nextDeadline =
+  upcomingDeadlines.length > 0
+    ? [...upcomingDeadlines]
+        .filter(
+          (d) =>
+            d?.dueDate &&
+            new Date(d.dueDate) > new Date()
+        )
+        .sort(
+          (a, b) =>
+            new Date(a.dueDate) -
+            new Date(b.dueDate)
+        )[0]
+    : null;
+
+const finalSubmissionDeadline =
+  upcomingDeadlines.length > 0
+    ? [...upcomingDeadlines]
+        .filter(
+          (d) =>
+            d?.isFinal === true &&
+            d?.finalSubmitDate &&
+            new Date(d.finalSubmitDate) > new Date()
+        )
+        .sort(
+          (a, b) =>
+            new Date(a.finalSubmitDate) -
+            new Date(b.finalSubmitDate)
+        )[0]
+    : null;
+
+// const finalSubmissionDeadline =
+//   upcomingDeadlines
+//     .filter(
+//       (d) =>
+//         d?.deadline &&
+//         new Date(d.deadline) > new Date() &&
+//         d?.title?.toLowerCase() === "final submission"
+//     )
+//     .sort(
+//       (a, b) =>
+//         new Date(a.deadline) - new Date(b.deadline)
+//     )[0] || null;
+
   const topNotifications = dashboardStats?.topNotifications || [];
   const feedbackList = dashboardStats?.feedbackList?.slice(-2).reverse() || [];
 
@@ -127,19 +179,30 @@ const StudentDashboard = () => {
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 to-orange-400" />
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-500">
-                  Next Deadline
-                </p>
-                <p className="mt-2 text-lg font-bold text-slate-800">
-                  {formatDate(academicWork?.deadline)}
-                </p>
+  <p className="text-sm font-medium text-slate-500">
+    Next Deadline
+  </p>
 
-                <p className="mt-2 text-xs text-slate-400">
-                  {academicWork?.deadline
-                    ? "Final Submission Deadline"
-                    : "No deadline available"}
-                </p>
-              </div>
+  <p className="mt-2 text-lg font-bold text-slate-800">
+    {/* {nextDeadline ? formatDate(nextDeadline.deadline) : "N/A"} */}
+  {nextDeadline
+  ? formatDate(nextDeadline.dueDate)
+  : "N/A"}
+  </p>
+
+  {/* <p
+    className="mt-2 text-xs text-slate-400 truncate max-w-[180px]"
+    title={nextDeadline?.title || ""}
+  >
+    {nextDeadline?.title || "No deadline available"}
+  </p> */}
+  <p
+  className="mt-2 text-xs text-slate-400 truncate max-w-[180px]"
+  title={nextDeadline?.name || ""}
+>
+  {nextDeadline?.name || "No deadline available"}
+</p>
+</div>
 
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-amber-50 text-amber-600 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
                 <CalendarDays className="w-6 h-6" strokeWidth={1.8} />
@@ -259,22 +322,33 @@ const StudentDashboard = () => {
                 </span>
               </div>
 
-              {/* Final Submission Deadline */}
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#17a2b8] mb-1">
-                    Final Submission Deadline
-                  </label>
+            {/* Final Submission Deadline */}
+<div className="flex items-center justify-between gap-4">
+  <div>
+    <label className="block text-xs font-semibold uppercase tracking-wider text-[#17a2b8] mb-1">
+      Final Submission Deadline
+    </label>
 
-                  <p className="text-sm font-semibold text-slate-800">
-                    {formatDate(academicWork?.deadline)}
-                  </p>
-                </div>
+    <p className="text-sm font-semibold text-slate-800">
+      {/* {finalSubmissionDeadline
+        ? formatDate(finalSubmissionDeadline.deadline)
+        : "N/A"} */}
+        {finalSubmissionDeadline
+  ? formatDate(finalSubmissionDeadline.finalSubmitDate)
+  : "N/A"}
+    </p>
 
-                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-50 text-amber-600">
-                  <CalendarDays className="w-5 h-5" strokeWidth={1.8} />
-                </div>
-              </div>
+    <p className="text-xs text-slate-400 mt-1">
+      {finalSubmissionDeadline
+        ? "Final submission deadline"
+        : "No final submission deadline available"}
+    </p>
+  </div>
+
+  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-50 text-amber-600">
+    <CalendarDays className="w-5 h-5" strokeWidth={1.8} />
+  </div>
+</div>
             </div>
           </div>
 
@@ -431,11 +505,13 @@ const StudentDashboard = () => {
 
                         <div className="min-w-0">
                           <p className="font-semibold text-sm text-slate-800 truncate">
-                            {d.title}
+                            {/* {d.title} */}
+                            {d.name}
                           </p>
 
                           <p className="text-xs text-slate-500 mt-1">
-                            {formatDate(d.deadline)}
+                            {/* {formatDate(d.deadline)} */}
+                        {formatDate(d.dueDate)}
                           </p>
                         </div>
                       </div>
