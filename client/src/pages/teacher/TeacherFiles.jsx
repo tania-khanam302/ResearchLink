@@ -16,6 +16,7 @@ import {
   downloadTeacherFiles,
   deleteTeacherFile,
 } from "./../../store/slices/teacherSlice";
+import TeacherPageHeader from "../../components/PageHeader/TeacherPageHeader";
 
 const TeacherFiles = () => {
   const [viewMode, setViewMode] = useState("grid");
@@ -31,6 +32,22 @@ const TeacherFiles = () => {
   useEffect(() => {
     dispatch(getFiles());
   }, [dispatch]);
+
+  useEffect(() => {
+  const handleResize = () => {
+    if (window.innerWidth < 640) {
+      setViewMode("grid");
+    }
+  };
+
+  handleResize();
+
+  window.addEventListener("resize", handleResize);
+
+  return () => {
+    window.removeEventListener("resize", handleResize);
+  };
+}, []);
 
   const deriveTypeFormatName = (name) => {
     if (!name) return "other";
@@ -259,41 +276,22 @@ const TeacherFiles = () => {
   return (
     <>
       <div className="space-y-6">
-        {/* header */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="relative px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-[#f0fbfc] to-white overflow-hidden">
-            <div className="absolute -right-10 -top-16 w-36 h-36 rounded-full bg-[#17a2b8]/5" />
-            <div className="absolute right-20 -bottom-20 w-32 h-32 rounded-full bg-[#17a2b8]/5" />
+          {/* Student Files header */}
+<TeacherPageHeader
+  icon={FileText}
+  title="Student Files"
+  description="Manage files shared with and received from students"
+/>
 
-            <div className="relative flex items-center gap-4">
-              <div
-                className="w-11 h-11 shrink-0 rounded-lg
-                   bg-[#17a2b8]/10
-                   border border-[#17a2b8]/20
-                   flex items-center justify-center"
-              >
-                <FileText className="w-5 h-5 text-[#138496]" />
-              </div>
 
-              <div>
-                <h1 className="text-xl sm:text-2xl font-semibold text-slate-800 tracking-tight">
-                  Student Files
-                </h1>
-
-                <p className="mt-1 text-sm text-slate-500">
-                  Manage files shared with and received from students
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="px-6 py-5 border-b border-slate-100">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="px-3 sm:px-4 md:px-6 py-4 md:py-5 border-b border-slate-100">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 md:gap-4">
               {/* Search & Filter */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full lg:w-auto">
                 {/* Project / Thesis Filter */}
                 <select
-                  className="w-full sm:w-44 h-10 px-3 text-sm text-slate-700
+                  className="w-full sm:w-40 md:w-44 h-10 px-3 text-sm text-slate-700
       bg-white border border-slate-300 rounded-lg
       outline-none cursor-pointer
       focus:border-[#17a2b8]
@@ -309,7 +307,7 @@ const TeacherFiles = () => {
 
                 {/* File Type Filter */}
                 <select
-                  className="w-full sm:w-52 h-10 px-3 text-sm text-slate-700
+                  className="w-full sm:w-44 md:w-52 h-10 px-3 text-sm text-slate-700
       bg-white border border-slate-300 rounded-lg
       outline-none cursor-pointer
       focus:border-[#17a2b8]
@@ -328,7 +326,7 @@ const TeacherFiles = () => {
                 {/* Search */}
                 <input
                   type="text"
-                  className="w-full sm:w-80 h-10 px-3 text-sm text-slate-700
+                  className="w-full sm:flex-1 md:w-80 lg:flex-none h-10 px-3 text-sm text-slate-700
       bg-white border border-slate-300 rounded-lg
       outline-none placeholder:text-slate-400
       focus:border-[#17a2b8]
@@ -341,31 +339,32 @@ const TeacherFiles = () => {
               </div>
 
               {/* View Mode */}
-              <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg w-fit">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded-md transition-all ${
-                    viewMode === "grid"
-                      ? "bg-white text-[#138496] shadow-sm"
-                      : "text-slate-500 hover:text-slate-700"
-                  }`}
-                  title="Grid view"
-                >
-                  <LayoutGrid className="w-5 h-5" />
-                </button>
+<div className="hidden sm:flex items-center gap-1 p-1 bg-slate-100 rounded-lg w-fit shrink-0">
+  <button
+    onClick={() => setViewMode("grid")}
+    className={`p-2 rounded-md transition-all ${
+      viewMode === "grid"
+        ? "bg-white text-[#138496] shadow-sm"
+        : "text-slate-500 hover:text-slate-700"
+    }`}
+    title="Grid view"
+  >
+    <LayoutGrid className="w-5 h-5" />
+  </button>
 
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-2 rounded-md transition-all ${
-                    viewMode === "list"
-                      ? "bg-white text-[#138496] shadow-sm"
-                      : "text-slate-500 hover:text-slate-700"
-                  }`}
-                  title="List view"
-                >
-                  <List className="w-5 h-5" />
-                </button>
-              </div>
+  <button
+    onClick={() => setViewMode("list")}
+    className={`p-2 rounded-md transition-all ${
+      viewMode === "list"
+        ? "bg-white text-[#138496] shadow-sm"
+        : "text-slate-500 hover:text-slate-700"
+    }`}
+    title="List view"
+  >
+    <List className="w-5 h-5" />
+  </button>
+</div>
+
             </div>
           </div>
 
@@ -391,11 +390,11 @@ const TeacherFiles = () => {
 
           {/* files display */}
           {viewMode === "grid" ? (
-            <div className="bg-gray-50 px-5 py-5">
+            <div className="bg-gray-50 px-3 sm:px-4 md:px-5 py-4 md:py-5">
               {currentFiles.length > 0 ? (
                 <>
                   {/* File Cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3.5 sm:gap-4 lg:gap-5">
                     {currentFiles.map((file) => (
                       <div
                         key={file.id}
@@ -412,7 +411,7 @@ const TeacherFiles = () => {
                           }`}
                         />
 
-                        <div className="p-5">
+                        <div className="p-4 sm:p-5">
                           {/* Header */}
                           <div className="flex items-start justify-between gap-3 mb-4">
                             {/* File Icon */}
@@ -429,7 +428,7 @@ const TeacherFiles = () => {
 
                             {/* Thesis and Project Badge */}
                             <span
-                              className={`shrink-0 px-2.5 py-1 rounded-full text-[11px]
+                              className={`shrink-0 px-2.5 py-1 rounded-full text-[10px]
             font-bold uppercase tracking-wide ${
               file.workType === "thesis"
                 ? "bg-purple-100 text-purple-700"
@@ -500,12 +499,8 @@ const TeacherFiles = () => {
                             {/* Download */}
                             <button
                               onClick={() => handleDownloadFile(file)}
-                              className="flex-1 inline-flex items-center justify-center gap-2
-            px-0 py-2 rounded-md
-            bg-[#17a2b8] hover:bg-[#138496]
-            text-white text-sm font-semibold
-            shadow-sm hover:shadow-md
-            transition-all duration-200"
+                             
+              className="flex-1 inline-flex items-center justify-center gap-2 main-btn !w-auto !px-0 !py-[clamp(0.5rem,1vw,0.625rem)] text-xs sm:!px-4 sm:text-sm"
                             >
                               <ArrowDownToLineIcon className="w-4 h-4" />
                               Download
@@ -514,13 +509,13 @@ const TeacherFiles = () => {
                             {/* Delete */}
                             <button
                               onClick={() => handleDeleteFile(file)}
-                              className="inline-flex items-center justify-center gap-2
-             px-5 py-2  rounded-md
+                              className="inline-flex items-center justify-center gap-2 btn-danger
+             
             border border-red-200
             bg-red-50 text-red-600
             hover:bg-red-500 hover:text-white
             hover:border-red-500
-            text-sm font-semibold
+            font-semibold
             transition-all duration-200"
                               title="Delete file"
                             >
@@ -626,152 +621,134 @@ const TeacherFiles = () => {
               )}
             </div>
           ) : (
-            // list grid table view
-            <div className="card p-4">
-              <div className="max-h-[500px] overflow-auto">
-                <table className="min-w-[1100px] w-full border-collapse">
-                  <thead className="bg-slate-50 text-slate-700">
-                    <tr>
-                      {[
-                        "File Name",
-                        "Student",
-                        "Work",
-                        "Type",
-                        "Upload Date",
-                        "Actions",
-                      ].map((t, i) => (
-                        <th
-                          key={i}
-                          className="sticky top-0 z-30 bg-white py-3 px-4 text-left font-semibold border-b border-slate-200 shadow-sm"
-                        >
-                          {t}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
+// list grid table view
+<div className="card p-3 min-w-0 max-w-full overflow-hidden">
 
-                  <tbody>
-                    {currentFiles.map((file) => (
-                      <tr
-                        key={file.id}
-                        className="border-t hover:bg-slate-50 transition-colors"
-                      >
-                        {/* File Name */}
-                        <td className="py-3 px-4">
-                          <div className="flex items-center gap-3 min-w-[220px]">
-                            <div
-                              className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-                                file.workType === "thesis"
-                                  ? "bg-purple-50"
-                                  : "bg-cyan-50"
-                              }`}
-                            >
-                              {getFileIcon(file.type)}
-                            </div>
+  <div className="w-full min-w-0 max-w-full max-h-[500px] overflow-x-auto overflow-y-auto">
+    <table className="w-full min-w-max border-collapse text-sm">
+      <thead className="bg-slate-50 text-slate-700">
+        <tr>
+          {["File Name", "Student", "Work", "Type", "Upload Date", "Actions"].map((t, i) => (
+            <th
+              key={i}
+              className="sticky top-0 z-30 bg-white py-0 pb-3 px-3 text-left text-sm font-semibold border-b border-slate-200 shadow-sm"
+            >
+              {t}
+            </th>
+          ))}
+        </tr>
+      </thead>
 
-                            <span
-                              className="font-medium text-slate-700 truncate max-w-[200px]"
-                              title={file.name}
-                            >
-                              {file.name}
-                            </span>
-                          </div>
-                        </td>
+      <tbody>
+        {currentFiles.map((file) => (
+          <tr key={file.id} className="border-t hover:bg-slate-50 transition-colors">
 
-                        {/* Student */}
-                        <td className="py-3 px-4">
-                          <span
-                            className="font-medium text-slate-700 truncate block max-w-[160px]"
-                            title={file.student}
-                          >
-                            {file.student}
-                          </span>
-                        </td>
+            {/* File Name */}
+            <td className="py-2 px-3">
+              <div className="flex items-center gap-2">
+                <div
+                  className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${
+                    file.workType === "thesis"
+                      ? "bg-purple-50"
+                      : "bg-cyan-50"
+                  }`}
+                >
+                  {getFileIcon(file.type)}
+                </div>
 
-                        {/* Project / Thesis */}
-                        <td className="py-3 px-4">
-                          <span
-                            className={`inline-flex items-center px-2.5 py-1 rounded-full
-                text-xs font-bold uppercase tracking-wide ${
+                <span
+                  className="font-medium text-xs text-slate-700 truncate"
+                  title={file.name}
+                >
+                  {file.name}
+                </span>
+              </div>
+            </td>
+
+            {/* Student */}
+            <td className="py-2 px-3">
+              <span
+                className="font-medium text-xs text-slate-700 truncate block"
+                title={file.student}
+              >
+                {file.student}
+              </span>
+            </td>
+
+            {/* Project / Thesis */}
+            <td className="py-2 px-3">
+              <span
+                className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${
                   file.workType === "thesis"
                     ? "bg-purple-100 text-purple-700"
                     : "bg-cyan-100 text-cyan-700"
                 }`}
-                          >
-                            {file.workType === "thesis" ? "Thesis" : "Project"}
-                          </span>
-                        </td>
+              >
+                {file.workType === "thesis" ? "Thesis" : "Project"}
+              </span>
+            </td>
 
-                        {/* File Type */}
-                        <td className="py-3 px-4">
-                          <span className="font-semibold text-slate-600">
-                            {file.type}
-                          </span>
-                        </td>
+            {/* File Type */}
+            <td className="py-2 px-3">
+              <span className="font-semibold text-xs text-slate-600">
+                {file.type}
+              </span>
+            </td>
 
-                        {/* Upload Date */}
-                        <td className="py-3 px-4 text-slate-600">
-                          {file.uploadDate
-                            ? new Date(file.uploadDate).toLocaleDateString()
-                            : "-"}
-                        </td>
+            {/* Upload Date */}
+            <td className="py-2 px-3 text-xs text-slate-600">
+              {file.uploadDate
+                ? new Date(file.uploadDate).toLocaleDateString()
+                : "-"}
+            </td>
 
-                        {/* Actions */}
-                        <td className="py-3 px-4 ">
-                          <div className="flex items-center gap-2">
-                            {/* Download */}
-                            <button
-                              onClick={() => handleDownloadFile(file)}
-                              className="inline-flex items-center justify-center gap-2
-                  px-3 py-2 rounded-lg
-                  bg-[#17a2b8] hover:bg-[#138496]
-                  text-white text-sm font-medium
-                  transition-all"
-                              title="Download file"
-                            >
-                              <ArrowDownToLineIcon className="w-4 h-4" />
-                              <span>Download</span>
-                            </button>
+            {/* Actions */}
+            <td className="py-2 px-3">
+              <div className="flex items-center justify-center gap-1.5">
 
-                            {/* Delete */}
-                            <button
-                              onClick={() => handleDeleteFile(file)}
-                              className="inline-flex items-center justify-center gap-2
-                  px-3 py-2 rounded-lg
-                  bg-red-50 text-red-600
-                  border border-red-200
-                  hover:bg-red-500 hover:text-white
-                  hover:border-red-500
-                  text-sm font-medium
-                  transition-all"
-                              title="Delete file"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              <span>Delete</span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                {/* Download */}
+                <button
+                  onClick={() => handleDownloadFile(file)}
+                  className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-md bg-[#17a2b8] hover:bg-[#138496] text-white text-xs font-medium transition-all"
+                  title="Download file"
+                >
+                  <ArrowDownToLineIcon className="w-3.5 h-3.5" />
+                  <span>Download</span>
+                </button>
+
+                {/* Delete */}
+                <button
+                  onClick={() => handleDeleteFile(file)}
+                  className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-md bg-red-50 text-red-600 border border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-xs font-medium transition-all"
+                  title="Delete file"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete</span>
+                </button>
+
               </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
 
-              {/* Empty State */}
-              {currentFiles.length === 0 && (
-                <div className="py-16 flex flex-col items-center justify-center">
-                  <FileText className="w-12 h-12 text-slate-300 mb-3" />
+  {/* Empty State */}
+  {currentFiles.length === 0 && (
+    <div className="py-12 flex flex-col items-center justify-center">
+      <FileText className="w-10 h-10 text-slate-300 mb-2" />
+      <h3 className="text-base font-semibold text-slate-600">
+        No files found
+      </h3>
+      <p className="text-xs text-slate-400 mt-1">
+        No files match your current filters.
+      </p>
+    </div>
+  )}
 
-                  <h3 className="text-lg font-semibold text-slate-600">
-                    No files found
-                  </h3>
+</div>
 
-                  <p className="text-sm text-slate-400 mt-1">
-                    No files match your current filters.
-                  </p>
-                </div>
-              )}
-            </div>
           )}
         </div>
       </div>
