@@ -12,6 +12,7 @@ import {
   getAssignedStudents,
   markComplete,
 } from "../../store/slices/teacherSlice";
+import TeacherPageHeader from "../../components/PageHeader/TeacherPageHeader";
 
 const AssignedStudents = () => {
   const [sortBy, setSortBy] = useState("name");
@@ -19,7 +20,7 @@ const AssignedStudents = () => {
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 4;
 
   const [feedbackData, setFeedbackData] = useState({
     title: "",
@@ -180,7 +181,6 @@ const AssignedStudents = () => {
   const submitFeedback = () => {
     const workInfo = getWorkInfo(selectedStudent);
 
-
     if (
       workInfo.id &&
       feedbackData.title.trim() &&
@@ -252,17 +252,17 @@ const AssignedStudents = () => {
       text: "text-green-700",
       sub: "text-green-600",
     },
-   {
-  label: "In Progress",
-  value: sortedStudents.filter((s) => {
-    const status = getWorkInfo(s).status;
+    {
+      label: "In Progress",
+      value: sortedStudents.filter((s) => {
+        const status = getWorkInfo(s).status;
 
-    return status === "in_progress" || status === "approved";
-  }).length,
-  bg: "bg-yellow-50",
-  text: "text-yellow-700",
-  sub: "text-yellow-600",
-},
+        return status === "in_progress" || status === "approved";
+      }).length,
+      bg: "bg-yellow-50",
+      text: "text-yellow-700",
+      sub: "text-yellow-600",
+    },
 
     {
       label: "Total Research Works",
@@ -285,54 +285,13 @@ const AssignedStudents = () => {
   return (
     <>
       <div className="space-y-6">
-        {/* header */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="relative px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-[#f0fbfc] to-white overflow-hidden">
-            <div className="absolute -right-10 -top-16 w-36 h-36 rounded-full bg-[#17a2b8]/5" />
-            <div className="absolute right-20 -bottom-20 w-32 h-32 rounded-full bg-[#17a2b8]/5" />
-
-            <div className="relative flex items-center gap-4">
-              <div
-                className="
-                  w-11 h-11 shrink-0 rounded-lg
-                  bg-[#17a2b8]/10
-                  border border-[#17a2b8]/20
-                  flex items-center justify-center
-                "
-              >
-                <Users className="w-5 h-5 text-[#138496]" />
-              </div>
-
-              <div>
-                <h1 className="text-xl sm:text-2xl font-semibold text-slate-800 tracking-tight">
-                  Assigned Students
-                </h1>
-
-                <p className="mt-1 text-sm text-slate-500">
-                  Manage your assigned students and their thesis/projects
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {stats.map((item) => (
-                <div
-                  key={item.label}
-                  className={`${item.bg} p-4 rounded-lg border border-white/60`}
-                >
-                  <p className={`text-sm ${item.sub}`}>{item.label}</p>
-
-                  <p className={`text-2xl ${item.text} font-bold mt-1`}>
-                    {item.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* assigned students heading */}
+        <TeacherPageHeader
+          icon={Users}
+          label=""
+          title="Assigned Students"
+          description="Manage your assigned students and their thesis/projects"
+        />
 
         {/* student grid  */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -342,14 +301,14 @@ const AssignedStudents = () => {
             return (
               <div
                 key={student._id}
-                className="card hover:shadow-lg transition-all duration-300"
+                className="card w-full overflow-hidden transition-all duration-300 hover:shadow-lg"
               >
                 {/* Student Header */}
-                <div className="flex items-center justify-between gap-3 mb-4">
-                  <div className="flex items-center gap-3">
+                <div className="mb-4 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between">
+                  <div className="flex min-w-0 items-center gap-3">
                     {/* Profile */}
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-blue-600 font-semibold">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100">
+                      <span className="font-semibold text-blue-600">
                         {student.name
                           ?.split(" ")
                           .map((n) => n[0])
@@ -358,37 +317,43 @@ const AssignedStudents = () => {
                     </div>
 
                     {/* Student Info */}
-                    <div>
-                      <h3 className="font-semibold text-slate-800">
+                    <div className="min-w-0">
+                      <h3 className="truncate font-semibold text-slate-800">
                         {student.name}
                       </h3>
 
-                      <p className="text-sm text-slate-600">{student.email}</p>
+                      <p className="truncate text-xs text-slate-600 sm:text-sm">
+                        {student.email}
+                      </p>
                     </div>
                   </div>
 
                   {/* Status */}
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(
+                    className={`w-fit shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${getStatusBadge(
                       workInfo.status,
                     )}`}
                   >
                     {getStatusText(workInfo.status)}
                   </span>
                 </div>
- {/* Thesis / Project Information */}
-                <div className="mb-5">
-                  <div className="flex items-center gap-2 mb-1">
+
+                {/* Thesis / Project Information */}
+                <div className="mb-5 min-w-0">
+                  <div className="mb-1 flex items-center gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-[#138496]">
                       {workInfo.type}
                     </span>
                   </div>
 
-                  <h4 className="font-medium text-slate-700">
+                  <h4
+                    className="line-clamp-2 break-words text-sm font-medium leading-5 text-slate-700 sm:text-base"
+                    title={workInfo.title}
+                  >
                     {workInfo.title}
                   </h4>
 
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="mt-1 text-xs text-slate-500">
                     Last Update:{" "}
                     {workInfo.updatedAt
                       ? new Date(workInfo.updatedAt).toLocaleDateString()
@@ -397,40 +362,35 @@ const AssignedStudents = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-3">
+                <div className="flex  gap-2 sm:gap-3">
                   <button
                     onClick={() => handleFeedback(student)}
-                    className="
-    flex items-center justify-center gap-2
-    px-4 py-2
-     bg-[#17a2b8] text-white
-    text-sm rounded-lg
-    hover:bg-[#138496]
-    transition duration-200
-  "
+                    className="main-btn !w-auto !px-3 !py-[clamp(0.5rem,1vw,0.625rem)] text-xs sm:!px-4 sm:text-sm"
                   >
-                    <MessageSquareIcon className="w-4 h-4" />
-                    Feedback
+                    <MessageSquareIcon className="h-4 w-4 shrink-0" />
+                    <span>Feedback</span>
                   </button>
 
                   <button
                     onClick={() => handleMarkComplete(student)}
                     disabled={workInfo.status === "completed"}
                     className={`
-                      flex items-center justify-center gap-2
-                      px-4 py-2
-                      bg-green-600 text-white
-                      text-sm rounded-lg
-                      transition
-                      ${
-                        workInfo.status === "completed"
-                          ? "opacity-50 cursor-not-allowed"
-                          : "hover:bg-green-700"
-                      }
-                    `}
+      inline-flex w-auto shrink-0 items-center justify-center
+      gap-1.5 rounded-lg
+      bg-green-600 px-3
+      py-[clamp(0.5rem,1vw,0.625rem)]
+      text-xs font-semibold text-white
+      transition
+      sm:gap-2 sm:px-4 sm:text-sm
+      ${
+        workInfo.status === "completed"
+          ? "cursor-not-allowed opacity-50"
+          : "hover:bg-green-700"
+      }
+    `}
                   >
-                    <CheckCircle2 className="w-4 h-4" />
-                    Mark Complete
+                    <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    <span>Mark Complete</span>
                   </button>
                 </div>
               </div>
@@ -442,8 +402,7 @@ const AssignedStudents = () => {
               <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                 <div className="flex flex-col items-center justify-center text-center px-6 py-14 sm:py-16">
                   {/* Icon */}
-                  <div
-                    className=" w-14 h-14 rounded-2xl bg-[#17a2b8]/10  border border-[#17a2b8]/20 flex items-center justify-center mb-5">
+                  <div className=" w-14 h-14 rounded-2xl bg-[#17a2b8]/10  border border-[#17a2b8]/20 flex items-center justify-center mb-5">
                     <Users className="w-6 h-6 text-[#138496]" />
                   </div>
 
@@ -457,9 +416,7 @@ const AssignedStudents = () => {
                     will appear here.
                   </p>
 
-                  <div
-                    className=" mt-5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs font-medium text-slate-500 "
-                  >
+                  <div className=" mt-5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs font-medium text-slate-500 ">
                     <Users className="w-3.5 h-3.5" />
                     No students to display
                   </div>
@@ -574,30 +531,30 @@ const AssignedStudents = () => {
             onClick={closeModal}
           >
             <div
-  className="
-    bg-white rounded-xl shadow-2xl
+              className="
+    bg-white rounded-lg shadow-2xl
     w-full max-w-lg
     max-h-[90vh]
     flex flex-col
-    overflow-hidden
+    overflow-hidden 
     transition-all
   "
-  onClick={(e) => e.stopPropagation()}
-  >
-    <div className="flex items-center justify-between p-5 border-b border-slate-200 shrink-0">
-    <h2 className="text-xl font-bold text-slate-800">
-      Provide Feedback
-    </h2>
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between p-5 border-b bg-blue-50 border-slate-200 shrink-0 ">
+                <h2 className="text-xl font-bold text-slate-800">
+                  Provide Feedback
+                </h2>
 
-    <button
-      onClick={closeModal}
-      className="text-slate-400 hover:text-slate-600"
-    >
-      <X className="w-5 h-5" />
-    </button>
-  </div>
+                <button
+                  onClick={closeModal}
+                  className="text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-              <div className="p-5 overflow-y-auto flex-1 min-h-0">
+              <div className="p-5 overflow-y-auto custom-scrollbar flex-1 min-h-0">
                 {/* Work Info */}
                 <div className="bg-slate-50 rounded-lg p-3 mb-4">
                   <div className="space-y-2 text-sm">
@@ -738,29 +695,26 @@ const AssignedStudents = () => {
                     />
                   </div>
                 </div>
-
-              
               </div>
-               {/* Fixed Buttons */}
-  <div className="flex justify-end gap-3 p-5 border-t border-slate-200 shrink-0 bg-white">
-    <button
-      onClick={closeModal}
-      className="btn-danger"
-    >
-      Cancel
-    </button>
 
-    <button
-      className="btn-primary bg-[#138496] hover:bg-[#17a2b8]"
-      onClick={submitFeedback}
-      disabled={
-        !feedbackData.title.trim() ||
-        !feedbackData.message.trim()
-      }
-    >
-      Submit Feedback
-    </button>
-  </div>
+              <div className="flex justify-end gap-3 p-5 border-t border-slate-200 shrink-0 bg-white">
+                <button
+                  onClick={closeModal}
+                  className="btn-danger !w-auto !px-3 !py-[clamp(0.5rem,1vw,0.625rem)] text-xs sm:!px-4 sm:text-sm"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  className="main-btn !w-auto !px-3 !py-[clamp(0.5rem,1vw,0.625rem)] text-xs sm:!px-4 sm:text-sm"
+                  onClick={submitFeedback}
+                  disabled={
+                    !feedbackData.title.trim() || !feedbackData.message.trim()
+                  }
+                >
+                  Submit Feedback
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -778,15 +732,14 @@ const AssignedStudents = () => {
           >
             <div
               className="
-                bg-white rounded-xl shadow-2xl
+                bg-white rounded-lg shadow-2xl
                 w-full max-w-md
                 transition-all
               "
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-6">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-6">
+            <div className="mark-complete-cotent">
+                 <div className="flex items-center justify-between mb-6 bg-blue-50 rounded-t-lg py-4 px-3">
                   <h2 className="text-xl font-bold text-slate-800">
                     Mark {getWorkInfo(selectedStudent).type.toLowerCase()} as
                     completed?
@@ -799,6 +752,8 @@ const AssignedStudents = () => {
                     <X className="w-5 h-5" />
                   </button>
                 </div>
+                <div className="p-6">
+             
 
                 {/* Work Info */}
                 <div className="bg-slate-50 rounded-lg p-4 mb-6">
@@ -832,26 +787,20 @@ const AssignedStudents = () => {
                 </p>
 
                 {/* Actions */}
-                <div className="flex gap-3">
-                  <button onClick={closeModal} className="btn-danger">
+                <div className="flex gap-3 justify-end">
+                  <button onClick={closeModal} className="btn-danger ">
                     Cancel
                   </button>
 
                   <button
                     onClick={confirmMarkComplete}
-                    className="
-    flex items-center justify-center gap-2
-    px-4 py-2
-     bg-[#17a2b8] text-white
-    text-sm rounded-lg
-    hover:bg-[#138496]
-    transition duration-200
-  "
+                    className="main-btn !w-auto !px-3 !py-[clamp(0.5rem,1vw,0.625rem)] text-xs sm:!px-4 sm:text-sm"
                   >
                     Mark as Completed
                   </button>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         )}

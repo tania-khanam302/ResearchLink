@@ -388,10 +388,23 @@ const teacherSlice = createSlice({
     });
 
     // reject Request
-    builder.addCase(rejectRequest.fulfilled, (state, action) => {
-      const rejectedRequest = action.payload;
-      state.list = state.list.filter((r) => r._id !== rejectedRequest._id);
-    });
+    // builder.addCase(rejectRequest.fulfilled, (state, action) => {
+    //   const rejectedRequest = action.payload;
+    //   state.list = state.list.filter((r) => r._id !== rejectedRequest._id);
+    // });
+builder.addCase(rejectRequest.fulfilled, (state, action) => {
+  const rejectedRequest = action.payload;
+
+  state.list = state.list.map((request) =>
+    request._id === rejectedRequest._id
+      ? {
+          ...request,
+          ...rejectedRequest,
+          status: "rejected",
+        }
+      : request
+  );
+});
 
     // delete Request
     builder.addCase(deleteRequest.fulfilled, (state, action) => {

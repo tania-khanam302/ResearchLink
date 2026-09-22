@@ -12,6 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { getAssignedStudents } from "../../store/slices/teacherSlice";
+import TeacherPageHeader from "../../components/PageHeader/TeacherPageHeader";
 
 const TeacherResearchLink = () => {
   const dispatch = useDispatch();
@@ -136,32 +137,14 @@ const TeacherResearchLink = () => {
   return (
     <div className="w-full max-w-full overflow-x-hidden space-y-6">
 
-      {/* Header */}
+      {/* header and search*/}
       <div className="overflow-hidden rounded-2xl bg-white border border-slate-200 shadow-xl shadow-slate-200/40">
-
-        <div className="relative overflow-hidden bg-gradient-to-r from-[#17a2b8] to-[#138496] px-6 py-7 sm:px-8">
-
-          <div className="absolute -right-10 -top-12 h-40 w-40 rounded-full bg-white/5" />
-          <div className="absolute right-20 -bottom-20 h-32 w-32 rounded-full bg-white/5" />
-
-          <div className="relative flex items-center gap-4">
-
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 border border-white/20 backdrop-blur-sm shadow-lg">
-              <Link2 className="h-7 w-7 text-white" />
-            </div>
-
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                Research Links
-              </h1>
-
-              <p className="mt-1.5 text-sm text-white/80 sm:text-base">
-                Review research resources shared by your assigned students.
-              </p>
-            </div>
-
-          </div>
-        </div>
+{/* research links header  */}
+    <TeacherPageHeader
+  icon={Link2}
+  title="Research Links"
+  description="Review research resources shared by your assigned students."
+/>
 
         {/* Search */}
         <div className="p-6 sm:p-8">

@@ -35,7 +35,7 @@ const AddStudent = () => {
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
-        <div className="bg-white rounded-sm w-full max-w-md mx-4 max-h-[95vh] overflow-y-auto">
+        <div className="bg-white rounded-lg w-full max-w-md mx-4 max-h-[95vh] custom-scrollbar overflow-y-auto">
           <div className="card-header rounded-t-lg py-4 p-3 mb-0 bg-blue-50 flex justify-between items-center sticky top-0 z-10">
             <h3 className="text-lg font-semibold text-slate-900">
               Add Student
@@ -174,14 +174,14 @@ const AddStudent = () => {
                 <button
                   type="button"
                   onClick={() => dispatch(toggleStudentModal())}
-                  className="btn-danger text-white px-4 font-medium h-9 rounded-md flex items-center space-x-2 mt-0 md:mt-0 shadow-md"
+                  className="btn-danger text-white px-4 font-medium h-10 rounded-lg flex items-center space-x-2 mt-0 md:mt-0 shadow-md"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-9 rounded-md flex items-center space-x-2 mt-0 md:mt-0 shadow-md"
+                  className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-lg flex items-center space-x-2 mt-0 md:mt-0 shadow-md"
                 >
                   Add Student
                 </button>

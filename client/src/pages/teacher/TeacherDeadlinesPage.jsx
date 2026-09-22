@@ -20,7 +20,7 @@ import {
   getTeacherDeadlines,
   reviewDeadline,
 } from "../../store/slices/deadlineSlice";
-
+import TeacherPageHeader from "../../components/PageHeader/TeacherPageHeader";
 import { getAssignedStudents } from "../../store/slices/teacherSlice";
 
 const TeacherDeadlinesPage = () => {
@@ -579,46 +579,23 @@ const TeacherDeadlinesPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* header  */}
-      <header className="relative w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
+      {/* manage deadlines header  */}
+<TeacherPageHeader
+  icon={CalendarDays}
+  title="Manage Deadlines"
+  description="Create weekly milestones, task deadlines and final submission dates for your students."
+  action={
+    <button
+      onClick={() => setShowModal(true)}
+      className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#17a2b8] px-3.5 py-2.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#138496] hover:shadow-md active:scale-[0.98] sm:px-4 sm:py-2.5 sm:text-sm"
+    >
+      <CalendarDays className="h-4 w-4 shrink-0" />
+      <span>Create Deadline</span>
+    </button>
+  }
+/>
 
-        <div className="relative z-10 px-4 py-5 xs:px-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
-          <div className="flex w-full flex-col gap-4 min-[421px]:flex-row min-[421px]:items-center min-[421px]:justify-between">
-            <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 sm:h-12 sm:w-12 sm:rounded-xl">
-                <CalendarDays className="h-5 w-5 sm:h-6 sm:w-6" />
-              </div>
 
-              <div className="min-w-0 flex-1">
-                <h1 className="break-words text-lg font-bold leading-tight tracking-tight text-slate-900 sm:text-2xl lg:text-3xl">
-                  Manage Deadlines
-                </h1>
-                <p className="mt-1.5 max-w-2xl text-[11px] leading-4 text-slate-500 sm:text-sm sm:leading-6 lg:text-base">
-                  Create weekly milestones, task deadlines and final submission
-                  dates for your students.
-                </p>
-              </div>
-            </div>
-
-            {/* Button */}
-            <div className="flex w-full justify-center min-[421px]:w-auto min-[421px]:justify-end">
-              <button
-                onClick={() => setShowModal(true)}
-                className="inline-flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#17a2b8] px-3.5 py-2.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#138496] hover:shadow-md active:scale-[0.98] sm:px-4 sm:py-2.5 sm:text-sm"
-              >
-                <CalendarDays className="h-4 w-4 shrink-0" />
-                <span>Create Deadline</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Decorative Background */}
-        <div className="pointer-events-none absolute -bottom-16 -right-16 h-40 w-40 rounded-full bg-cyan-100/50 blur-3xl sm:-bottom-20 sm:-right-16 sm:h-52 sm:w-52" />
-
-        <div className="pointer-events-none absolute -bottom-8 right-4 h-20 w-20 rounded-full border border-cyan-200/40 bg-cyan-50/30 sm:-bottom-10 sm:right-16 sm:h-28 sm:w-28" />
-      </header>
 
       {/* Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1811,8 +1788,7 @@ const TeacherDeadlinesPage = () => {
                 type="button"
                 onClick={closeModal}
                 aria-label="Close"
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100"
-              >
+  className="icon-btn">
                 <X className="h-5 w-5" />
               </button>
             </div>

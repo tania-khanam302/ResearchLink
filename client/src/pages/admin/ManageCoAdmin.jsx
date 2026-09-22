@@ -136,13 +136,14 @@ const ManageCoAdmin = () => {
         </div>
       </div>
 
-      <button
-        onClick={() => dispatch(toggleCoAdminModal())}
-        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl bg-[#17a2b8] px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#138496] hover:shadow-md w-full sm:w-auto shrink-0"
-      >
-        <UserPlus className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-200 group-hover:scale-110" />
-        <span>Add New Co-Admin</span>
-      </button>
+ <button
+  onClick={() => dispatch(toggleCoAdminModal())}
+  className="main-btn"
+>
+  <UserPlus className="h-4 w-4 sm:h-5 sm:w-5" />
+  <span>Add New Co-Admin</span>
+</button>
+
     </div>
   </div>
 

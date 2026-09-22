@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDashboardStats } from "../../store/slices/studentSlice";
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
   Bell,
@@ -21,6 +21,7 @@ const StudentDashboard = () => {
   const { dashboardStats } = useSelector((state) => state.student);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [expandedFeedback, setExpandedFeedback] = useState(null);
+const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchDashboardStats());
@@ -58,12 +59,11 @@ const nextDeadline =
         )[0]
     : null;
 
-const finalSubmissionDeadline =
+    const finalSubmissionDeadline =
   upcomingDeadlines.length > 0
     ? [...upcomingDeadlines]
         .filter(
           (d) =>
-            d?.isFinal === true &&
             d?.finalSubmitDate &&
             new Date(d.finalSubmitDate) > new Date()
         )
@@ -73,6 +73,22 @@ const finalSubmissionDeadline =
             new Date(b.finalSubmitDate)
         )[0]
     : null;
+
+// const finalSubmissionDeadline =
+//   upcomingDeadlines.length > 0
+//     ? [...upcomingDeadlines]
+//         .filter(
+//           (d) =>
+//             d?.isFinal === true &&
+//             d?.finalSubmitDate &&
+//             new Date(d.finalSubmitDate) > new Date()
+//         )
+//         .sort(
+//           (a, b) =>
+//             new Date(a.finalSubmitDate) -
+//             new Date(b.finalSubmitDate)
+//         )[0]
+//     : null;
 
 // const finalSubmissionDeadline =
 //   upcomingDeadlines
@@ -472,18 +488,35 @@ const finalSubmissionDeadline =
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Upcoming Deadlines */}
           <div className="card overflow-hidden border border-slate-300 shadow-sm hover:shadow-md transition-all duration-300">
-            <div className="card-header flex items-center gap-3 border-b border-slate-100  p-2 bg-slate-100">
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-50 text-amber-600">
-                <CalendarDays className="w-5 h-5" strokeWidth={1.8} />
-              </div>
+                <div className="card-header flex items-center justify-between gap-3 border-b border-slate-100 p-2 bg-slate-100">
+  
+  <div className="flex items-center gap-3">
+    <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-50 text-amber-600">
+      <CalendarDays className="w-5 h-5" strokeWidth={1.8} />
+    </div>
 
-              <div>
-                <h2 className="card-title">Upcoming Deadlines</h2>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Important upcoming submissions
-                </p>
-              </div>
-            </div>
+    <div>
+      <h2 className="card-title">Upcoming Deadlines</h2>
+      <p className="text-xs text-slate-400 mt-0.5">
+        Important upcoming submissions
+      </p>
+    </div>
+  </div>
+
+  
+              <Link
+                to={"/student/student-deadlines"}
+                className="inline-flex items-center px-4 py-2 text-xs font-semibold
+        bg-cyan-600 hover:bg-cyan-700
+        text-white rounded-lg
+        shadow-sm hover:shadow-md
+        transition-all duration-200"
+              >
+                View All
+              </Link>
+
+</div>
+
 
             {upcomingDeadlines && upcomingDeadlines.length > 0 ? (
               <div className="p-5 space-y-3 max-h-[280px] overflow-y-auto custom-scrollbar">

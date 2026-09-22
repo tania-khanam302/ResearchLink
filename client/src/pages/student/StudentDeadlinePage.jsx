@@ -1372,7 +1372,7 @@ const lastSubmission =
 
       {/* submission modal  */}
       {historyDeadline && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-6 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
           <div className="my-auto w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-6 py-5">
               <div>
@@ -1396,7 +1396,7 @@ const lastSubmission =
               </button>
             </div>
 
-            <div className="max-h-[75vh] space-y-5 overflow-y-auto bg-slate-50/40 p-6">
+            <div className="max-h-[70vh] space-y-5 overflow-y-auto bg-slate-50/40 p-6">
               {getSubmissions(historyDeadline)
                 .slice()
                 .reverse()

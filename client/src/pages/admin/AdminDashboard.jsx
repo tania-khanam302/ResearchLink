@@ -330,12 +330,7 @@ const AdminDashboard = () => {
       btnClass: "btn-secondary h-[40px]",
       Icon: PlusIcon,
     },
-    {
-      label: "View Reports",
-      onClick: () => setIsReportModalOpen(true),
-      btnClass: "btn-outline h-[40px] border-[#17a2b8] text-[#17a2b8]",
-      Icon: FileTextIcon,
-    },
+   
   ];
 
   return (
@@ -997,70 +992,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {isReportModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
-            <div className="bg-white rounded-sm w-full max-w-lg mx-4 overflow-hidden max-h-[90vh] flex flex-col">
-              {/* Header */}
-              <div className="card-header rounded-t-lg py-4 p-3 mb-0 bg-blue-50 sticky top-0 z-10 shrink-0">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-slate-900">
-                    All Files
-                  </h3>
-
-                  <button
-                    onClick={() => setIsReportModalOpen(false)}
-                    className="text-slate-400 hover:text-slate-600"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-
-                <div className="mt-4">
-                  <input
-                    type="text"
-                    className="input w-full"
-                    placeholder="Search by file name, thesis and project title, or student name"
-                    value={reportSearch}
-                    onChange={(e) => setReportSearch(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              {/* Scrollable Files */}
-              <div className="flex-1 overflow-y-auto p-3">
-                {filteredFiles.length === 0 ? (
-                  <div className="text-slate-500">No files found.</div>
-                ) : (
-                  <div className="space-y-2">
-                    {filteredFiles.map((f, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between p-3 bg-slate-50 rounded"
-                      >
-                        <div className="min-w-0">
-                          <div className="font-medium text-slate-800 truncate">
-                            {f.originalName}
-                          </div>
-
-                          <div className="text-sm text-slate-500 truncate">
-                            {f.type} - {f.title} - {f.studentName}
-                          </div>
-                        </div>
-
-                        <button
-                          className="btn-outline btn-small ml-3 shrink-0"
-                          onClick={() => handleDownload(f)}
-                        >
-                          Download
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+        
         {isCreateStudentModalOpen && <AddStudent />}
         {isCreateTeacherModalOpen && <AddTeacher />}
       </div>
