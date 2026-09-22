@@ -363,25 +363,23 @@ const AssignedStudents = () => {
 
                 {/* Actions */}
                 <div className="flex  gap-2 sm:gap-3">
-                  <button
-                    onClick={() => handleFeedback(student)}
-                    className="main-btn !w-auto !px-3 !py-[clamp(0.5rem,1vw,0.625rem)] text-xs sm:!px-4 sm:text-sm"
-                  >
-                    <MessageSquareIcon className="h-4 w-4 shrink-0" />
-                    <span>Feedback</span>
-                  </button>
+                 <button
+  onClick={() => handleFeedback(student)}
+  className="btn-small inline-flex items-center justify-center gap-1"
+>
+  <MessageSquareIcon className="custom-icon shrink-0" />
+  <span>Feedback</span>
+</button>
 
                   <button
                     onClick={() => handleMarkComplete(student)}
                     disabled={workInfo.status === "completed"}
                     className={`
-      inline-flex w-auto shrink-0 items-center justify-center
-      gap-1.5 rounded-lg
-      bg-green-600 px-3
-      py-[clamp(0.5rem,1vw,0.625rem)]
-      text-xs font-semibold text-white
-      transition
-      sm:gap-2 sm:px-4 sm:text-sm
+                      btn-small inline-flex  items-center justify-center gap-1
+      w-auto shrink-0  
+      
+      bg-green-600 
+    
       ${
         workInfo.status === "completed"
           ? "cursor-not-allowed opacity-50"
@@ -389,7 +387,7 @@ const AssignedStudents = () => {
       }
     `}
                   >
-                    <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    <CheckCircle2 className="custom-icon   shrink-0" />
                     <span>Mark Complete</span>
                   </button>
                 </div>
@@ -631,12 +629,7 @@ const AssignedStudents = () => {
                           title: e.target.value,
                         })
                       }
-                      className="
-                        w-full px-3 py-2
-                        border border-slate-300
-                        rounded-lg outline-none
-                        focus:ring-1 focus:ring-blue-500
-                      "
+                      className="custom-input"
                       placeholder="Enter feedback title"
                     />
                   </div>
@@ -655,13 +648,7 @@ const AssignedStudents = () => {
                           type: e.target.value,
                         })
                       }
-                      className="
-                        w-full px-3 py-2
-                        border border-slate-300
-                        rounded-lg outline-none
-                        focus:ring-1 focus:ring-blue-500
-                        focus:border-transparent
-                      "
+                      className="custom-select"
                     >
                       <option value="general">General</option>
                       <option value="positive">Positive</option>
@@ -684,13 +671,7 @@ const AssignedStudents = () => {
                         })
                       }
                       rows={4}
-                      className="
-                        w-full px-3 py-2
-                        border border-slate-300
-                        rounded-lg outline-none
-                        focus:ring-1 focus:ring-blue-500
-                        focus:border-transparent
-                      "
+                      className="custom-textarea"
                       placeholder="Enter your feedback message..."
                     />
                   </div>

@@ -374,10 +374,21 @@ const teacherSlice = createSlice({
       state.list = [];
     });
 
-    // get Files
-    builder.addCase(getFiles.fulfilled, (state, action) => {
-      state.files = action.payload.files || action.payload || [];
-    });
+   // get Files
+builder.addCase(getFiles.pending, (state) => {
+  state.loading = true;
+  state.error = null;
+});
+
+builder.addCase(getFiles.fulfilled, (state, action) => {
+  state.loading = false;
+  state.files = action.payload.files || action.payload || [];
+});
+
+builder.addCase(getFiles.rejected, (state, action) => {
+  state.loading = false;
+  state.error = action.payload || "Failed to fetch teacher files";
+});
 
     // accept Request
     builder.addCase(acceptRequest.fulfilled, (state, action) => {

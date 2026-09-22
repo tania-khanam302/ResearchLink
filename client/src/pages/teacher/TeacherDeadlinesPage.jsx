@@ -587,7 +587,7 @@ const TeacherDeadlinesPage = () => {
   action={
     <button
       onClick={() => setShowModal(true)}
-      className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#17a2b8] px-3.5 py-2.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#138496] hover:shadow-md active:scale-[0.98] sm:px-4 sm:py-2.5 sm:text-sm"
+      className="inline-flex items-center justify-center gap-2 main-btn "
     >
       <CalendarDays className="h-4 w-4 shrink-0" />
       <span>Create Deadline</span>
@@ -687,32 +687,33 @@ const TeacherDeadlinesPage = () => {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           {/* Search */}
 
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-slate-700">
-              Search
-            </label>
+         <div>
+  <label className="custom-label">
+    Search
+  </label>
 
-            <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-3">
-              <Search className="h-4 w-4 text-[#17a2b8]" />
+  <div className="custom-input flex items-center gap-2">
+    <Search className="h-4 w-4 shrink-0 text-[#17a2b8]" />
 
-              <input
-                className="w-full bg-transparent text-sm outline-none"
-                placeholder="Search project, thesis or student..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
+    <input
+      type="search"
+      placeholder="Search project, thesis or student..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="w-full border-0 bg-transparent p-0 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:ring-0"
+    />
+  </div>
+</div>
 
           {/* Type */}
 
           <div>
-            <label className="mb-2 block text-sm font-semibold text-slate-700">
+            <label className="custom-label ">
               Type
             </label>
 
             <select
-              className="w-full rounded-xl border border-slate-300 p-3 text-sm outline-none focus:border-[#17a2b8] focus:ring-2 focus:ring-cyan-100"
+              className="custom-select"
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
             >
@@ -732,7 +733,7 @@ const TeacherDeadlinesPage = () => {
             </label>
 
             <select
-              className="w-full rounded-xl border border-slate-300 p-3 text-sm outline-none focus:border-[#17a2b8] focus:ring-2 focus:ring-cyan-100"
+              className="custom-select"
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
             >
@@ -752,30 +753,18 @@ const TeacherDeadlinesPage = () => {
 
       {/* deadline table  */}
       <div className="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="border-b border-slate-200 bg-gradient-to-r from-cyan-50/70 to-white px-3 py-4 sm:px-5 sm:py-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#17a2b8]/10 text-[#17a2b8] sm:h-9 sm:w-9">
-                  <CalendarDays className="h-4 w-4" />
-                </div>
-
-                <h2 className="truncate text-sm font-bold text-slate-800 sm:text-base">
-                  Thesis / Project Deadlines
-                </h2>
-              </div>
-
-              <p className="mt-1.5 pl-10 text-[11px] leading-4 text-slate-500 sm:pl-11 sm:text-xs">
-                Manage milestone deadlines and view student submissions.
-              </p>
-            </div>
-
-            <div className="self-start rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-500 shadow-sm ring-1 ring-slate-200 sm:self-auto sm:text-xs">
-              {filteredRows.length} Deadline
-              {filteredRows.length !== 1 ? "s" : ""}
-            </div>
-          </div>
-        </div>
+  <TeacherPageHeader
+  subHeader
+  icon={CalendarDays}
+  title="Thesis / Project Deadlines"
+  description="Manage milestone deadlines and view student submissions"
+  action={
+    <div className="rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-500 shadow-sm ring-1 ring-slate-200 sm:text-xs">
+      {filteredRows.length} Deadline
+      {filteredRows.length !== 1 ? "s" : ""}
+    </div>
+  }
+/>
 
         <div className="hidden w-full min-w-0 md:block">
           <div className="w-full overflow-x-auto overscroll-x-contain">
@@ -1289,48 +1278,32 @@ const TeacherDeadlinesPage = () => {
           id="submission-history"
           className="scroll-mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
         >
-          <div className="border-b border-slate-200 bg-gradient-to-r from-cyan-50/70 to-white px-5 py-5">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#17a2b8]/10 text-[#17a2b8]">
-                    <FileText className="h-5 w-5" />
-                  </div>
+      <TeacherPageHeader
+  subHeader
+  icon={FileText}
+  title="Submission History"
+  description="All submissions made for this deadline."
+  action={
+    <div className="flex items-center gap-3">
+      <span className="rounded-full bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-cyan-700">
+        {getSubmissionList(selectedSubmission).length} Submission
+        {getSubmissionList(selectedSubmission).length === 1 ? "" : "s"}
+      </span>
 
-                  <div>
-                    <h2 className="text-base font-bold text-slate-800">
-                      Submission History
-                    </h2>
-
-                    <p className="mt-0.5 text-xs text-slate-500">
-                      All submissions made for this deadline.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="rounded-full bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-cyan-700">
-                  {getSubmissionList(selectedSubmission).length} Submission
-                  {getSubmissionList(selectedSubmission).length === 1
-                    ? ""
-                    : "s"}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedSubmission(null);
-                    setExpandedSubmissionId(null);
-                  }}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
-                >
-                  <X className="h-3.5 w-3.5" />
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
+      <button
+        type="button"
+        onClick={() => {
+          setSelectedSubmission(null);
+          setExpandedSubmissionId(null);
+        }}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+      >
+        <X className="h-3.5 w-3.5" />
+        Close
+      </button>
+    </div>
+  }
+/>
 
           {/* Student / Research Information */}
 
@@ -1517,8 +1490,6 @@ const TeacherDeadlinesPage = () => {
                           <div className="border-t border-slate-100 bg-slate-50/40 px-5 pb-5">
                             {/* Files */}
 
-                            {/* Files */}
-
                             <div className="pt-5">
                               <div className="mb-4 flex items-center justify-between gap-3">
                                 <div className="flex items-center gap-2">
@@ -1641,7 +1612,7 @@ const TeacherDeadlinesPage = () => {
                                         href={link.url}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-indigo-700"
+                                        className="inline-flex shrink-0 items-center justify-center gap-1.5  btn-small "
                                       >
                                         <ExternalLink className="h-3.5 w-3.5" />
                                         Open
@@ -1720,7 +1691,7 @@ const TeacherDeadlinesPage = () => {
                                       setTeacherFeedback(e.target.value)
                                     }
                                     placeholder="Write feedback or reply to the student's submission..."
-                                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[#17a2b8] focus:ring-2 focus:ring-cyan-100"
+                                    className="custom-textarea"
                                   />
 
                                   <div className="mt-3 flex justify-end">
@@ -1770,7 +1741,7 @@ const TeacherDeadlinesPage = () => {
       {/* Create Deadline Modal  */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-2 backdrop-blur-sm !mt-0 !pt-0 sm:px-4">
-          <div className="flex max-h-[90vh] w-full max-w-3xl flex-col custom-scrollbar overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-[92vh] sm:rounded-2xl">
+          <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-[92vh] sm:rounded-2xl">
             {/* Modal Header */}
             <div className="flex shrink-0 items-start justify-between gap-2 border-b border-slate-100 px-3 py-3 sm:items-center sm:px-6 sm:py-5">
               <div className="min-w-0">
@@ -1798,7 +1769,7 @@ const TeacherDeadlinesPage = () => {
               className="flex min-h-0 flex-1 flex-col"
             >
               {/* Modal Body */}
-              <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overflow-x-hidden p-3 sm:space-y-6 sm:p-6">
+              <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overflow-x-hidden  custom-scrollbar  p-3  sm:space-y-6 sm:p-6">
                 {/* Select Project / Thesis */}
                 <div>
                   <label className="mb-1.5 block text-sm font-semibold text-slate-700 sm:mb-2">

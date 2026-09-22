@@ -197,9 +197,6 @@ const TeacherDashboard = () => {
   description="Manage your students and supervise their research, thesis and projects."
 />
 
-
-
-
       {/* statistics */}
       <section className="grid grid-cols-1 gap-3 min-[375px]:gap-3.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 xl:gap-5">
         {statsCards.map(({ title, value, icon: Icon, iconBg, color }) => (
@@ -236,176 +233,147 @@ const TeacherDashboard = () => {
 
       {/* supervisor requests */}
       <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm sm:rounded-xl">
-        <div className="border-b border-slate-200 bg-gradient-to-r from-[#f0fbfc] to-white px-3 py-3 xs:px-4 xs:py-4 sm:px-6 sm:py-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex min-w-0 items-center gap-2.5 xs:gap-3">
-              {/* Supervisor Requests */}
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#17a2b8]/20 bg-[#17a2b8]/10 xs:h-10 xs:w-10 sm:h-11 sm:w-11">
-                <UserCheck className="h-4 w-4 text-[#138496] xs:h-5 xs:w-5" />
-              </div>
-
               {/* supervisor requests sub-heading */}
-              <div className="min-w-0">
-                <h2 className="truncate text-base font-semibold text-slate-800 xs:text-lg sm:text-xl">
-                  Supervisor Requests
-                </h2>
+      <TeacherPageHeader
+  subHeader
+  icon={UserCheck}
+  title="Supervisor Requests"
+  description="Students requesting you as their supervisor"
+  action={
+   <span className="ml-auto w-fit rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-700 custom-count">
+  {pendingRequestCount} Pending
+</span>
+  }
+/>
 
-                <p className="mt-0.5 text-[10px] leading-4 text-slate-500 xs:text-xs sm:text-sm">
-                  Students requesting you as their supervisor
-                </p>
-              </div>
+{/* supervisor requests card  */}
+       <div className="p-3 xs:p-4 sm:p-6">
+  {loading ? (
+    <div className="flex justify-center py-8 xs:py-10">
+      <Loader2
+        size={26}
+        className="animate-spin text-[#17a2b8] xs:h-[30px] xs:w-[30px]"
+      />
+    </div>
+  ) : pendingRequests.length > 0 ? (
+    <div className="space-y-3 xs:space-y-3.5">
+      {pendingRequests.slice(0, 5).map((request) => (
+        <div
+          key={request._id}
+          className="flex flex-col gap-3 rounded-lg border border-slate-100 bg-slate-50 p-3 transition-colors hover:bg-[#f0fbfc] xs:gap-4 xs:rounded-xl xs:p-4 sm:p-4 lg:flex-row lg:items-center lg:justify-between"
+        >
+          {/* Student info */}
+          <div className="flex min-w-0 flex-1 items-start gap-2.5 xs:gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#17a2b8]/10 xs:h-10 xs:w-10">
+              <Users className="h-4 w-4 text-[#138496] xs:h-5 xs:w-5" />
             </div>
 
-            <span className="ml-auto w-fit rounded-full bg-yellow-100 px-2.5 py-1 text-[12px] font-semibold text-yellow-700 xs:px-3 xs:text-xs">
-              {pendingRequestCount} Pending
-            </span>
-
-            {/* <span
-              className="w-ml-auto w-fit rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-semibold text-yellow-700 xs:px-3 xs:text-xs"
-            >
-              {pendingRequestCount} Pending
-            </span> */}
-          </div>
-        </div>
-
-        <div className="p-3 xs:p-4 sm:p-6">
-          {loading ? (
-            <div className="flex justify-center py-8 xs:py-10">
-              <Loader2
-                size={26}
-                className="animate-spin text-[#17a2b8] xs:h-[30px] xs:w-[30px]"
-              />
-            </div>
-          ) : pendingRequests.length > 0 ? (
-            <div className="space-y-2.5 xs:space-y-3">
-              {pendingRequests.slice(0, 5).map((request) => (
-                <div
-                  key={request._id}
-                  className="flex flex-col justify-between gap-3 rounded-lg border border-slate-100 bg-slate-50 p-3 transition-colors hover:bg-[#f0fbfc] xs:gap-4 xs:rounded-xl xs:p-4 lg:flex-row lg:items-center"
-                >
-                  <div className="flex min-w-0 items-start gap-2.5 xs:gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#17a2b8]/10 xs:h-10 xs:w-10">
-                      <Users className="h-4 w-4 text-[#138496] xs:h-5 xs:w-5" />
-                    </div>
-
-                    <div className="min-w-0">
-                      <h3 className="truncate text-sm font-semibold text-slate-800 xs:text-base">
-                        {request.student?.name || "Unknown Student"}
-                      </h3>
-
-                      <p className="truncate text-[11px] text-slate-500 xs:text-xs sm:text-sm">
-                        {request.student?.email || "No email available"}
-                      </p>
-
-                      {request.proposal && (
-                        <div className="mt-1.5 flex min-w-0 items-start gap-1.5 xs:mt-2 xs:gap-2">
-                          <FileText
-                            size={13}
-                            className="mt-0.5 shrink-0 text-[#138496] xs:h-[14px] xs:w-[14px]"
-                          />
-
-                          <p className="min-w-0 truncate text-[11px] text-slate-600 xs:text-xs sm:text-sm">
-                            <span className="font-medium">
-                              {request.proposalType}:
-                            </span>{" "}
-                            {request.proposal.title || "Untitled Research"}
-                          </p>
-                        </div>
-                      )}
-
-                      <p className="mt-1 text-[10px] text-slate-400 xs:text-xs">
-                        Requested{" "}
-                        {request.createdAt
-                          ? new Date(request.createdAt).toLocaleDateString(
-                              "en-US",
-                              {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              },
-                            )
-                          : "Recently"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex w-full shrink-0 gap-2 sm:w-auto">
-                    <button
-                      onClick={() => handleAccept(request._id)}
-                      className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg bg-[#17a2b8] px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#138496] xs:gap-1.5 xs:px-3 xs:text-sm sm:flex-none"
-                    >
-                      <Check size={14} className="xs:h-4 xs:w-4" />
-                      Accept
-                    </button>
-
-                    <button
-                      onClick={() => handleReject(request._id)}
-                      className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 xs:gap-1.5 xs:px-3 xs:text-sm sm:flex-none"
-                    >
-                      <X size={14} className="xs:h-4 xs:w-4" />
-                      Reject
-                    </button>
-                  </div>
-                </div>
-              ))}
-
-              {pendingRequests.length > 5 && (
-                <div className="flex justify-center pt-2 xs:pt-3">
-                  <button
-                    onClick={() => navigate("/teacher/pending-requests")}
-                    className="inline-flex items-center gap-1 rounded-lg border border-[#17a2b8]/20 bg-[#f0fbfc] px-3 py-1.5 text-[11px] font-semibold text-[#138496] transition-colors hover:bg-[#17a2b8]/10 xs:gap-1.5 xs:px-4 xs:py-2 xs:text-xs sm:text-sm"
-                  >
-                    View all {pendingRequestCount} requests
-                    <ArrowRight size={14} className="xs:h-4 xs:w-4" />
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="text-center py-10">
-              <div
-                className="w-12 h-12 mx-auto rounded-full
-                bg-green-50
-                flex items-center justify-center"
-              >
-                <CheckCircle className="w-6 h-6 text-green-500" />
-              </div>
-
-              <h3 className="mt-3 text-sm font-semibold text-slate-700">
-                No pending requests
+            <div className="min-w-0 flex-1">
+              <h3 className="break-words text-sm font-semibold leading-5 text-slate-800 xs:text-base">
+                {request.student?.name || "Unknown Student"}
               </h3>
 
-              <p className="mt-1 text-sm text-slate-500">
-                You are all caught up.
+              <p className="break-all text-xs leading-5 text-slate-500 xs:text-sm">
+                {request.student?.email || "No email available"}
+              </p>
+
+              {request.proposal && (
+                <div className="mt-1.5 flex min-w-0 items-start gap-1.5 xs:mt-2 xs:gap-2">
+                  <FileText
+                    size={13}
+                    className="mt-0.5 shrink-0 text-[#138496] xs:h-[14px] xs:w-[14px]"
+                  />
+
+                  <p className="min-w-0 break-words text-xs leading-5 text-slate-600 xs:text-sm">
+                    <span className="font-medium">
+                      {request.proposalType}:
+                    </span>{" "}
+                    {request.proposal.title || "Untitled Research"}
+                  </p>
+                </div>
+              )}
+
+              <p className="mt-1 text-[11px] leading-4 text-slate-400 xs:text-xs">
+                Requested{" "}
+                {request.createdAt
+                  ? new Date(request.createdAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      },
+                    )
+                  : "Recently"}
               </p>
             </div>
-          )}
+          </div>
+
+          {/* Buttons */}
+          <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:shrink-0">
+            <button
+              onClick={() => handleAccept(request._id)}
+              className="inline-flex  items-center justify-center gap-1   transition-colors 
+              btn-small 
+              
+              "
+            >
+              <Check size={15} className="shrink-0 xs:h-4 xs:w-4" />
+              <span>Accept</span>
+            </button>
+
+            <button
+              onClick={() => handleReject(request._id)}
+              className=" btn-small  inline-flex  items-center justify-center gap-1  border border-red-200 bg-white  text-red-600 transition-colors hover:bg-red-50 "
+            >
+              <X size={15} className="shrink-0 xs:h-4 xs:w-4" />
+              <span>Reject</span>
+            </button>
+          </div>
         </div>
+      ))}
+
+      {pendingRequests.length > 5 && (
+        <div className="flex justify-center pt-2 xs:pt-3">
+          <button
+            onClick={() => navigate("/teacher/pending-requests")}
+            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg border border-[#17a2b8]/20 bg-[#f0fbfc] px-3 py-2 text-xs font-semibold text-[#138496] transition-colors hover:bg-[#17a2b8]/10 xs:min-h-10 xs:px-4 xs:text-sm"
+          >
+            <span>View all {pendingRequestCount} requests</span>
+            <ArrowRight size={15} className="shrink-0 xs:h-4 xs:w-4" />
+          </button>
+        </div>
+      )}
+    </div>
+  ) : (
+    <div className="py-8 text-center xs:py-10">
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-50">
+        <CheckCircle className="h-6 w-6 text-green-500" />
+      </div>
+
+      <h3 className="mt-3 text-sm font-semibold text-slate-700 xs:text-base">
+        No pending requests
+      </h3>
+
+      <p className="mt-1 text-xs text-slate-500 xs:text-sm">
+        You are all caught up.
+      </p>
+    </div>
+  )}
+</div>
       </section>
 
       {/* students and research overview */}
       <section className="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6 xl:grid-cols-2">
         {/* students overview  */}
         <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm sm:rounded-xl">
-          <div className="border-b border-slate-200 px-3 py-3 xs:px-4 xs:py-4 sm:px-6 sm:py-5">
-            <div className="flex items-center gap-2.5 xs:gap-3">
-              {/* My Research Students */}
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-blue-600/20 bg-blue-50 xs:h-10 xs:w-10 sm:h-11 sm:w-11">
-                <Users className="h-4 w-4 text-blue-600 xs:h-5 xs:w-5" />
-              </div>
-
               {/* my research students sub-heading*/}
-              <div className="min-w-0">
-                <h2 className="truncate text-base font-semibold text-slate-800 xs:text-lg sm:text-xl">
-                  My Research Students
-                </h2>
-
-                <p className="mt-0.5 text-[10px] leading-4 text-slate-500 xs:text-xs sm:mt-1 sm:text-sm">
-                  Students currently under your supervision
-                </p>
-              </div>
-            </div>
-          </div>
+         <TeacherPageHeader
+  subHeader
+  icon={Users}
+  title="My Research Students"
+  description="Students currently under your supervision"
+/>
 
           <div className="p-3 xs:p-4 sm:p-6">
             {loading ? (
@@ -524,24 +492,14 @@ const TeacherDashboard = () => {
         </div>
         {/* research overview  */}
         <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm sm:rounded-xl">
-          <div className="border-b border-slate-200 px-3 py-3 xs:px-4 xs:py-4 sm:px-6 sm:py-5">
-            <div className="flex items-center gap-2.5 xs:gap-3">
-              {/* Research Overview */}
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-green-600/20 bg-green-50 xs:h-10 xs:w-10 sm:h-11 sm:w-11">
-                <BookOpen className="h-4 w-4 text-green-600 xs:h-5 xs:w-5" />
-              </div>
-
               {/* research overview sub-heading */}
-              <div className="min-w-0">
-                <h2 className="truncate text-base font-semibold text-slate-800 xs:text-lg sm:text-xl">
-                  Research Overview
-                </h2>
-                <p className="mt-0.5 text-[10px] leading-4 text-slate-500 xs:text-xs sm:mt-1 sm:text-sm">
-                  Current supervision summary
-                </p>
-              </div>
-            </div>
-          </div>
+
+        <TeacherPageHeader
+  subHeader
+  icon={BookOpen}
+  title="Research Overview"
+  description="Current supervision summary"
+/>
 
           <div className="grid grid-cols-2 gap-2.5 p-3 xs:gap-3 xs:p-4 sm:gap-4 sm:p-6">
             <div className="rounded-lg border border-blue-100 bg-blue-50 p-3 xs:rounded-xl xs:p-4 sm:p-5">
@@ -600,36 +558,20 @@ const TeacherDashboard = () => {
       {/* upcoming deadlines */}
       <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm sm:rounded-xl">
             {/* upcoming deadlines sub-heading */}
-        <div className="relative overflow-hidden border-b border-slate-200 bg-gradient-to-r from-[#f0fbfc] to-white px-3 py-3 xs:px-4 xs:py-4 sm:px-6 sm:py-5">
-          <div className="absolute -right-8 -top-10 h-24 w-24 rounded-full bg-[#17a2b8]/5 xs:-right-10 xs:-top-12 xs:h-28 xs:w-28 sm:h-36 sm:w-36" />
-
-          <div className="relative flex items-center gap-2.5 xs:gap-3 sm:gap-4">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#17a2b8]/20 bg-[#17a2b8]/10 xs:h-10 xs:w-10 sm:h-11 sm:w-11">
-              <CalendarDays className="h-4 w-4 text-[#138496] xs:h-5 xs:w-5" />
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <h2 className="text-base font-semibold leading-5 text-slate-800 xs:text-lg xs:leading-6 sm:text-xl sm:leading-7">
-                Upcoming Deadlines
-              </h2>
-
-              <p className="mt-0.5 text-[10px] leading-4 text-slate-500 xs:mt-1 xs:text-xs sm:text-sm">
-                Important deadlines for your supervised research
-              </p>
-            </div>
-            
-  {/* View All */}
-  <button
-    onClick={() => navigate("/teacher/deadlines")}
-  className="inline-flex items-center px-4 py-2 text-xs font-semibold
-        bg-cyan-600 hover:bg-cyan-700
-        text-white rounded-lg
-        shadow-sm hover:shadow-md
-        transition-all duration-200">
-    View all
-  </button>
-          </div>
-        </div>
+        <TeacherPageHeader
+  subHeader
+  icon={CalendarDays}
+  title="Upcoming Deadlines"
+  description="Important deadlines for your supervised research"
+  action={
+    <button
+      onClick={() => navigate("/teacher/deadlines")}
+      className="btn-small"
+    >
+      View all
+    </button>
+  }
+/>
 
         <div className="p-3 xs:p-4 sm:p-6">
           {loading ? (
@@ -746,7 +688,7 @@ const TeacherDashboard = () => {
                 <CheckCircle className="h-5 w-5 text-green-500 xs:h-6 xs:w-6" />
               </div>
 
-              <h3 className="mt-2.5 text-xs font-semibold text-slate-700 xs:mt-3 xs:text-sm">
+              <h3 className="mt-2.5 text-xm font-semibold text-slate-700 xs:mt-3 xs:text-sm">
                 No upcoming deadlines
               </h3>
 

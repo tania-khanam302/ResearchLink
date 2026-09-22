@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import TeacherPageHeader from "../../components/PageHeader/TeacherPageHeader";
-import { FileText } from "lucide-react";
+import { FileText, Search } from "lucide-react";
 import {
   getTeacherRequests,
   acceptRequest,
@@ -19,7 +19,7 @@ const PendingRequests = () => {
   const itemsPerPage = 4;
 
   const [requestsLoading, setRequestsLoading] = useState(true);
-
+const [isFilterOpen, setIsFilterOpen] = useState(false);
   const dispatch = useDispatch();
   const { list } = useSelector((state) => state.teacher);
   const { authUser } = useSelector((state) => state.auth);
@@ -160,30 +160,37 @@ const handleReject = async (request) => {
           {/* search & filter */}
           <div className="px-6 py-6">
             <div className="flex flex-col md:flex-row gap-3">
-              <div className="relative flex-1">
-                <input
-                  type="text"
-                  placeholder="Search by student name or thesis/project title..."
-                  className="w-full h-10 px-3 text-sm  text-slate-700  bg-white  border border-slate-300 rounded-lg  outline-none  placeholder:text-slate-400 transition-all  focus:border-[#17a2b8]  focus:ring-2  focus:ring-[#17a2b8]/10"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
+<div className="relative flex-1">
+  <div className="custom-input flex items-center gap-2">
+    <Search className="h-4 w-4 shrink-0 text-[#17a2b8]" />
+
+    <input
+      type="search"
+      placeholder="Search by student name or thesis/project title..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="w-full border-0 bg-transparent p-0 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:ring-0"
+    />
+  </div>
+</div>
+
+
+
               <div className="w-full md:w-52">
-                <select
-                  className="w-full h-10 px-3  text-sm  text-slate-700  bg-white border border-slate-300 rounded-lg  outline-none cursor-pointer transition-all  focus:border-[#17a2b8] focus:ring-1  focus:ring-[#17a2b8]/10"
-                  value={filterType}
-                  onChange={(e) => setFilterType(e.target.value)}
-                >
-                  <option value="all">All Types</option>
-                  <option value="thesis">Thesis</option>
-                  <option value="project">Project</option>
-                </select>
+             <select
+  className="custom-select"
+  value={filterType}
+  onChange={(e) => setFilterType(e.target.value)}
+>
+  <option value="all">All Types</option>
+  <option value="thesis">Thesis</option>
+  <option value="project">Project</option>
+</select>
               </div>
 
               <div className="w-full md:w-52">
                 <select
-                  className="w-full h-10 px-3  text-sm  text-slate-700  bg-white border border-slate-300 rounded-lg  outline-none cursor-pointer transition-all  focus:border-[#17a2b8] focus:ring-1  focus:ring-[#17a2b8]/10"
+                  className="custom-select"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >

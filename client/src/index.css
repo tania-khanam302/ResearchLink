@@ -126,10 +126,34 @@
   padding-bottom: clamp(0.5rem, 1vw, 0.625rem);
 }
 
+.btn-small {
+  @apply px-3 py-2 text-xs font-semibold rounded-lg
+    text-white bg-[#17a2b8] hover:bg-[#138496]
+    transition-all duration-200;
+}
+
+.custom-icon {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+/* Small screen */
+@media (max-width: 420px) {
   .btn-small {
-    @apply px-3 py-1.5 text-sm;
+    @apply px-3 py-1 text-[11px];
   }
-  
+
+  .custom-icon {
+    width: 13px;
+    height: 13px;
+    
+  margin-top: 2px;
+  margin-bottom: 2px;
+  }
+}
+
   /* Card Components */
   .card {
     /* @apply bg-white rounded-lg shadow-sm border border-slate-200 p-6 shadow-lg rounded-md; */
@@ -274,5 +298,96 @@ body {
     @apply flex h-8 w-8 shrink-0 items-center justify-center
       rounded-full text-slate-500
       transition hover:bg-slate-100;
+  }
+}
+
+/* custom-count  */
+.custom-count {
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .custom-count {
+    @apply px-2 py-1 text-[10px];
+  }
+}
+
+/* custom-input */
+
+.custom-input {
+  @apply w-full h-10 px-3 text-sm
+    text-slate-700 bg-white
+    border border-slate-300 rounded-md
+    outline-none
+    transition-all duration-200;
+}
+
+.custom-input:focus-within {
+  @apply border-[#17a2b8] ring-1 ring-[#17a2b8]/10;
+}
+
+/* small screen */
+
+@media (max-width: 420px) {
+  .custom-input {
+    @apply h-9 px-2.5;
+  }
+
+  .custom-input input {
+    @apply text-xs;
+  }
+}
+
+/* .custom-select */
+
+.custom-select {
+  @apply w-full h-10 px-3 text-sm
+    text-slate-600 bg-white
+    border border-slate-300 rounded-md
+    outline-none cursor-pointer
+    transition-all duration-200
+    focus:border-[#17a2b8]
+    focus:ring-1 focus:ring-[#17a2b8]/10 ;
+}
+
+/* Small screen */
+
+@media (max-width: 420px) {
+  .custom-select {
+    @apply h-9 px-2.5 text-xs;
+  }
+}
+/* custom-textarea */
+
+.custom-textarea {
+  @apply w-full px-3 py-2
+    text-sm text-slate-700 bg-white
+    border border-slate-300 rounded-md
+    outline-none
+    placeholder:text-slate-400
+    transition-all duration-200
+    focus:border-[#17a2b8]
+    focus:ring-1 focus:ring-[#17a2b8]/10;
+}
+
+/* small screen */
+
+@media (max-width: 420px) {
+  .custom-textarea {
+    @apply px-2.5 py-2 text-xs;
+  }
+}
+
+/* search label */
+
+.custom-label  {
+  @apply mb-2 block text-sm font-semibold text-slate-700;
+}
+
+/* small screen */
+
+@media (max-width: 420px) {
+  .custom-label {
+    @apply mb-1.5 text-sm;
   }
 }

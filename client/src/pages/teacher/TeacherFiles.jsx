@@ -10,6 +10,7 @@ import {
   List,
   Trash2,
   Image,
+  Loader2,
 } from "lucide-react";
 import {
   getFiles,
@@ -28,6 +29,7 @@ const TeacherFiles = () => {
 
   const dispatch = useDispatch();
   const fileFromStore = useSelector((state) => state.teacher.files) || [];
+const loading = useSelector((state) => state.teacher.loading);
 
   useEffect(() => {
     dispatch(getFiles());
@@ -368,25 +370,31 @@ const TeacherFiles = () => {
             </div>
           </div>
 
-          {/* files section */}
-          <div className="p-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-              {fileStats.map((item, i) => {
-                return (
-                  <div
-                    key={i}
-                    className={`${item.bg} p-4 rounded-lg border border-white/60`}
-                  >
-                    <p className={`text-sm ${item.text}`}>{item.label}</p>
+      {/* files section */}
+<section className="p-6">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+    {fileStats.map((item, i) => {
+      return (
+        <div
+          key={i}
+          className={`${item.bg} p-4 rounded-lg border border-white/60`}
+        >
+          <p className={`text-sm ${item.text}`}>{item.label}</p>
 
-                    <p className={`text-2xl ${item.text} font-bold mt-1`}>
-                      {item.count}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <p className={`text-2xl ${item.text} font-bold mt-1`}>
+            {loading ? (
+              <Loader2
+                className="h-6 w-6 animate-spin text-[#17a2b8]"
+              />
+            ) : (
+              item.count
+            )}
+          </p>
+        </div>
+      );
+    })}
+  </div>
+</section>
 
           {/* files display */}
           {viewMode === "grid" ? (

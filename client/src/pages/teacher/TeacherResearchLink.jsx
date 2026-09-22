@@ -151,24 +151,20 @@ const TeacherResearchLink = () => {
 
           <div className="flex flex-col gap-3 lg:flex-row">
 
-            <div className="relative flex-1">
-
-              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
 
               <input
-                type="text"
+                type="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by student, thesis/project or link..."
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-12 pr-4 text-sm outline-none transition focus:border-[#17a2b8] focus:ring-2 focus:ring-[#17a2b8]/10"
+                className=" custom-input"
               />
 
-            </div>
 
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none focus:border-[#17a2b8]"
+              className="w-[200px] custom-select"
             >
               <option value="All">All Types</option>
               <option value="Thesis">Thesis</option>
@@ -367,7 +363,7 @@ const TeacherResearchLink = () => {
                                 href={link.url}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#17a2b8] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#138496]"
+                                className="inline-flex shrink-0 items-center justify-center gap-2 btn-small"
                               >
                                 <ExternalLink className="h-4 w-4" />
                                 Open Link
