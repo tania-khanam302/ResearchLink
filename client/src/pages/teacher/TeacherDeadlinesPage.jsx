@@ -1770,7 +1770,7 @@ const TeacherDeadlinesPage = () => {
       {/* Create Deadline Modal  */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-2 backdrop-blur-sm !mt-0 !pt-0 sm:px-4">
-          <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-[92vh] sm:rounded-2xl">
+          <div className="flex max-h-[90vh] w-full max-w-3xl flex-col custom-scrollbar overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-[92vh] sm:rounded-2xl">
             {/* Modal Header */}
             <div className="flex shrink-0 items-start justify-between gap-2 border-b border-slate-100 px-3 py-3 sm:items-center sm:px-6 sm:py-5">
               <div className="min-w-0">
