@@ -565,7 +565,7 @@ const TeacherDashboard = () => {
   description="Important deadlines for your supervised research"
   action={
     <button
-      onClick={() => navigate("/teacher/deadlines")}
+      onClick={() => navigate("/teacher/table")}
       className="btn-small"
     >
       View all

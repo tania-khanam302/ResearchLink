@@ -556,8 +556,8 @@ const ManageStudents = () => {
                         <option value="Select Department">
                           Select Department
                         </option>
-                        <option value="Computer Science">
-                          Computer Science
+                        <option value="Computer Science and Engineering">
+                          Computer Science and Engineering
                         </option>
                         <option value="Software Engineering">
                           Software Engineering

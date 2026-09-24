@@ -125,7 +125,7 @@ const AddStudent = () => {
                   <option value="" disabled>
                     Select Department
                   </option>
-                  <option value="Computer Science">Computer Science</option>
+                  <option value="Computer Science and Engineering">Computer Science and Engineering</option>
                   <option value="Software Engineering">
                     Software Engineering
                   </option>
