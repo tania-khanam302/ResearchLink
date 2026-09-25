@@ -4,9 +4,9 @@ import {
   Users,
   UserPlus,
   Search,
-  ShieldCheck,
   X,
   AlertTriangle,
+  Layers3,
 } from "lucide-react";
 import {
   getAllUsers,
@@ -188,7 +188,7 @@ const ManageCoAdmin = () => {
       </div>
 
       <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#138496]/10 flex items-center justify-center shrink-0">
-        <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-[#138496]" />
+        <Layers3 className="w-4 h-4 sm:w-5 sm:h-5 text-[#138496]" />
       </div>
     </div>
   </div>
@@ -263,126 +263,134 @@ const ManageCoAdmin = () => {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead className="bg-slate-100">
-                <tr className="text-[#138496] text-xs font-semibold uppercase">
-                  <th className="px-6 py-4">Co-Admin Info</th>
-                  <th className="px-6 py-4">Email</th>
-                  <th className="px-6 py-4">Department</th>
-                  <th className="px-6 py-4">Role</th>
-                  <th className="px-6 py-4">Action</th>
-                </tr>
-              </thead>
+           <table className="w-full text-left border-collapse text-[13px]">
+  <thead className="bg-slate-100">
+    <tr className="text-[#138496] text-[12px] font-semibold uppercase">
+      <th className="px-2 py-3">Co-Admin Info</th>
+      <th className="px-2 py-3">Department</th>
+      <th className="px-2 py-3">Role</th>
+      <th className="px-2 py-3">Action</th>
+    </tr>
+  </thead>
 
-              <tbody className="bg-white divide-y divide-slate-200">
-                {paginatedAdmins.map((admin) => (
-                  <tr key={admin._id} className="hover:bg-slate-50">
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-slate-900">
-                        {admin.name}
-                      </div>
-                    </td>
+  <tbody className="bg-white divide-y divide-slate-200">
+    {paginatedAdmins.map((admin) => (
+      <tr key={admin._id} className="hover:bg-slate-50">
 
-                    <td className="px-6 py-4 text-sm text-slate-900">
-                      {admin.email}
-                    </td>
+        {/* Co-Admin Info */}
+        <td className="px-2 py-1">
+          <div>
+            <div className="text-[13px] font-medium text-slate-900">
+              {admin.name}
+            </div>
 
-                    <td className="px-6 py-4 text-sm text-slate-900">
-                      {admin.department || "-"}
-                    </td>
+            <div className="text-[13px] text-slate-500">
+              {admin.email}
+            </div>
+          </div>
+        </td>
 
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        Co-Admin
-                      </span>
-                    </td>
+        {/* Department */}
+        <td className="px-2 py-1 text-[13px] text-slate-900">
+          {admin.department || "-"}
+        </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={() => handleEdit(admin)}
-                        className="text-[#17a2b8] hover:text-blue-900 pe-3"
-                      >
-                        Edit
-                      </button>
+        {/* Role */}
+        <td className="px-2 py-1">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-blue-100 text-blue-800">
+            Co-Admin
+          </span>
+        </td>
 
-                      <button
-                        onClick={() => handleDelete(admin)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Action */}
+        <td className="px-2 py-1 whitespace-nowrap text-[13px] font-medium">
+          <button
+            onClick={() => handleEdit(admin)}
+            className="text-[#17a2b8] hover:text-blue-900 pe-3"
+          >
+            Edit
+          </button>
 
-            {filteredAdmins.length > 0 && (
-              <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-slate-500">
-                  Showing{" "}
-                  <span className="font-semibold text-slate-700">
-                    {startIndex + 1}
-                  </span>{" "}
-                  to{" "}
-                  <span className="font-semibold text-slate-700">
-                    {Math.min(startIndex + itemsPerPage, filteredAdmins.length)}
-                  </span>{" "}
-                  of{" "}
-                  <span className="font-semibold text-slate-700">
-                    {filteredAdmins.length}
-                  </span>{" "}
-                  co-admins
-                </p>
+          <button
+            onClick={() => handleDelete(admin)}
+            className="text-red-600 hover:text-red-900"
+          >
+            Delete
+          </button>
+        </td>
 
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
-                    disabled={currentPage === 1}
-                    className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
-                      currentPage === 1
-                        ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                    }`}
-                  >
-                    Previous
-                  </button>
+      </tr>
+    ))}
+  </tbody>
+</table>
 
-                  {Array.from(
-                    { length: totalPages },
-                    (_, index) => index + 1,
-                  ).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`min-w-[38px] rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                        currentPage === page
-                          ? "border-[#17a2b8] bg-[#17a2b8] text-white"
-                          : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
+{filteredAdmins.length > 0 && (
+  <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
+    <p className="text-xs text-slate-500">
+      Showing{" "}
+      <span className="font-semibold text-slate-700">
+        {startIndex + 1}
+      </span>{" "}
+      to{" "}
+      <span className="font-semibold text-slate-700">
+        {Math.min(startIndex + itemsPerPage, filteredAdmins.length)}
+      </span>{" "}
+      of{" "}
+      <span className="font-semibold text-slate-700">
+        {filteredAdmins.length}
+      </span>{" "}
+      co-admins
+    </p>
 
-                  <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
-                    disabled={currentPage === totalPages}
-                    className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
-                      currentPage === totalPages
-                        ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                    }`}
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            )}
+    <div className="flex items-center gap-1">
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.max(prev - 1, 1))
+        }
+        disabled={currentPage === 1}
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === 1
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Previous
+      </button>
+
+      {Array.from(
+        { length: totalPages },
+        (_, index) => index + 1
+      ).map((page) => (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`min-w-[30px] rounded-md border px-2 py-1 text-xs font-semibold transition ${
+            currentPage === page
+              ? "border-[#17a2b8] bg-[#17a2b8] text-white"
+              : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
+
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+        }
+        disabled={currentPage === totalPages}
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === totalPages
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Next
+      </button>
+    </div>
+  </div>
+)}
+
 
             {filteredAdmins.length === 0 && (
               <div className="text-center py-8 text-slate-500">
@@ -391,11 +399,6 @@ const ManageCoAdmin = () => {
             )}
           </div>
         </div>
-
-
-
-
-        
 
         {/* edit co-admin model */}
         {editingAdmin && (

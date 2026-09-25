@@ -328,160 +328,188 @@ const ManageStudents = () => {
           >
             {filteredStudents && filteredStudents.length > 0 ? (
               <div>
-                <table className="min-w-auto w-full text-left border-collapse">
-                  <thead className="bg-slate-200 sticky top-0 z-10">
-                    <tr className="text-[#138496] text-[12px] font-semibold uppercase">
-                      <th className="px-2 py-6">Student Info</th>
-                      <th className="px-2 py-6">Department & Year</th>
-                      <th className="px-2 py-6">Supervisor</th>
-                      <th className="px-2 py-6">Type</th>
-                      <th className="px-2 py-6">Thesis / Project Title</th>
-                      <th className="px-2 py-6">Action</th>
-                    </tr>
-                  </thead>
+<table className="w-full text-left border-collapse text-[12px]">
+  <thead className="bg-slate-200 sticky top-0 z-10">
+    <tr className="text-[#138496] text-[12px] font-semibold uppercase">
+      <th className="px-2 py-3">Student Info</th>
+      <th className="px-2 py-3">Department & Year</th>
+      <th className="px-2 py-3">Supervisor</th>
+      <th className="px-2 py-3">Type</th>
+      <th className="px-2 py-3">Thesis / Project Title</th>
+      <th className="px-2 py-3">Action</th>
+    </tr>
+  </thead>
 
-                  <tbody className="bg-slate-50 divide-y divide-slate-200">
-                    {paginatedStudents.map((student) => (
-                      <tr key={student._id} className="hover:bg-white">
-                        <td className="px-2 py-6">
-                          <div>
-                            <div className="text-[16px] font-medium text-slate-900">
-                              {student.name}
-                            </div>
+  <tbody className="bg-slate-50 divide-y divide-slate-200">
+    {paginatedStudents.map((student) => (
+      <tr key={student._id} className="hover:bg-white">
 
-                            <div className="text-sm font-medium text-slate-900">
-                              {student.email}
-                            </div>
-                          </div>
-                        </td>
+        {/* Student Info */}
+        <td className="px-2 py-1">
+          <div>
+            <div className="text-[13px] font-medium text-slate-900">
+              {student.name}
+            </div>
 
-                        <td className="px-2 py-4 whitespace-nowrap">
-                          <div className="text-[16px] text-slate-900">
-                            {student.department || "-"}
-                          </div>
+            <div className="text-[13px] text-slate-500">
+              {student.email}
+            </div>
+          </div>
+        </td>
 
-                          <div className="text-sm text-slate-500">
-                            {student.createdAt
-                              ? new Date(student.createdAt).getFullYear()
-                              : "-"}
-                          </div>
-                        </td>
+        {/* Department & Year */}
+        <td className="px-2 py-1 whitespace-nowrap">
+          <div className="text-[13px] text-slate-900">
+            {student.department || "-"}
+          </div>
 
-                        <td className="px-2 py-4 text-center">
-                          {student.supervisor ? (
-                            <span className="inline-flex flex-wrap items-center px-2 py-1 rounded-full text-green-800 bg-gray-200 text-[14px] font-medium">
-                              {
-                                users?.find((u) => u._id === student.supervisor)
-                                  ?.name
-                              }
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-red-800 bg-red-100 text-xs font-medium">
-                              {student.projectStatus === "rejected"
-                                ? "Rejected"
-                                : "Not Assigned"}
-                            </span>
-                          )}
-                        </td>
+          <div className="text-[12px] text-slate-500">
+            {student.createdAt
+              ? new Date(student.createdAt).getFullYear()
+              : "-"}
+          </div>
+        </td>
 
-                        <td className="px-2 py-4 text-center">
-                          <span
-                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                              student.type === "Thesis"
-                                ? "text-purple-800 bg-purple-100"
-                                : "text-blue-800 bg-blue-100"
-                            }`}
-                          >
-                            {student.type || "-"}
-                          </span>
-                        </td>
+        {/* Supervisor */}
+        <td className="px-2 py-1 text-center">
+          {student.supervisor ? (
+            <span className="inline-flex flex-wrap items-center px-2 py-0.5 rounded-md text-green-800 bg-gray-200 text-[10px] font-medium">
+              {
+                users?.find((u) => u._id === student.supervisor)?.name
+              }
+            </span>
+          ) : (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-red-800 bg-red-100 text-[10px] font-medium">
+              {student.projectStatus === "rejected"
+                ? "Rejected"
+                : "Not Assigned"}
+            </span>
+          )}
+        </td>
 
-                        <td className="px-2 py-4">
-                          <div className="text-[16px] text-slate-900">
-                            {student.projectTitle}
-                          </div>
-                        </td>
+        {/* Type */}
+        <td className="px-2 py-1 text-center">
+          <span
+            className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium ${
+              student.type === "Thesis"
+                ? "text-purple-800 bg-purple-100"
+                : "text-blue-800 bg-blue-100"
+            }`}
+          >
+            {student.type || "-"}
+          </span>
+        </td>
 
-                        <td className="px-2 py-4 whitespace-nowrap text-sm font-medium">
-                          <button
-                            onClick={() => handleEdit(student)}
-                            className="text-[#17a2b8] hover:text-blue-900 pe-2"
-                          >
-                            Edit
-                          </button>
+        {/* Thesis / Project Title */}
+        <td className="px-2 py-1">
+          <div className="text-[13px] text-slate-900">
+            {student.projectTitle}
+          </div>
+        </td>
 
-                          <button
-                            onClick={() => handleDelete(student)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+        {/* Action */}
+        <td className="px-2 py-1 whitespace-nowrap text-[13px] font-medium">
+          <button
+            onClick={() => handleEdit(student)}
+            className="text-[#17a2b8] hover:text-blue-900 pe-2"
+          >
+            Edit
+          </button>
 
-                {/* Pagination */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-4 bg-white border-t border-slate-200">
-                  <p className="text-sm text-slate-500">
-                    Showing{" "}
-                    <span className="font-medium text-slate-700">
-                      {filteredStudents.length === 0 ? 0 : startIndex + 1}
-                    </span>{" "}
-                    to{" "}
-                    <span className="font-medium text-slate-700">
-                      {Math.min(
-                        startIndex + itemsPerPage,
-                        filteredStudents.length,
-                      )}
-                    </span>{" "}
-                    of{" "}
-                    <span className="font-medium text-slate-700">
-                      {filteredStudents.length}
-                    </span>{" "}
-                    students
-                  </p>
+          <button
+            onClick={() => handleDelete(student)}
+            className="text-red-600 hover:text-red-900"
+          >
+            Delete
+          </button>
+        </td>
 
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.max(prev - 1, 1))
-                      }
-                      disabled={currentPage === 1}
-                      className="px-3 py-1.5 text-sm border border-slate-300 rounded-md text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed"
-                    >
-                      Previous
-                    </button>
+      </tr>
+    ))}
+  </tbody>
+</table>
 
-                    {Array.from(
-                      { length: totalPages },
-                      (_, index) => index + 1,
-                    ).map((page) => (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`px-3 py-1.5 text-sm rounded-md border ${
-                          currentPage === page
-                            ? "bg-[#17a2b8] text-white border-[#17a2b8]"
-                            : "border-slate-300 text-slate-600 hover:bg-slate-100"
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ))}
+{/* Pagination */}
+{filteredStudents.length > 0 && (
+  <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
 
-                    <button
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                      }
-                      disabled={currentPage === totalPages || totalPages === 0}
-                      className="px-3 py-1.5 text-sm border border-slate-300 rounded-md text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed"
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
+    <p className="text-xs text-slate-500">
+      Showing{" "}
+      <span className="font-semibold text-slate-700">
+        {filteredStudents.length === 0 ? 0 : startIndex + 1}
+      </span>{" "}
+      to{" "}
+      <span className="font-semibold text-slate-700">
+        {Math.min(
+          startIndex + itemsPerPage,
+          filteredStudents.length
+        )}
+      </span>{" "}
+      of{" "}
+      <span className="font-semibold text-slate-700">
+        {filteredStudents.length}
+      </span>{" "}
+      students
+    </p>
+
+    <div className="flex items-center gap-1">
+
+      {/* Previous */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.max(prev - 1, 1))
+        }
+        disabled={currentPage === 1}
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === 1
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Previous
+      </button>
+
+      {/* Page Numbers */}
+      {Array.from(
+        { length: totalPages },
+        (_, index) => index + 1
+      ).map((page) => (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`min-w-[30px] rounded-md border px-2 py-1 text-xs font-semibold transition ${
+            currentPage === page
+              ? "border-[#17a2b8] bg-[#17a2b8] text-white"
+              : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
+
+      {/* Next */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) =>
+            Math.min(prev + 1, totalPages)
+          )
+        }
+        disabled={
+          currentPage === totalPages || totalPages === 0
+        }
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === totalPages || totalPages === 0
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Next
+      </button>
+
+    </div>
+  </div>
+)}
+
               </div>
             ) : (
               <div className="text-center py-8 text-slate-500">

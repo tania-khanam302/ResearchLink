@@ -12,6 +12,8 @@ const AddTeacher = () => {
   // showPassword and showConfirmPassword ===================
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showExpertise, setShowExpertise] = useState(false);
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -156,8 +158,8 @@ const AddTeacher = () => {
                 Select Department
               </option>
 
-                  <option value="Computer Science and Engineering">
-                    Computer Science and Engineering
+                  <option value="Computer Science & Engineering">
+                    Computer Science & Engineering
                     </option>
                   <option value="Electrical & Electronic Engineering">
                     Electrical & Electronic Engineering
@@ -168,71 +170,83 @@ const AddTeacher = () => {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700">
-              Expertise
-            </label>
+ <div className="relative">
+  <label className="block text-sm font-medium text-slate-700">
+    Expertise
+  </label>
 
-            <select
-              required
-              value={formData.expertise}
-              onChange={(e) =>
+  {/* Dropdown Button */}
+  <button
+    type="button"
+    onClick={() => setShowExpertise(!showExpertise)}
+    className="w-full p-2 mt-1 border-b border-slate-400 focus:outline-none flex items-center justify-between text-left"
+  >
+    <span
+      className={
+        formData.expertise.length > 0
+          ? "text-slate-700"
+          : "text-slate-400"
+      }
+    >
+      {formData.expertise.length > 0
+        ? `${formData.expertise.length} expertise selected`
+        : "Select Expertise"}
+    </span>
+
+    <span className="text-slate-500">
+      ▼
+    </span>
+  </button>
+
+  {/* Dropdown Options */}
+  {showExpertise && (
+    <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg p-2">
+
+      {[
+        "Machine Learning & Cyber Security",
+        "Artificial Intelligence",
+        "Computer Networks",
+        "Power Systems",
+        "Structural Engineering",
+      ].map((expertise) => (
+        <label
+          key={expertise}
+          className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-blue-50 cursor-pointer"
+        >
+          <input
+            type="checkbox"
+            checked={formData.expertise.includes(expertise)}
+            onChange={(e) => {
+              if (e.target.checked) {
                 setFormData({
                   ...formData,
-                  expertise: e.target.value,
-                })
+                  expertise: [
+                    ...formData.expertise,
+                    expertise,
+                  ],
+                });
+              } else {
+                setFormData({
+                  ...formData,
+                  expertise: formData.expertise.filter(
+                    (item) => item !== expertise
+                  ),
+                });
               }
-              className="input-field w-full p-2 border-b border-slate-400 focus:outline-none"
-            >
-              <option value="">
-                Select Expertise
-              </option>
+            }}
+            className="w-4 h-4 accent-[#17a2b8]"
+          />
 
-              <option value="Artificial Intelligence">
-                Artificial Intelligence
-              </option>
+          <span className="text-sm text-slate-700">
+            {expertise}
+          </span>
+        </label>
+      ))}
+    </div>
+  )}
+</div>
 
-              <option value="Machine Learning">
-                Machine Learning
-              </option>
 
-              <option value="Data Science">
-                Data Science
-              </option>
-
-              <option value="Software Development">
-                Software Development
-              </option>
-
-              <option value="Cybersecurity">
-                Cybersecurity
-              </option>
-
-              <option value="Web Development">
-                Web Development
-              </option>
-
-              <option value="Computer Networking">
-                Computer Networking
-              </option>
-
-              <option value="Operating System">
-                Operating System
-              </option>
-
-              <option value="Human Resource Management">
-                Human Resource Management
-              </option>
-
-              <option value="Organizational Behavior">
-                Organizational Behavior
-              </option>
-
-              <option value="Talent Management & Retention">
-                Talent Management & Retention
-              </option>
-            </select>
-          </div>
 
           <div>
             <label className="block text-sm font-medium text-slate-700">

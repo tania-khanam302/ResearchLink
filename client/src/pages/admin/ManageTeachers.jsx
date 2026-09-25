@@ -9,8 +9,10 @@ import {
 import {
   AlertTriangle,
   BadgeCheck,
+  Layers3,
   Plus,
   TriangleAlert,
+  UserCheck,
   UserPlus,
   Users,
   X,
@@ -20,7 +22,9 @@ import { toggleTeacherModal } from "../../store/slices/popupSlice";
 const ManageTeachers = () => {
   const { users } = useSelector((state) => state.admin);
   const { isCreateTeacherModalOpen } = useSelector((state) => state.popup);
-  const [showModal, setShowModal] = useState(false);
+
+const [showModal, setShowModal] = useState(false);
+const [showEditExpertise, setShowEditExpertise] = useState(false);
   const [editingTeacher, setEditingTeacher] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDepartment, setFilterDepartment] = useState("all");
@@ -29,13 +33,14 @@ const ManageTeachers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    department: "",
-    expertise: "",
-    maxStudents: 10,
-  });
+const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  department: "",
+  expertise: [],
+  maxStudents: 10,
+});
+
 
   const dispatch = useDispatch();
 useEffect(() => {
@@ -89,17 +94,21 @@ useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, filterDepartment]);
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setEditingTeacher(null);
-    setFormData({
-      name: "",
-      email: "",
-      department: "",
-      expertise: "",
-      maxStudents: 10,
-    });
-  };
+const handleCloseModal = () => {
+  setShowModal(false);
+  setEditingTeacher(null);
+  setShowEditExpertise(false);
+
+  setFormData({
+    name: "",
+    email: "",
+    department: "",
+    expertise: [],
+    maxStudents: 10,
+  });
+};
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -110,20 +119,27 @@ useEffect(() => {
     handleCloseModal();
   };
 
-  const handleEdit = (teacher) => {
-    setEditingTeacher(teacher);
-    setFormData({
-      name: teacher.name,
-      email: teacher.email,
-      department: teacher.department,
-      expertise: Array.isArray(teacher.expertise)
-        ? teacher.expertise[0]
-        : teacher.expertise,
-      maxStudents:
-        typeof teacher.maxStudents === "number" ? teacher.maxStudents : 10,
-    });
-    setShowModal(true);
-  };
+const handleEdit = (teacher) => {
+  setEditingTeacher(teacher);
+
+  setFormData({
+    name: teacher.name || "",
+    email: teacher.email || "",
+    department: teacher.department || "",
+    expertise: Array.isArray(teacher.expertise)
+      ? teacher.expertise
+      : teacher.expertise
+        ? [teacher.expertise]
+        : [],
+    maxStudents:
+      typeof teacher.maxStudents === "number"
+        ? teacher.maxStudents
+        : Number(teacher.maxStudents) || 10,
+  });
+
+  setShowModal(true);
+};
+
 
   const handleDelete = (teacher) => {
     setTeacherToDelete(teacher);
@@ -208,7 +224,9 @@ useEffect(() => {
           <div className="card shadow-lg rounded-md">
             <div className="flex items-center">
               <div className="p-3 bg-blue-100 rounded-lg">
-                <BadgeCheck className="w-6 h-6 text-purple-600" />
+                {/* <BadgeCheck className="w-6 h-6 text-purple-600" /> */}
+      <UserCheck className="w-6 h-6 text-purple-600" />
+
               </div>
 
               <div className="ml-4">
@@ -226,7 +244,7 @@ useEffect(() => {
           <div className="card shadow-lg rounded-md">
             <div className="flex items-center">
               <div className="p-3 bg-blue-100 rounded-lg">
-                <TriangleAlert className="w-6 h-6 text-yellow-600" />
+      <Layers3 className="w-6 h-6 text-[#17a2b8]" />
               </div>
 
               <div className="ml-4">
@@ -293,78 +311,89 @@ useEffect(() => {
       [&::-webkit-scrollbar-thumb:hover]:bg-[#8fb8be]"
           >
             {filteredTeachers && filteredTeachers.length > 0 ? (
-              <table className="min-w-auto w-full text-left border-collapse">
-                <thead className="bg-slate-200 sticky top-0 z-10">
-                  <tr className=" text-[#138496] text-xs font-semibold uppercase">
-                    <th className="px-2 py-6 text-left tracking-wide">
-                      Teacher Info
-                    </th>
-                    <th className="px-2 py-6 text-left ">Department</th>
-                    <th className="px-2 py-6 text-left ">Expertise</th>
-                    <th className="px-2 py-6 text-left ">Join Date</th>
-                    <th className="px-2 py-6 text-left">Action</th>
-                  </tr>
-                </thead>
+<table className="min-w-auto w-full text-left border-collapse text-[13px]">
+  <thead className="bg-slate-200 sticky top-0 z-10">
+    <tr className="text-[#138496] text-[12px] font-semibold uppercase">
+      <th className="px-2 py-3 text-left tracking-wide">
+        Teacher Info
+      </th>
+      <th className="px-2 py-3 text-left">
+        Department
+      </th>
+      <th className="px-2 py-3 text-left">
+        Expertise
+      </th>
+      <th className="px-2 py-3 text-left">
+        Join Date
+      </th>
+      <th className="px-2 py-3 text-left">
+        Action
+      </th>
+    </tr>
+  </thead>
 
-                <tbody className=" bg-slate-50 divide-y divide-slate-200">
-                  {paginatedTeachers.map((teacher) => {
-                    return (
-                      <tr key={teacher._id} className="hover:bg-white">
-                        {/* Teacher Info */}
-                        <td className="px-2 py-4">
-                          <div>
-                            <div className="text-sm font-medium text-slate-900">
-                              {teacher.name}
-                            </div>
-                            <div className="text-sm font-medium text-slate-900">
-                              {teacher.email}
-                            </div>
-                          </div>
-                        </td>
+  <tbody className="bg-slate-50 divide-y divide-slate-200">
+    {paginatedTeachers.map((teacher) => (
+      <tr key={teacher._id} className="hover:bg-white">
 
-                        {/* department */}
-                        <td className="px-2 py-4 whitespace-nowrapp">
-                          <div className="text-sm text-slate-900">
-                            {teacher.department || "-"}
-                          </div>
-                        </td>
+        {/* Teacher Info */}
+        <td className="px-2 py-1">
+          <div>
+            <div className="text-[13px] font-medium text-slate-900">
+              {teacher.name}
+            </div>
+            <div className="text-[13px] text-slate-500">
+              {teacher.email}
+            </div>
+          </div>
+        </td>
 
-                        {/* expertise */}
-                        <td className="px-2 py-4 whitespace-nowrapp">
-                          {Array.isArray(teacher.expertise)
-                            ? teacher.expertise.join(", ")
-                            : teacher.expertise}
-                        </td>
+        {/* Department */}
+        <td className="px-2 py-1 whitespace-nowrap">
+          <div className="text-[13px] text-slate-900">
+            {teacher.department || "-"}
+          </div>
+        </td>
 
-                        {/* join date */}
-                        <td className="px-2 py-4">
-                          <div className="text-sm text-slate-900">
-                            {teacher.createdAt
-                              ? new Date(teacher.createdAt).toLocaleString()
-                              : "-"}
-                          </div>
-                        </td>
+        {/* Expertise */}
+        <td className="px-2 py-1 whitespace-nowrap text-[13px]">
+          {Array.isArray(teacher.expertise)
+            ? teacher.expertise.join(", ")
+            : teacher.expertise}
+        </td>
 
-                        {/* action */}
-                        <td className="px-2 py-4 whitespace-nowrap text-sm font-medium">
-                          <button
-                            onClick={() => handleEdit(teacher)}
-                            className="text-[#17a2b8] hover:text-blue-900 pe-2"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDelete(teacher)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+        {/* Join Date */}
+        <td className="px-2 py-1">
+          <div className="text-[13px] text-slate-900">
+            {teacher.createdAt
+              ? new Date(teacher.createdAt).toLocaleString()
+              : "-"}
+          </div>
+        </td>
+
+        {/* Action */}
+        <td className="px-2 py-1 whitespace-nowrap text-[13px] font-medium">
+          <button
+            onClick={() => handleEdit(teacher)}
+            className="text-[#17a2b8] hover:text-blue-900 pe-2"
+          >
+            Edit
+          </button>
+
+          <button
+            onClick={() => handleDelete(teacher)}
+            className="text-red-600 hover:text-red-900"
+          >
+            Delete
+          </button>
+        </td>
+
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+
             ) : (
               filteredTeachers.length === 0 && (
                 <div className="text-center py-8 text-slate-500">
@@ -374,76 +403,77 @@ useEffect(() => {
             )}
           </div>
 
-          {/* Teachers Pagination */}
-          {filteredTeachers.length > 0 && (
-            <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-slate-500">
-                Showing{" "}
-                <span className="font-semibold text-slate-700">
-                  {startIndex + 1}
-                </span>{" "}
-                to{" "}
-                <span className="font-semibold text-slate-700">
-                  {Math.min(startIndex + itemsPerPage, filteredTeachers.length)}
-                </span>{" "}
-                of{" "}
-                <span className="font-semibold text-slate-700">
-                  {filteredTeachers.length}
-                </span>{" "}
-                teachers
-              </p>
+         {/* Teachers Pagination */}
+{filteredTeachers.length > 0 && (
+  <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
+    <p className="text-xs text-slate-500">
+      Showing{" "}
+      <span className="font-semibold text-slate-700">
+        {startIndex + 1}
+      </span>{" "}
+      to{" "}
+      <span className="font-semibold text-slate-700">
+        {Math.min(startIndex + itemsPerPage, filteredTeachers.length)}
+      </span>{" "}
+      of{" "}
+      <span className="font-semibold text-slate-700">
+        {filteredTeachers.length}
+      </span>{" "}
+      teachers
+    </p>
 
-              <div className="flex items-center gap-1.5">
-                {/* Previous */}
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
-                    currentPage === 1
-                      ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                  }`}
-                >
-                  Previous
-                </button>
+    <div className="flex items-center gap-1">
+      {/* Previous */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.max(prev - 1, 1))
+        }
+        disabled={currentPage === 1}
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === 1
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Previous
+      </button>
 
-                {/* Page Numbers */}
-                {Array.from(
-                  { length: totalPages },
-                  (_, index) => index + 1,
-                ).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`min-w-[38px] rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                      currentPage === page
-                        ? "border-[#17a2b8] bg-[#17a2b8] text-white"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
+      {/* Page Numbers */}
+      {Array.from(
+        { length: totalPages },
+        (_, index) => index + 1
+      ).map((page) => (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`min-w-[30px] rounded-md border px-2 py-1 text-xs font-semibold transition ${
+            currentPage === page
+              ? "border-[#17a2b8] bg-[#17a2b8] text-white"
+              : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
 
-                {/* Next */}
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
-                    currentPage === totalPages
-                      ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                  }`}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
+      {/* Next */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+        }
+        disabled={currentPage === totalPages}
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === totalPages
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Next
+      </button>
+    </div>
+  </div>
+)}
+
 
           {/* edit teacher model */}
           {showModal && (
@@ -520,44 +550,78 @@ useEffect(() => {
                       </select>
                     </div>
 
-                    {/* expertise */}
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">
-                        Expertise
-                      </label>
+                {/* Expertise */}
+<div className="relative">
+  <label className="block text-sm font-medium text-slate-700 mb-1">
+    Expertise
+  </label>
 
-                      <select
-                        className="input-feild w-full p-2 border-b border-slate-400 focus:outline-none"
-                        required
-                        value={formData.expertise}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            expertise: e.target.value,
-                          })
-                        }
-                      >
-                        <option value="">Select Expertise</option>
-                        <option value="Artificial Intelligence">
-                          Artificial Intelligence
-                        </option>
-                        <option value="Machine Learning">
-                          Machine Learning
-                        </option>
-                        <option value="Data Science">Data Science</option>
-                        <option value="Software Development">
-                          Software Development
-                        </option>
-                        <option value="Cyber Security">Cyber Security</option>
-                        <option value="Web Development">Web Development</option>
-                        <option value="Computer Networking">
-                          Computer Networking
-                        </option>
-                        <option value="Operating System">
-                          Operating System
-                        </option>
-                      </select>
-                    </div>
+  <button
+    type="button"
+    onClick={() => setShowEditExpertise(!showEditExpertise)}
+    className="w-full p-2 border-b border-slate-400 focus:outline-none flex items-center justify-between text-left"
+  >
+    <span
+      className={
+        formData.expertise.length > 0
+          ? "text-slate-700"
+          : "text-slate-400"
+      }
+    >
+      {formData.expertise.length > 0
+        ? `${formData.expertise.length} expertise selected`
+        : "Select Expertise"}
+    </span>
+
+    <span className="text-slate-500">▼</span>
+  </button>
+
+  {showEditExpertise && (
+    <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg p-2 max-h-56 overflow-y-auto">
+      {[
+        "Machine Learning & Cyber Security",
+        "Artificial Intelligence",
+        "Computer Networks",
+        "Power Systems",
+        "Structural Engineering",
+      ].map((expertise) => (
+        <label
+          key={expertise}
+          className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-blue-50 cursor-pointer"
+        >
+          <input
+            type="checkbox"
+            checked={formData.expertise.includes(expertise)}
+            onChange={(e) => {
+              if (e.target.checked) {
+                setFormData((prev) => ({
+                  ...prev,
+                  expertise: [
+                    ...prev.expertise,
+                    expertise,
+                  ],
+                }));
+              } else {
+                setFormData((prev) => ({
+                  ...prev,
+                  expertise: prev.expertise.filter(
+                    (item) => item !== expertise
+                  ),
+                }));
+              }
+            }}
+            className="w-4 h-4 accent-[#17a2b8]"
+          />
+
+          <span className="text-sm text-slate-700">
+            {expertise}
+          </span>
+        </label>
+      ))}
+    </div>
+  )}
+</div>
+
 
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">
