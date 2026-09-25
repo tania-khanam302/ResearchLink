@@ -513,28 +513,10 @@ useEffect(() => {
                         <option value="Select Department">
                           Select Department
                         </option>
-                        <option value="Computer Science and Engineering">
-                          Computer Science and Engineering
-                        </option>
-                        <option value="Software Engineering">
-                          Software Engineering
-                        </option>
-                        <option value="Information Technology">
-                          Information Technology
-                        </option>
-                        <option value="Data Science">Data Science</option>
-                        <option value="Electrical Engineering">
-                          Electrical Engineering
-                        </option>
-                        <option value="Mechanical Engineering">
-                          Mechanical Engineering
-                        </option>
-                        <option value="Civil Engineering">
-                          Civil Engineering
-                        </option>
-                        <option value="Business Administration">
-                          Business Administration
-                        </option>
+                  <option value="">Select Department</option>
+                  <option>Computer Science & Engineering</option>
+                  <option>Electrical & Electronic Engineering</option>
+                  <option>Civil Engineering</option>
                       </select>
                     </div>
 
