@@ -104,11 +104,9 @@ const AddCoAdmin = () => {
                   className="w-full mt-1 px-3 py-2 rounded-lg border border-slate-200 focus:border-[#17a2b8] outline-none"
                 >
                   <option value="">Select Department</option>
-                  <option>Computer Science and Engineering</option>
-                  <option>Software Engineering</option>
-                  <option>Information Technology</option>
-                  <option>Data Science</option>
-                  <option>Electrical Engineering</option>
+                  <option>Computer Science & Engineering</option>
+                  <option>Electrical & Electronic Engineering</option>
+                  <option>Civil Engineering</option>
                 </select>
               </div>
               
