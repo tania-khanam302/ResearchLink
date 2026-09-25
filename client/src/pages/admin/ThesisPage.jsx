@@ -636,75 +636,88 @@ const ThesisPage = () => {
             </table>
           </div>
 
-          {/* Pagination */}
-          {!loading && filteredTheses.length > 0 && (
-            <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-slate-500">
-                Showing{" "}
-                <span className="font-semibold text-slate-700">
-                  {startIndex + 1}
-                </span>{" "}
-                to{" "}
-                <span className="font-semibold text-slate-700">
-                  {Math.min(startIndex + itemsPerPage, filteredTheses.length)}
-                </span>{" "}
-                of{" "}
-                <span className="font-semibold text-slate-700">
-                  {filteredTheses.length}
-                </span>{" "}
-                theses
-              </p>
+{/* Pagination */}
+{!loading && filteredTheses.length > 0 && (
+  <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
 
-              {/* Pagination */}
-              <div className="flex items-center gap-1.5">
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
-                    currentPage === 1
-                      ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                  }`}
-                >
-                  Previous
-                </button>
+    <p className="text-xs text-slate-500">
+      Showing{" "}
+      <span className="font-semibold text-slate-700">
+        {startIndex + 1}
+      </span>{" "}
+      to{" "}
+      <span className="font-semibold text-slate-700">
+        {Math.min(
+          startIndex + itemsPerPage,
+          filteredTheses.length
+        )}
+      </span>{" "}
+      of{" "}
+      <span className="font-semibold text-slate-700">
+        {filteredTheses.length}
+      </span>{" "}
+      theses
+    </p>
 
-                {/* Page Numbers */}
-                {Array.from(
-                  { length: totalPages },
-                  (_, index) => index + 1,
-                ).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`min-w-[38px] rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                      currentPage === page
-                        ? "border-[#17a2b8] bg-[#17a2b8] text-white shadow-sm"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
+    {/* Pagination */}
+    <div className="flex items-center gap-1">
 
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
-                    currentPage === totalPages
-                      ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                  }`}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
+      {/* Previous */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.max(prev - 1, 1))
+        }
+        disabled={currentPage === 1}
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === 1
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Previous
+      </button>
+
+      {/* Page Numbers */}
+      {Array.from(
+        { length: totalPages },
+        (_, index) => index + 1
+      ).map((page) => (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`min-w-[30px] rounded-md border px-2 py-1 text-xs font-semibold transition ${
+            currentPage === page
+              ? "border-[#17a2b8] bg-[#17a2b8] text-white"
+              : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
+
+      {/* Next */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) =>
+            Math.min(prev + 1, totalPages)
+          )
+        }
+        disabled={
+          currentPage === totalPages || totalPages === 0
+        }
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === totalPages || totalPages === 0
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Next
+      </button>
+
+    </div>
+  </div>
+)}
+
 
           {/* No theses found matching the criteria. */}
           {!loading && filteredTheses.length === 0 && (

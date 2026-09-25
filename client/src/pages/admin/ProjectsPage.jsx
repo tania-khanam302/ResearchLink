@@ -330,7 +330,7 @@ const ProjectsPage = () => {
           <div className="pointer-events-none absolute -bottom-16 -right-16 h-32 w-32 rounded-full bg-cyan-500/5" />
         </div>
 
-        {/* Projects Overview */}
+        {/* All Projects Records*/}
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div className="flex flex-col gap-3 border-b border-slate-200 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
@@ -339,7 +339,7 @@ const ProjectsPage = () => {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-slate-900">
-                  Projects Overview
+                   All Projects Records
                 </h2>
                 <p className="text-sm text-slate-500">
                   View and manage all students projects across the platform.
@@ -515,72 +515,84 @@ const ProjectsPage = () => {
 
           {/* pagination  */}
           {filteredProjects.length > 0 && (
-            <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-slate-500">
-                Showing{" "}
-                <span className="font-semibold text-slate-700">
-                  {startIndex + 1}
-                </span>{" "}
-                to{" "}
-                <span className="font-semibold text-slate-700">
-                  {Math.min(startIndex + itemsPerPage, filteredProjects.length)}
-                </span>{" "}
-                of{" "}
-                <span className="font-semibold text-slate-700">
-                  {filteredProjects.length}
-                </span>{" "}
-                projects
-              </p>
+       <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
+  <p className="text-xs text-slate-500">
+    Showing{" "}
+    <span className="font-semibold text-slate-700">
+      {startIndex + 1}
+    </span>{" "}
+    to{" "}
+    <span className="font-semibold text-slate-700">
+      {Math.min(
+        startIndex + itemsPerPage,
+        filteredProjects.length
+      )}
+    </span>{" "}
+    of{" "}
+    <span className="font-semibold text-slate-700">
+      {filteredProjects.length}
+    </span>{" "}
+    projects
+  </p>
 
-              {/* Pagination Buttons */}
-              <div className="flex items-center gap-1.5">
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
-                    currentPage === 1
-                      ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                  }`}
-                >
-                  Previous
-                </button>
+  {/* Pagination Buttons */}
+  <div className="flex items-center gap-1">
 
-                {/* Page Numbers */}
-                {Array.from(
-                  { length: totalPages },
-                  (_, index) => index + 1,
-                ).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`min-w-[38px] rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                      currentPage === page
-                        ? "border-[#17a2b8] bg-[#17a2b8] text-white shadow-sm"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
+    {/* Previous */}
+    <button
+      onClick={() =>
+        setCurrentPage((prev) => Math.max(prev - 1, 1))
+      }
+      disabled={currentPage === 1}
+      className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+        currentPage === 1
+          ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+          : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+      }`}
+    >
+      Previous
+    </button>
 
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
-                    currentPage === totalPages
-                      ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-                  }`}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+    {/* Page Numbers */}
+    {Array.from(
+      { length: totalPages },
+      (_, index) => index + 1
+    ).map((page) => (
+      <button
+        key={page}
+        onClick={() => setCurrentPage(page)}
+        className={`min-w-[30px] rounded-md border px-2 py-1 text-xs font-semibold transition ${
+          currentPage === page
+            ? "border-[#17a2b8] bg-[#17a2b8] text-white"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        {page}
+      </button>
+    ))}
+
+    {/* Next */}
+    <button
+      onClick={() =>
+        setCurrentPage((prev) =>
+          Math.min(prev + 1, totalPages)
+        )
+      }
+      disabled={
+        currentPage === totalPages || totalPages === 0
+      }
+      className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+        currentPage === totalPages || totalPages === 0
+          ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+          : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+      }`}
+    >
+      Next
+    </button>
+
+  </div>
+</div>
+
           )}
 
           {/*  No projects found matching the criteria. */}

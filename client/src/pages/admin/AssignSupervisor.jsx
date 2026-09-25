@@ -351,219 +351,222 @@ const AssignSupervisor = () => {
 
           {/* Table Wrapper */}
           <div className="w-full overflow-x-auto">
-            <table className="w-full min-w-[950px] table-fixed border-collapse">
-              <thead className="border-b border-slate-200 bg-slate-50">
-        <tr>
-          <th className=" px-1 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500 sm:px-5">
-            Student
-          </th>
+         <table className="w-full min-w-[950px] table-fixed border-collapse text-[13px]">
+  <thead className="border-b border-slate-200 bg-slate-50">
+    <tr>
+      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500 sm:px-3">
+        Student
+      </th>
 
-          <th className=" px-1 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            Type
-          </th>
+      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+        Type
+      </th>
 
-          <th className=" px-1 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            Thesis / Project Title
-          </th>
+      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+        Thesis / Project Title
+      </th>
 
-          <th className=" px-1 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            Supervisor
-          </th>
+      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+        Supervisor
+      </th>
 
-          <th className=" px-1 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            Deadline
-          </th>
+      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+        Deadline
+      </th>
 
-          <th className=" px-1 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            Updated
-          </th>
+      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+        Updated
+      </th>
 
-          <th className=" px-1 py-4 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            Assign Supervisor
-          </th>
+      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+        Assign Supervisor
+      </th>
 
-          <th className=" px-1 py-4 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            Actions
-          </th>
-        </tr>
-      </thead>
+      <th className="px-1 py-3 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500">
+        Actions
+      </th>
+    </tr>
+  </thead>
 
-              <tbody className="divide-y divide-slate-100">
-                {paginatedData.map((row) => (
-                  <tr
-                    key={row.workId}
-                    className="hover:bg-slate-50 transition-colors duration-150"
-                  >
-                    {/* Student */}
-                    <td className="px-1 py-4 align-middle">
-                      <div className="min-w-0">
-                        <div
-                          className="text-sm font-semibold text-slate-800 truncate"
-                          title={row.studentName}
-                        >
-                          {row.studentName}
-                        </div>
+  <tbody className="divide-y divide-slate-100">
+    {paginatedData.map((row) => (
+      <tr
+        key={row.workId}
+        className="hover:bg-slate-50 transition-colors duration-150"
+      >
+        {/* Student */}
+        <td className="px-1 py-1.5 align-middle">
+          <div className="min-w-0">
+            <div
+              className="text-[13px] font-semibold text-slate-800 truncate"
+              title={row.studentName}
+            >
+              {row.studentName}
+            </div>
 
-                        <div
-                          className="text-xs text-slate-500 mt-1 truncate"
-                          title={row.studentEmail}
-                        >
-                          {row.studentEmail}
-                        </div>
-                      </div>
-                    </td>
+            <div
+              className="text-[12px] text-slate-500 mt-0.5 truncate"
+              title={row.studentEmail}
+            >
+              {row.studentEmail}
+            </div>
+          </div>
+        </td>
 
-                    {/* Type */}
-                    <td className="px-1 py-4 align-middle">
-                      {row.type === "thesis" ? (
-                        <Badge color="bg-purple-50 text-purple-700 ring-1 ring-purple-200">
-                          Thesis
-                        </Badge>
-                      ) : (
-                        <Badge color="bg-blue-50 text-blue-700 ring-1 ring-blue-200">
-                          Project
-                        </Badge>
-                      )}
-                    </td>
+    {/* Type */}
+<td className="px-1 py-1.5 align-middle">
+  {row.type === "thesis" ? (
+    <Badge color="bg-purple-50 text-purple-700 ring-1 ring-purple-200 rounded-md text-[10px]">
+      Thesis
+    </Badge>
+  ) : (
+    <Badge color="bg-blue-50 text-blue-700 ring-1 ring-blue-200 rounded-md text-[10px]">
+      Project
+    </Badge>
+  )}
+</td>
 
-                    {/* Title */}
-                    <td className="px-1 py-4 align-middle">
-                      <div
-                        className="text-sm font-medium text-slate-800 truncate"
-                        title={row.title}
-                      >
-                        {row.title}
-                      </div>
-                    </td>
 
-                    {/* Supervisor */}
-                    <td className="px-1 py-4 align-middle">
-                      {row.supervisor ? (
-                        <Badge color="bg-green-50 text-green-700 ring-1 ring-green-200">
-                          <span
-                            className="max-w-[100px] truncate inline-block"
-                            title={row.supervisor}
-                          >
-                            {row.supervisor}
-                          </span>
-                        </Badge>
-                      ) : (
-                        <Badge color="bg-red-50 text-red-700 ring-1 ring-red-200">
-                          {row.status === "rejected"
-                            ? "Rejected"
-                            : "Not Assigned"}
-                        </Badge>
-                      )}
-                    </td>
+        {/* Title */}
+        <td className="px-1 py-1.5 align-middle">
+          <div
+            className="text-[13px] font-medium text-slate-800 truncate"
+            title={row.title}
+          >
+            {row.title}
+          </div>
+        </td>
 
-                    {/* Deadline */}
-                    <td className="px-1 py-4 text-sm text-slate-600 align-middle whitespace-nowrap">
-                      {row.deadline}
-                    </td>
+ {/* Supervisor */}
+<td className="px-1 py-1.5 align-middle">
+  {row.supervisor ? (
+    <Badge color="bg-green-50 text-green-700 ring-1 ring-green-200 rounded-md text-[10px]">
+      <span
+        className="truncate inline-block"
+        title={row.supervisor}
+      >
+        {row.supervisor}
+      </span>
+    </Badge>
+  ) : (
+    <Badge color="bg-red-50 text-red-700 ring-1 ring-red-200 rounded-md text-[10px]">
+      {row.status === "rejected"
+        ? "Rejected"
+        : "Not Assigned"}
+    </Badge>
+  )}
+</td>
 
-                    {/* Updated */}
-                    <td className="px-1 py-4 text-xs text-slate-500 align-middle">
-                      <div className="truncate" title={row.updatedAt}>
-                        {row.updatedAt}
-                      </div>
-                    </td>
 
-                    {/* Assign Supervisor */}
-                    <td className="px-1 py-4 align-middle">
-                      <select
-                        className="
-                  w-full
-                  rounded-lg
-                  border border-slate-300
-                  bg-white
-                  px-2.5
-                  py-2
-                  text-xs
-                  text-slate-700
-                  outline-none
-                  shadow-sm
-                  transition
-                  hover:border-[#17a2b8]
-                  focus:border-[#17a2b8]
-                  focus:ring-2
-                  focus:ring-[#17a2b8]/20
-                  disabled:bg-slate-100
-                  disabled:text-slate-400
-                  disabled:cursor-not-allowed
-                "
-                        value={selectedSupervisor[row.workId] || ""}
-                        disabled={
-                          !!row.supervisor ||
-                          row.status === "rejected" ||
-                          !row.isApproved
-                        }
-                        onChange={(e) =>
-                          handleAssignSupervisor(row.workId, e.target.value)
-                        }
-                      >
-                        <option value="" disabled>
-                          Select
-                        </option>
+        {/* Deadline */}
+        <td className="px-1 py-1.5 text-[13px] text-slate-600 align-middle whitespace-nowrap">
+          {row.deadline}
+        </td>
 
-                        {teachers
-                          .filter((t) => t.capacityLeft > 0)
-                          .map((t) => (
-                            <option value={t._id} key={t._id}>
-                              {t.name} ({t.capacityLeft})
-                            </option>
-                          ))}
-                      </select>
-                    </td>
+        {/* Updated */}
+        <td className="px-1 py-1.5 text-[12px] text-slate-500 align-middle">
+          <div className="truncate" title={row.updatedAt}>
+            {row.updatedAt}
+          </div>
+        </td>
 
-                    {/* Actions */}
-                    <td className="px-1 py-4 align-middle">
-                      <button
-                        className="
-                  w-[100px]
-                  px-0
-                  py-2
-                  rounded-lg
-                  bg-[#17a2b8]
-                  hover:bg-[#138496]
-                  text-white
-                  text-xs
-                  font-semibold
-                  shadow-sm
-                  transition
-                  disabled:opacity-50
-                  disabled:cursor-not-allowed
-                "
-                        onClick={() =>
-                          handleAssign(
-                            row.studentId,
-                            row.status,
-                            row.workId,
-                            row.type,
-                          )
-                        }
-                        disabled={
-                          pendingFor === row.workId ||
-                          !!row.supervisor ||
-                          row.status === "rejected" ||
-                          !row.isApproved ||
-                          !selectedSupervisor[row.workId]
-                        }
-                      >
-                        {pendingFor === row.workId
-                          ? "Assigning..."
-                          : row.supervisor
-                            ? "Assigned"
-                            : row.status === "rejected"
-                              ? "Rejected"
-                              : !row.isApproved
-                                ? "Not Approved"
-                                : "Assign"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Assign Supervisor */}
+        <td className="px-1 py-1.5 align-middle">
+          <select
+            className="
+              w-full
+              rounded-md
+              border border-slate-300
+              bg-white
+              px-2
+              py-1.5
+              text-[12px]
+              text-slate-700
+              outline-none
+              shadow-sm
+              transition
+              hover:border-[#17a2b8]
+              focus:border-[#17a2b8]
+              focus:ring-2
+              focus:ring-[#17a2b8]/20
+              disabled:bg-slate-100
+              disabled:text-slate-400
+              disabled:cursor-not-allowed
+            "
+            value={selectedSupervisor[row.workId] || ""}
+            disabled={
+              !!row.supervisor ||
+              row.status === "rejected" ||
+              !row.isApproved
+            }
+            onChange={(e) =>
+              handleAssignSupervisor(row.workId, e.target.value)
+            }
+          >
+            <option value="" disabled>
+              Select
+            </option>
+
+            {teachers
+              .filter((t) => t.capacityLeft > 0)
+              .map((t) => (
+                <option value={t._id} key={t._id}>
+                  {t.name} ({t.capacityLeft})
+                </option>
+              ))}
+          </select>
+        </td>
+
+        {/* Actions */}
+        <td className="px-1 py-1.5 align-middle text-center">
+          <button
+            className="
+              w-[90px]
+              px-0
+              py-1.5
+              rounded-md
+              bg-[#17a2b8]
+              hover:bg-[#138496]
+              text-white
+              text-[12px]
+              font-semibold
+              shadow-sm
+              transition
+              disabled:opacity-50
+              disabled:cursor-not-allowed
+            "
+            onClick={() =>
+              handleAssign(
+                row.studentId,
+                row.status,
+                row.workId,
+                row.type,
+              )
+            }
+            disabled={
+              pendingFor === row.workId ||
+              !!row.supervisor ||
+              row.status === "rejected" ||
+              !row.isApproved ||
+              !selectedSupervisor[row.workId]
+            }
+          >
+            {pendingFor === row.workId
+              ? "Assigning..."
+              : row.supervisor
+                ? "Assigned"
+                : row.status === "rejected"
+                  ? "Rejected"
+                  : !row.isApproved
+                    ? "Not Approved"
+                    : "Assign"}
+          </button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
 
             {/* No students found */}
             {filtered.length === 0 && (
@@ -581,98 +584,85 @@ const AssignSupervisor = () => {
             )}
           </div>
 
-          {/* Pagination */}
-          {filtered.length > 0 && (
-            <div className="px-6 py-4 bg-white border-t border-slate-200">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-sm text-slate-500">
-                  Showing{" "}
-                  <span className="font-semibold text-slate-700">
-                    {(currentPage - 1) * itemsPerPage + 1}
-                  </span>{" "}
-                  to{" "}
-                  <span className="font-semibold text-slate-700">
-                    {Math.min(currentPage * itemsPerPage, filtered.length)}
-                  </span>{" "}
-                  of{" "}
-                  <span className="font-semibold text-slate-700">
-                    {filtered.length}
-                  </span>{" "}
-                  students
-                </div>
+       {/* Pagination */}
+{filtered.length > 0 && (
+  <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
 
-                {/* Pagination Buttons */}
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
-                    disabled={currentPage === 1}
-                    className="
-              px-3.5 py-2
-              text-sm font-medium
-              border border-slate-200
-              rounded-lg
-              bg-white
-              text-slate-600
-              hover:bg-slate-50
-              disabled:opacity-40
-              disabled:cursor-not-allowed
-              transition
-            "
-                  >
-                    Previous
-                  </button>
+    <p className="text-xs text-slate-500">
+      Showing{" "}
+      <span className="font-semibold text-slate-700">
+        {(currentPage - 1) * itemsPerPage + 1}
+      </span>{" "}
+      to{" "}
+      <span className="font-semibold text-slate-700">
+        {Math.min(currentPage * itemsPerPage, filtered.length)}
+      </span>{" "}
+      of{" "}
+      <span className="font-semibold text-slate-700">
+        {filtered.length}
+      </span>{" "}
+      students
+    </p>
 
-                  {Array.from(
-                    { length: totalPages },
-                    (_, index) => index + 1,
-                  ).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`
-                min-w-[38px]
-                px-3 py-2
-                text-sm font-semibold
-                rounded-lg
-                border
-                transition
-                ${
-                  currentPage === page
-                    ? "bg-[#17a2b8] text-white border-[#17a2b8]"
-                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
-                }
-              `}
-                    >
-                      {page}
-                    </button>
-                  ))}
+    {/* Pagination Buttons */}
+    <div className="flex items-center gap-1">
 
-                  <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
-                    disabled={currentPage === totalPages}
-                    className="
-              px-3.5 py-2
-              text-sm font-medium
-              border border-slate-200
-              rounded-lg
-              bg-white
-              text-slate-600
-              hover:bg-slate-50
-              disabled:opacity-40
-              disabled:cursor-not-allowed
-              transition
-            "
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+      {/* Previous */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.max(prev - 1, 1))
+        }
+        disabled={currentPage === 1}
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === 1
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Previous
+      </button>
+
+      {/* Page Numbers */}
+      {Array.from(
+        { length: totalPages },
+        (_, index) => index + 1
+      ).map((page) => (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`min-w-[30px] rounded-md border px-2 py-1 text-xs font-semibold transition ${
+            currentPage === page
+              ? "border-[#17a2b8] bg-[#17a2b8] text-white"
+              : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
+
+      {/* Next */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) =>
+            Math.min(prev + 1, totalPages)
+          )
+        }
+        disabled={
+          currentPage === totalPages || totalPages === 0
+        }
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === totalPages || totalPages === 0
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Next
+      </button>
+
+    </div>
+  </div>
+)}
+
         </div>
 
       </div>

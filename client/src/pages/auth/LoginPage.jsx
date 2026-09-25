@@ -91,7 +91,7 @@ const LoginPage = () => {
     <>
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="relative z-10  max-w-md w-full">
-          <div className="bg-white px-6 py-6 rounded-lg border shadow-[0px_0px_40px_rgba(0,0,0,0.35)]">
+          <div className="px-6 py-6 rounded-lg border shadow-[0px_0px_40px_rgba(0,0,0,0.35)]">
             {/* login header */}
             <div className="text-center mb-2">
               <div className="inline-flex items-center justify-center w-12 h-12 bg-[#17a2b8] rounded-full">

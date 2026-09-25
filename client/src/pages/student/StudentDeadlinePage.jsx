@@ -1148,7 +1148,7 @@ const lastSubmission =
 
       {/* submit modal  */}
       {selectedDeadline && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-6 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
           <form
             onSubmit={handleSubmit}
             className="my-auto w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl"

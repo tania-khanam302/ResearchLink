@@ -56,25 +56,7 @@ const SupervisorPage = () => {
       : "Project";
   const hasWork = !!work?._id;
 
-  const formatDeadline = (dateStr) => {
-    if (!dateStr) return "-";
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) return "-";
-    const day = date.getDate();
-    const j = day % 10,
-      k = day % 100;
-    const suffix =
-      j === 1 && k !== 11
-        ? "st"
-        : j === 2 && k !== 12
-          ? "nd"
-          : j === 3 && k !== 13
-            ? "rd"
-            : "th";
-    const month = date.toLocaleString("en-US", { month: "long" });
-    const year = date.getFullYear();
-    return `${day} ${suffix} ${month} ${year}`;
-  };
+
 
   const handleOpenRequest = (supervisor) => {
     setSelectedSupervisor(supervisor);
@@ -240,69 +222,42 @@ const SupervisorPage = () => {
             </div>
 
             <div className="space-y-6 px-6 py-6 mb-3">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {/* Project Title */}
-                <div className="bg-slate-50 border rounded-xl p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    {workType === "Thesis" ? "Thesis Title" : "Project Title"}
-                  </p>
-                  <h3 className="text-xl font-bold text-slate-800 mt-2">
-                    {work?.title || "-"}
-                  </h3>
-                </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+  {/* Project Title */}
+  <div className="bg-slate-50 border rounded-xl p-5">
+    <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+      {workType === "Thesis" ? "Thesis Title" : "Project Title"}
+    </p>
+    <h3 className="text-xl font-bold text-slate-800 mt-2">
+      {work?.title || "-"}
+    </h3>
+  </div>
 
-                {/* Status */}
-                <div className="bg-slate-50 border rounded-xl p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    Status
-                  </p>
-                  <div className="mt-3">
-                    <span
-                      className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium capitalize
-                        ${
-                          // project?.status === "approved"
-                          work?.status === "approved"
-                            ? "bg-green-100 text-green-700"
-                            : work?.status === "pending"
-                              ? // : project?.status === "pending"
-                                "bg-yellow-100 text-yellow-700"
-                              : work?.status === "rejected"
-                                ? // : project?.status === "rejected"
-                                  "bg-red-100 text-red-700"
-                                : "bg-gray-100 text-gray-700"
-                        }
-                        
-                        `}
-                    >
-                      {work?.status || "Invalid"}
-                    </span>
-                  </div>
-                </div>
+  {/* Status */}
+  <div className="bg-slate-50 border rounded-xl p-5">
+    <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+      Status
+    </p>
 
-                {/* Deadline */}
-                <div className="bg-slate-50 border rounded-xl p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    Deadline
-                  </p>
-                  <h3 className="text-xl font-bold text-slate-800 mt-2">
-                    {work?.deadline
-                      ? formatDeadline(work.deadline)
-                      : "No deadline set"}
-                  </h3>
-                </div>
+    <div className="mt-3">
+      <span
+        className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium capitalize
+          ${
+            work?.status === "approved"
+              ? "bg-green-100 text-green-700"
+              : work?.status === "pending"
+                ? "bg-yellow-100 text-yellow-700"
+                : work?.status === "rejected"
+                  ? "bg-red-100 text-red-700"
+                  : "bg-gray-100 text-gray-700"
+          }`}
+      >
+        {work?.status || "Invalid"}
+      </span>
+    </div>
+  </div>
+</div>
 
-                {/* Created */}
-                <div className="bg-slate-50 border rounded-xl p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    Created
-                  </p>
-                  <h3 className="text-xl font-bold text-slate-800 mt-2">
-                    {work?.createdAt
-                      ? formatDeadline(work.createdAt)
-                      : "Unknown"}
-                  </h3>
-                </div>
-              </div>
 
               {/* Description */}
               {work?.description && (
