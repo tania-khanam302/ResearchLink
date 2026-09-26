@@ -280,18 +280,18 @@ const ManageCoAdmin = () => {
         {/* Co-Admin Info */}
         <td className="px-2 py-1">
           <div>
-            <div className="text-[13px] font-medium text-slate-900">
+            <div className="font-medium text-slate-900">
               {admin.name}
             </div>
 
-            <div className="text-[13px] text-slate-500">
+            <div className="text-slate-500">
               {admin.email}
             </div>
           </div>
         </td>
 
         {/* Department */}
-        <td className="px-2 py-1 text-[13px] text-slate-900">
+        <td className="px-2 py-1 text-slate-900">
           {admin.department || "-"}
         </td>
 
@@ -303,7 +303,7 @@ const ManageCoAdmin = () => {
         </td>
 
         {/* Action */}
-        <td className="px-2 py-1 whitespace-nowrap text-[13px] font-medium">
+        <td className="px-2 py-1 whitespace-nowrap font-medium">
           <button
             onClick={() => handleEdit(admin)}
             className="text-[#17a2b8] hover:text-blue-900 pe-3"
