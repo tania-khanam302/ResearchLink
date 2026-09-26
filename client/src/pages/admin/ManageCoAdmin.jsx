@@ -255,15 +255,15 @@ const ManageCoAdmin = () => {
 
 
         {/* Co-Admin list section */}
-        <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)] overflow-hidden">
-          <div className="card-header">
+        <div className="card responsive-card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)] overflow-hidden">
+           <div className="card-header">
             <h2 className="card-title text-lg font-semibold text-[#17a2b8]">
               Co-Admin List
             </h2>
           </div>
-          
-<div className="w-full overflow-x-auto overscroll-x-contain">
-  <table className="min-w-[620px] w-full text-left border-collapse text-[13px]">
+
+          <div className="overflow-x-auto">
+           <table className="w-full text-left border-collapse text-[13px]">
   <thead className="bg-slate-100">
     <tr className="text-[#138496] text-[12px] font-semibold uppercase">
       <th className="px-2 py-3">Co-Admin Info</th>
