@@ -162,125 +162,152 @@ const handleEdit = (teacher) => {
   return (
     <>
       <div className="space-y-6">
- {/* Header */}
-<div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+{/* Manage Teachers Header */}
+<div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-md">
+
   <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
 
-  <div className="relative px-6 py-6 sm:px-8 sm:py-7">
-    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+  <div className="relative p-4 sm:px-8 sm:py-7">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-      <div className="flex items-start gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
-          <Users className="h-6 w-6" />
+      {/* Header Content */}
+      <div className="flex items-start gap-3 sm:items-center sm:gap-4">
+
+        {/* Icon */}
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100 sm:h-14 sm:w-14 sm:rounded-2xl">
+          <Users
+            className="h-5 w-5 sm:h-7 sm:w-7"
+            strokeWidth={1.8}
+          />
         </div>
 
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        {/* Title & Description */}
+        <div className="min-w-0">
+
+          <h1 className="truncate text-xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             Manage Teachers
           </h1>
 
-          <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
-            Add, edit, and manage teacher accounts
+          <p className="mt-0.5 text-xs leading-relaxed text-slate-500 sm:mt-1 sm:text-base sm:leading-6">
+            Add, edit and manage teacher accounts.
           </p>
+
         </div>
       </div>
 
+      {/* Add Teacher Button */}
       <button
         onClick={() => dispatch(toggleTeacherModal())}
-        className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#17a2b8] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#138496] hover:shadow-md"
+        className="main-btn"
       >
-        <UserPlus className="h-4 w-4" />
+        <UserPlus className="h-4 w-4 sm:h-5 sm:w-5" />
         <span>Add New Teacher</span>
       </button>
 
     </div>
   </div>
 
+  {/* Background Elements */}
   <div className="pointer-events-none absolute -bottom-24 -right-20 h-52 w-52 rounded-full bg-cyan-100/50 blur-3xl" />
+
   <div className="pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full bg-cyan-500/5" />
+
   <div className="pointer-events-none absolute bottom-0 right-48 h-24 w-24 rounded-full bg-indigo-500/5" />
+
 </div>
 
+{/* Stats cards */}
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
+
+  {/* Total Teachers */}
+  <div className="admin-card border border-slate-200 hover:shadow-lg transition-shadow duration-200 p-4 sm:p-5">
+    <div className="flex items-center justify-between gap-2">
+
+      <div className="min-w-0">
+        <p className="text-xs sm:text-sm font-medium text-slate-500 truncate">
+          Total Teachers
+        </p>
+
+        <p className="text-xl sm:text-2xl font-bold text-slate-800 mt-1 sm:mt-2 truncate">
+          {teachers.length}
+        </p>
+      </div>
+
+      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#17a2b8]/10 flex items-center justify-center shrink-0">
+        <Users className="w-4 h-4 sm:w-5 sm:h-5 text-[#17a2b8]" />
+      </div>
+
+    </div>
+  </div>
 
 
-        {/* Stats cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="card shadow-lg rounded-md">
-            <div className="flex items-center">
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <Users className="w-6 h-6 text-[#17a2b8]" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-slate-600">
-                  Total Teachers
-                </p>
-                <p className="text-lg font-semibold text-slate-800">
-                  {teachers.length}
-                </p>
-              </div>
-            </div>
-          </div>
+  {/* Assigned Students */}
+  <div className="admin-card border border-slate-200 hover:shadow-lg transition-shadow duration-200 p-4 sm:p-5">
+    <div className="flex items-center justify-between gap-2">
 
-          <div className="card shadow-lg rounded-md">
-            <div className="flex items-center">
-              <div className="p-3 bg-blue-100 rounded-lg">
-                {/* <BadgeCheck className="w-6 h-6 text-purple-600" /> */}
-      <UserCheck className="w-6 h-6 text-purple-600" />
+      <div className="min-w-0">
+        <p className="text-xs sm:text-sm font-medium text-slate-500 truncate">
+          Assigned Students
+        </p>
 
-              </div>
+        <p className="text-xl sm:text-2xl font-bold text-slate-800 mt-1 sm:mt-2 truncate">
+          {assignedStudentCount}
+        </p>
+      </div>
 
-              <div className="ml-4">
-                <p className="text-sm font-medium text-slate-600">
-                  Assigned Student
-                </p>
+      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-purple-100 flex items-center justify-center shrink-0">
+        <UserCheck className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
+      </div>
 
-                <p className="text-lg font-semibold text-slate-800">
-                  {assignedStudentCount}
-                </p>
-              </div>
-            </div>
-          </div>
+    </div>
+  </div>
 
-          <div className="card shadow-lg rounded-md">
-            <div className="flex items-center">
-              <div className="p-3 bg-blue-100 rounded-lg">
-      <Layers3 className="w-6 h-6 text-[#17a2b8]" />
-              </div>
 
-              <div className="ml-4">
-                <p className="text-sm font-medium text-slate-600">
-                  Departments
-                </p>
-                <p className="text-lg font-semibold text-slate-800">
-                  {departments.length}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+  {/* Total Departments */}
+  <div className="admin-card border border-slate-200 hover:shadow-lg transition-shadow duration-200 p-4 sm:p-5">
+    <div className="flex items-center justify-between gap-2">
+
+      <div className="min-w-0">
+        <p className="text-xs sm:text-sm font-medium text-slate-500 truncate">
+          Total Departments
+        </p>
+
+        <p className="text-xl sm:text-2xl font-bold text-slate-800 mt-1 sm:mt-2 truncate">
+          {departments.length}
+        </p>
+      </div>
+
+      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#138496]/10 flex items-center justify-center shrink-0">
+        <Layers3 className="w-4 h-4 sm:w-5 sm:h-5 text-[#138496]" />
+      </div>
+
+    </div>
+  </div>
+
+</div>
 
         {/* Filters */}
-        <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)] flex flex-col md:flex-row gap-4">
+        <div className="card admin-card flex flex-col md:flex-row gap-4 ">
           <div className="flex-1">
-            <label className="block mb-2 card-title text-md font-semibold text-[#17a2b8]">
+            <label className="block mb-2 card-title text-xs sm:text-[18px] font-semibold text-[#17a2b8]">
               Search Teachers
             </label>
 
             <input
-              type="text"
+              type="search"
               placeholder="Search by name or email..."
-              className="input-field outline-none p-1 border border-slate-300 w-[250px] "
+              className="custom-input "
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
           <div className="w-full md:w-48">
-            <label className="block mb-2 text-md font-semibold text-[#17a2b8]">
+            <label className="block mb-2 text-xs sm:text-[18px] font-semibold text-[#17a2b8]">
               Filter Department
             </label>
             <select
-              className="input-field w-full outline-none p-1 border border-slate-300"
+              className="custom-select"
               value={filterDepartment}
               onChange={(e) => setFilterDepartment(e.target.value)}
             >
@@ -295,25 +322,19 @@ const handleEdit = (teacher) => {
         </div>
 
         {/* Teachers table */}
-        <div className="card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)] overflow-hidden">
+        <div className="card admin-card responsive-card  overflow-hidden">
           <div className="card-header">
             <h2 className="card-title text-lg font-semibold text-[#17a2b8]">
               Teachers List
             </h2>
           </div>
           <div
-            className="w-full max-w-full overflow-auto max-h-[500px]
-          
-      [&::-webkit-scrollbar]:w-1.5
-      [&::-webkit-scrollbar-track]:bg-slate-100
-      [&::-webkit-scrollbar-thumb]:bg-[#b0cbcf]
-      [&::-webkit-scrollbar-thumb]:rounded-full
-      [&::-webkit-scrollbar-thumb:hover]:bg-[#8fb8be]"
+            className="w-full max-w-full overflow-auto custom-scroll-x"
           >
             {filteredTeachers && filteredTeachers.length > 0 ? (
 <table className="min-w-auto w-full text-left border-collapse text-[13px]">
   <thead className="bg-slate-200 sticky top-0 z-10">
-    <tr className="text-[#138496] text-[12px] font-semibold uppercase">
+    <tr className="text-[#138496]  font-semibold uppercase">
       <th className="px-2 py-3 text-left tracking-wide">
         Teacher Info
       </th>
@@ -339,10 +360,10 @@ const handleEdit = (teacher) => {
         {/* Teacher Info */}
         <td className="px-2 py-1">
           <div>
-            <div className="text-[13px] font-medium text-slate-900">
+            <div className=" font-medium text-slate-900">
               {teacher.name}
             </div>
-            <div className="text-[13px] text-slate-500">
+            <div className=" text-slate-500">
               {teacher.email}
             </div>
           </div>
@@ -350,13 +371,13 @@ const handleEdit = (teacher) => {
 
         {/* Department */}
         <td className="px-2 py-1 whitespace-nowrap">
-          <div className="text-[13px] text-slate-900">
+          <div className=" text-slate-900">
             {teacher.department || "-"}
           </div>
         </td>
 
         {/* Expertise */}
-        <td className="px-2 py-1 whitespace-nowrap text-[13px]">
+        <td className="px-2 py-1 whitespace-nowrap ">
           {Array.isArray(teacher.expertise)
             ? teacher.expertise.join(", ")
             : teacher.expertise}
@@ -364,7 +385,7 @@ const handleEdit = (teacher) => {
 
         {/* Join Date */}
         <td className="px-2 py-1">
-          <div className="text-[13px] text-slate-900">
+          <div className=" text-slate-900">
             {teacher.createdAt
               ? new Date(teacher.createdAt).toLocaleString()
               : "-"}
@@ -372,7 +393,7 @@ const handleEdit = (teacher) => {
         </td>
 
         {/* Action */}
-        <td className="px-2 py-1 whitespace-nowrap text-[13px] font-medium">
+        <td className="px-2 py-1 whitespace-nowrap  font-medium">
           <button
             onClick={() => handleEdit(teacher)}
             className="text-[#17a2b8] hover:text-blue-900 pe-2"
@@ -403,76 +424,6 @@ const handleEdit = (teacher) => {
             )}
           </div>
 
-         {/* Teachers Pagination */}
-{filteredTeachers.length > 0 && (
-  <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
-    <p className="text-xs text-slate-500">
-      Showing{" "}
-      <span className="font-semibold text-slate-700">
-        {startIndex + 1}
-      </span>{" "}
-      to{" "}
-      <span className="font-semibold text-slate-700">
-        {Math.min(startIndex + itemsPerPage, filteredTeachers.length)}
-      </span>{" "}
-      of{" "}
-      <span className="font-semibold text-slate-700">
-        {filteredTeachers.length}
-      </span>{" "}
-      teachers
-    </p>
-
-    <div className="flex items-center gap-1">
-      {/* Previous */}
-      <button
-        onClick={() =>
-          setCurrentPage((prev) => Math.max(prev - 1, 1))
-        }
-        disabled={currentPage === 1}
-        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
-          currentPage === 1
-            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
-            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-        }`}
-      >
-        Previous
-      </button>
-
-      {/* Page Numbers */}
-      {Array.from(
-        { length: totalPages },
-        (_, index) => index + 1
-      ).map((page) => (
-        <button
-          key={page}
-          onClick={() => setCurrentPage(page)}
-          className={`min-w-[30px] rounded-md border px-2 py-1 text-xs font-semibold transition ${
-            currentPage === page
-              ? "border-[#17a2b8] bg-[#17a2b8] text-white"
-              : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-          }`}
-        >
-          {page}
-        </button>
-      ))}
-
-      {/* Next */}
-      <button
-        onClick={() =>
-          setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-        }
-        disabled={currentPage === totalPages}
-        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
-          currentPage === totalPages
-            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
-            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
-        }`}
-      >
-        Next
-      </button>
-    </div>
-  </div>
-)}
 
 
           {/* edit teacher model */}
@@ -710,6 +661,80 @@ const handleEdit = (teacher) => {
           {/* Add Student Modal */}
           {isCreateTeacherModalOpen && <AddTeacher />}
         </div>
+
+         {/* Teachers Pagination */}
+         <div className="common-pagination">
+{filteredTeachers.length > 0 && (
+  <div className="admin-pagination card responsive-card sm:flex-row sm:items-center sm:justify-between">
+    <p className=" text-slate-500">
+      Showing{" "}
+      <span className="font-semibold text-slate-700">
+        {startIndex + 1}
+      </span>{" "}
+      to{" "}
+      <span className="font-semibold text-slate-700">
+        {Math.min(startIndex + itemsPerPage, filteredTeachers.length)}
+      </span>{" "}
+      of{" "}
+      <span className="font-semibold text-slate-700">
+        {filteredTeachers.length}
+      </span>{" "}
+      teachers
+    </p>
+
+    <div className="flex items-center gap-1">
+      {/* Previous */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.max(prev - 1, 1))
+        }
+        disabled={currentPage === 1}
+        className={`rounded-md border px-2.5 py-1 font-medium transition ${
+          currentPage === 1
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Previous
+      </button>
+
+      {/* Page Numbers */}
+      {Array.from(
+        { length: totalPages },
+        (_, index) => index + 1
+      ).map((page) => (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`min-w-[30px] rounded-md border px-2 py-1 text-xs font-semibold transition ${
+            currentPage === page
+              ? "border-[#17a2b8] bg-[#17a2b8] text-white"
+              : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
+
+      {/* Next */}
+      <button
+        onClick={() =>
+          setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+        }
+        disabled={currentPage === totalPages}
+        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+          currentPage === totalPages
+            ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
+            : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
+        }`}
+      >
+        Next
+      </button>
+    </div>
+  </div>
+)}
+</div>
+        
       </div>
     </>
   );

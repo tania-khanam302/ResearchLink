@@ -116,7 +116,7 @@ const ManageCoAdmin = () => {
     <>
     <div className="space-y-6">
  {/* manage co-admins header */}
-<div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+<div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-md">
   <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
   
   <div className="relative p-4 sm:px-8 sm:py-7">
@@ -158,7 +158,7 @@ const ManageCoAdmin = () => {
 {/* total co-admins and department */}
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
   {/* Total Co-Admins Card */}
-  <div className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-200 p-4 sm:p-5">
+  <div className=" admin-card border border-slate-200 hover:shadow-lg transition-shadow duration-200 p-4 sm:p-5">
     <div className="flex items-center justify-between gap-2">
       <div className="min-w-0">
         <p className="text-xs sm:text-sm font-medium text-slate-500 truncate">
@@ -176,7 +176,7 @@ const ManageCoAdmin = () => {
   </div>
 
   {/* Total Departments Card */}
-  <div className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-200 p-4 sm:p-5">
+  <div className="admin-card  border border-slate-200  hover:shadow-lg transition-shadow duration-200 p-4 sm:p-5">
     <div className="flex items-center justify-between gap-2">
       <div className="min-w-0">
         <p className="text-xs sm:text-sm font-medium text-slate-500 truncate">
@@ -195,50 +195,37 @@ const ManageCoAdmin = () => {
 </div>
 
 {/* Search & Filter Co-Admins Section */}
-<div className="card bg-white rounded-xl border border-slate-100 p-4 shadow-sm sm:shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
+<div className="card admin-card border border-slate-100 p-4 ">
   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
     {/* Search Box */}
     <div>
-      <label className="block mb-1.5 text-xs sm:text-sm font-semibold text-[#17a2b8]">
+      <label className="block mb-2 text-xs sm:text-[18px] font-semibold text-[#17a2b8]">
         Search Co-Admins
       </label>
 
-      <div className="bg-white p-2.5 sm:p-3 rounded-xl flex items-center gap-2 border border-slate-200 shadow-sm">
-        <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#17a2b8] shrink-0" />
-        <input
-          className="w-full outline-none text-xs sm:text-sm bg-transparent"
-          placeholder="Search co-admin..."
+        <div className="custom-input flex items-center gap-2">
+          <Search className="h-4 w-4 shrink-0 text-[#17a2b8]" />
+      
+          <input
+            type="search"
+            placeholder="Search co-admin..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+        className="w-full border-0 bg-transparent p-0 text-sm text-slate-700 outline-none placeholder:text-slate-400 focus:ring-0"
+          />
+        </div>
     </div>
 
     {/* Department Filter */}
     <div>
-      <label className="block mb-1.5 text-xs sm:text-sm font-semibold text-[#17a2b8]">
+      <label className="block mb-2 text-xs sm:text-[18px] font-semibold text-[#17a2b8]">
         Filter by Department
       </label>
 
       <select
         value={departmentFilter}
         onChange={(e) => setDepartmentFilter(e.target.value)}
-        className="
-          w-full
-          p-2.5
-          sm:p-3
-          text-xs
-          sm:text-sm
-          bg-white
-          border
-          border-slate-200
-          rounded-xl
-          outline-none
-          shadow-sm
-          focus:border-[#17a2b8]
-          focus:ring-1
-          focus:ring-[#17a2b8]
-          transition
+        className="custom-select
         "
       >
         <option value="all">All Departments</option>
@@ -255,17 +242,17 @@ const ManageCoAdmin = () => {
 
 
         {/* Co-Admin list section */}
-        <div className="card responsive-card bg-white rounded-md shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)] overflow-hidden">
+        <div className="card responsive-card admin-card overflow-hidden">
            <div className="card-header">
-            <h2 className="card-title text-lg font-semibold text-[#17a2b8]">
+            <h2 className="card-title text-md font-semibold text-[#17a2b8]">
               Co-Admin List
             </h2>
           </div>
 
-          <div className="overflow-x-auto">
-           <table className="w-full text-left border-collapse text-[13px]">
+          <div className="overflow-x-auto custom-scroll-x">
+           <table className="w-full text-left border-collapse ">
   <thead className="bg-slate-100">
-    <tr className="text-[#138496] text-[12px] font-semibold uppercase">
+    <tr className="text-[#138496]  font-semibold uppercase">
       <th className="px-2 py-3">Co-Admin Info</th>
       <th className="px-2 py-3">Department</th>
       <th className="px-2 py-3">Role</th>
@@ -296,8 +283,8 @@ const ManageCoAdmin = () => {
         </td>
 
         {/* Role */}
-        <td className="px-2 py-1">
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-blue-100 text-blue-800">
+        <td className="px-2 py-1 role-span">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md  font-medium bg-blue-100 text-blue-800">
             Co-Admin
           </span>
         </td>
@@ -324,9 +311,21 @@ const ManageCoAdmin = () => {
   </tbody>
 </table>
 
-{filteredAdmins.length > 0 && (
-  <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
-    <p className="text-xs text-slate-500">
+
+
+
+            {filteredAdmins.length === 0 && (
+              <div className="text-center py-8 text-slate-500">
+                No co-admin found.
+              </div>
+            )}
+          </div>
+        </div>
+
+<div className="common-pagination">
+  {filteredAdmins.length > 0 && (
+  <div className="admin-pagination card responsive-card">
+    <p className=" text-slate-500">
       Showing{" "}
       <span className="font-semibold text-slate-700">
         {startIndex + 1}
@@ -348,7 +347,7 @@ const ManageCoAdmin = () => {
           setCurrentPage((prev) => Math.max(prev - 1, 1))
         }
         disabled={currentPage === 1}
-        className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+        className={`rounded-md border px-2.5 py-1 font-medium transition ${
           currentPage === 1
             ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-300"
             : "border-slate-200 bg-white text-slate-600 hover:border-[#17a2b8] hover:text-[#17a2b8]"
@@ -390,16 +389,7 @@ const ManageCoAdmin = () => {
     </div>
   </div>
 )}
-
-
-            {filteredAdmins.length === 0 && (
-              <div className="text-center py-8 text-slate-500">
-                No co-admin found.
-              </div>
-            )}
-          </div>
-        </div>
-
+</div>
         {/* edit co-admin model */}
         {editingAdmin && (
           <div className="fixed inset-0 z-50 flex items-center justify-center ">

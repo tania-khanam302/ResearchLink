@@ -337,7 +337,7 @@ const AdminDashboard = () => {
     <>
       <div className="space-y-6">
         {/* Dashboard Header */}
-        <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+        <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-md">
           <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
 
           <div className="relative p-4 sm:px-8 sm:py-7">

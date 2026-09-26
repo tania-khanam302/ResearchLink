@@ -186,40 +186,59 @@ const ProjectsPage = () => {
   return (
     <>
       <div className="space-y-4">
-        {/* All Projects header */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
-          <div className="relative px-6 py-6 sm:px-8 sm:py-7">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
-                  <Folder className="h-7 w-7" strokeWidth={1.8} />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-                    All Projects
-                  </h1>
+    {/* All Projects Header */}
+<div className="relative overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
 
-                  <p className="mt-1 text-sm leading-6 text-slate-500 sm:text-base">
-                    View and manage all students projects across the platform.
-                  </p>
-                </div>
-              </div>
+  <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
 
-              <button
-                onClick={() => setReportsOpen(true)}
-                className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#17a2b8] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#138fa3] hover:shadow-md active:scale-[0.98]"
-              >
-                <FileDown className="h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5" />
-                <span>Download Reports</span>
-              </button>
-            </div>
-          </div>
+  <div className="relative p-4 sm:px-8 sm:py-7">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-          <div className="pointer-events-none absolute -bottom-24 -right-20 h-52 w-52 rounded-full bg-cyan-100/50 blur-3xl" />
-          <div className="pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full bg-cyan-500/5" />
-          <div className="pointer-events-none absolute bottom-0 right-48 h-24 w-24 rounded-full bg-indigo-500/5" />
+      {/* Header Content */}
+      <div className="flex items-start gap-3 sm:items-center sm:gap-4">
+
+        {/* Icon */}
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100 sm:h-14 sm:w-14 sm:rounded-2xl">
+          <Folder
+            className="h-5 w-5 sm:h-7 sm:w-7"
+            strokeWidth={1.8}
+          />
         </div>
+
+        {/* Title & Description */}
+        <div className="min-w-0">
+
+          <h1 className="truncate text-xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            All Projects
+          </h1>
+
+          <p className="mt-0.5 text-xs leading-relaxed text-slate-500 sm:mt-1 sm:text-base sm:leading-6">
+            View and manage all students projects across the platform.
+          </p>
+
+        </div>
+      </div>
+
+      {/* Download Reports Button */}
+      <button
+        onClick={() => setReportsOpen(true)}
+        className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#17a2b8] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#138fa3] hover:shadow-md active:scale-[0.98]"
+      >
+        <FileDown className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-200 group-hover:-translate-y-0.5" />
+        <span>Download Reports</span>
+      </button>
+
+    </div>
+  </div>
+
+  {/* Background Elements */}
+  <div className="pointer-events-none absolute -bottom-24 -right-20 h-52 w-52 rounded-full bg-cyan-100/50 blur-3xl" />
+
+  <div className="pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full bg-cyan-500/5" />
+
+  <div className="pointer-events-none absolute bottom-0 right-48 h-24 w-24 rounded-full bg-indigo-500/5" />
+
+</div>
 
         {/* Stats  */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
@@ -227,7 +246,7 @@ const ProjectsPage = () => {
             const Icon = item.Icon;
 
             return (
-              <div key={index} className="card">
+              <div key={index} className="card admin-card">
                 <div className="flex items-center">
                   <div className={`rounded-lg p-2 ${item.bg}`}>
                     <Icon className={`h-6 w-6 ${item.iconColor}`} />
@@ -249,8 +268,8 @@ const ProjectsPage = () => {
         </div>
 
         {/* seacrh and filter  */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="p-5 sm:p-6">
+        <div className="card admin-card">
+          <div className="search-project-content">
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
                 <Folder className="h-5 w-5" />
@@ -268,13 +287,13 @@ const ProjectsPage = () => {
 
             <div className="grid grid-cols-1 mt-[20px] gap-4 md:grid-cols-2 lg:grid-cols-3">
               <div>
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                <label className="block mb-2 text-xs sm:text-[18px] font-semibold text-[#17a2b8]">
                   Search Projects
                 </label>
 
                 <input
-                  type="text"
-                  className="input w-full  rounded-lg border border-slate-200 focus:border-[#17a2b8] focus:ring-0 focus:outline-none"
+                  type="search"
+                  className="custom-input "
                   placeholder="Search by project title or student name..."
                   value={searchTearm}
                   onChange={(e) => setsearchTearm(e.target.value)}
@@ -283,12 +302,12 @@ const ProjectsPage = () => {
 
               {/* Status */}
               <div>
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                <label className="block mb-2 text-xs sm:text-[18px] font-semibold text-[#17a2b8]">
                   Filter by Status
                 </label>
 
                 <select
-                  className="input w-full rounded-lg border border-slate-200 focus:border-[#17a2b8] focus:ring-0 focus:outline-none"
+                  className="custom-input "
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >
@@ -306,12 +325,12 @@ const ProjectsPage = () => {
 
               {/* Supervisor */}
               <div>
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                <label className="block mb-2 text-xs sm:text-[18px] font-semibold text-[#17a2b8]">
                   Filter Supervisor
                 </label>
 
                 <select
-                  className="input w-full rounded-lg border border-slate-200 focus:border-[#17a2b8] focus:ring-0 focus:outline-none"
+                  className="custom-input "
                   value={filterSupervisor}
                   onChange={(e) => setFilterSupervisor(e.target.value)}
                 >
@@ -331,7 +350,7 @@ const ProjectsPage = () => {
         </div>
 
         {/* All Projects Records*/}
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="card responsive-card admin-card overflow-hidden">
           <div className="flex flex-col gap-3 border-b border-slate-200 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
@@ -353,31 +372,31 @@ const ProjectsPage = () => {
           </div>
 
           {/* Project Details Table */}
-          <div className="max-h-[500px] overflow-x-auto overflow-y-auto scrollbar-thin">
-            <table className="w-full min-w-[900px] table-fixed">
+          <div className="overflow-x-auto custom-scroll-x">
+            <table className="w-full">
               <thead className="bg-slate-50">
-                <tr>
-                  <th className="w-[25%] px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                <tr className="text-[#138496]  font-semibold uppercase text-left">
+                  <th className="text-left px-2 py-3">
                     Project Details
                   </th>
 
-                  <th className="px-3 py-5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                  <th className="px-2 py-3">
                     Student
                   </th>
 
-                  <th className="px-3 py-5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                  <th className="px-2 py-3">
                     Supervisor
                   </th>
 
-                  <th className="px-3 py-5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                  <th className="px-2 py-3">
                     Deadline
                   </th>
 
-                  <th className="px-3 py-5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                  <th className="px-2 py-3">
                     Status
                   </th>
 
-                  <th className="px-3 py-5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                  <th className="px-2 py-3">
                     Actions
                   </th>
                 </tr>
@@ -390,17 +409,17 @@ const ProjectsPage = () => {
                     className="transition-colors hover:bg-cyan-50/30"
                   >
                     {/* Project Details */}
-                    <td className="w-[25%] px-3 py-4">
+                    <td className="w-[25%] px-2 py-1">
                       <div>
-                        <div className="text-sm font-semibold text-slate-900">
+                        <div className="font-semibold text-slate-900">
                           {project.title}
                         </div>
 
-                        <div className="mt-1 max-w-xs truncate text-sm text-slate-500">
+                        <div className="mt-1 max-w-xs truncate text-slate-500">
                           {project.description}
                         </div>
 
-                        <div className="mt-1.5 text-xs font-medium text-purple-600">
+                        <div className="mt-1.5 font-medium text-purple-600">
                           Due:{" "}
                           {project.deadline
                             ? project.deadline.split("T")[0]
@@ -410,12 +429,12 @@ const ProjectsPage = () => {
                     </td>
 
                     {/* Student */}
-                    <td className="whitespace-nowrap px-3 py-4">
-                      <div className="text-sm font-semibold text-slate-900">
+                    <td className="whitespace-nowrap px-2 py-1">
+                      <div className="font-semibold text-slate-900">
                         {project.student?.name || "N/A"}
                       </div>
 
-                      <div className="mt-1 text-xs text-slate-500">
+                      <div className="mt-1 text-slate-500">
                         Last Updated:{" "}
                         {project.updatedAt
                           ? new Date(project.updatedAt).toLocaleDateString()
@@ -424,9 +443,9 @@ const ProjectsPage = () => {
                     </td>
 
                     {/* Supervisor */}
-                    <td className="whitespace-nowrap px-3 py-4">
+                    <td className="whitespace-nowrap px-2 py-1 role-span">
                       {project.supervisor?.name ? (
-                        <span className="inline-flex items-center rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 ring-1 ring-green-100">
+                        <span className="inline-flex items-center rounded-full bg-green-50 px-2.5 py-1 font-medium text-green-700 ring-1 ring-green-100">
                           {project.supervisor.name}
                         </span>
                       ) : (
@@ -437,16 +456,16 @@ const ProjectsPage = () => {
                     </td>
 
                     {/* Deadline */}
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-700">
+                    <td className="whitespace-nowrap px-2 py-1 text-slate-700">
                       {project.deadline
                         ? new Date(project.deadline).toLocaleDateString()
                         : "N/A"}
                     </td>
 
                     {/* Status */}
-                    <td className="whitespace-nowrap px-3 py-4">
+                    <td className="whitespace-nowrap px-2 py-1 role-span">
                       <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${getStatusColor(
+                        className={`inline-flex items-center rounded-full px-2.5 py-1  font-semibold capitalize ${getStatusColor(
                           project.status,
                         )}`}
                       >
@@ -455,7 +474,7 @@ const ProjectsPage = () => {
                     </td>
 
                     {/* Actions */}
-                    <td className="px-3 py-4">
+                    <td className="px-2 py-1">
                       <div className="flex flex-wrap gap-2">
                         <button
                           onClick={async () => {

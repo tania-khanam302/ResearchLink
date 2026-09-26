@@ -224,7 +224,7 @@ const AssignSupervisor = () => {
     <>
       <div className="space-y-6">
         {/* Assign Supervisor Heading */}
-<div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+<div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-md">
   <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
   <div className="relative z-10 px-6 py-6 sm:px-8 sm:py-7">
     <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
@@ -259,7 +259,7 @@ const AssignSupervisor = () => {
             const Icon = card.icon;
 
             return (
-              <div key={index} className="card">
+              <div key={index} className="card admin-card">
                 <div className="flex items-center">
                   <div className={`p-3 ${card.bg} rounded-lg`}>
                     <Icon className={`w-6 h-6 ${card.color}`} />
@@ -281,17 +281,17 @@ const AssignSupervisor = () => {
         </div>
 
         {/* Search and Filters */}
-        <div className="card bg-white shadow-[0_0.5rem_2rem_rgba(0,0,0,0.15)]">
+        <div className="card admin-card ">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1">
-              <label className="block mb-2 text-xl font-bold  text-[#17a2b8]">
+              <label className="block  mb-2 text-xs sm:text-[18px]  font-bold  text-[#17a2b8]">
                 Search Students
               </label>
 
               <input
                 type="text"
                 placeholder="Search by student name or thesis/project title..."
-                className="input-field outline-none p-2 border border-slate-300 rounded-md w-full"
+                className="custom-input"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -299,12 +299,12 @@ const AssignSupervisor = () => {
 
             {/* Type Filter */}
             <div className="w-full lg:w-48">
-              <label className="block mb-2 text-md font-semibold text-[#17a2b8]">
+              <label className="block mb-2 text-xs sm:text-[18px]  font-semibold text-[#17a2b8]">
                 Filter Type
               </label>
 
               <select
-                className="input-field w-full outline-none p-2 border border-slate-300 rounded-md"
+                className="custom-select"
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
               >
@@ -316,12 +316,12 @@ const AssignSupervisor = () => {
 
             {/* Status Filter */}
             <div className="w-full lg:w-48">
-              <label className="block mb-2 text-md font-semibold text-[#17a2b8]">
+              <label className="block mb-2 text-xs sm:text-[18px]  font-semibold text-[#17a2b8]">
                 Filter Status
               </label>
 
               <select
-                className="input-field w-full outline-none p-2 border border-slate-300 rounded-md"
+                className="custom-select"
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
               >
@@ -334,7 +334,7 @@ const AssignSupervisor = () => {
         </div>
 
         {/* Student Assignments Table */}
-        <div className="card bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <div className="card responsive-card admin-card overflow-hidden">
           {/* Student Assignments Header */}
           <div className="px-0 pb-5 border-b border-slate-200">
             <div className="flex items-center justify-between gap-4">
@@ -350,39 +350,39 @@ const AssignSupervisor = () => {
           </div>
 
           {/* Table Wrapper */}
-          <div className="w-full overflow-x-auto">
-         <table className="w-full min-w-[950px] table-fixed border-collapse text-[13px]">
+          <div className="w-full overflow-x-auto custom-scroll-x">
+         <table className="w-full  border-collapse ">
   <thead className="border-b border-slate-200 bg-slate-50">
     <tr>
-      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500 sm:px-3">
+      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500 sm:px-3">
         Student
       </th>
 
-      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
         Type
       </th>
 
-      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
         Thesis / Project Title
       </th>
 
-      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
         Supervisor
       </th>
 
-      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
         Deadline
       </th>
 
-      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
         Updated
       </th>
 
-      <th className="px-1 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500">
+      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
         Assign Supervisor
       </th>
 
-      <th className="px-1 py-3 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500">
+      <th className="px-1 py-3 text-center  font-bold uppercase tracking-wider text-slate-500">
         Actions
       </th>
     </tr>
@@ -398,7 +398,7 @@ const AssignSupervisor = () => {
         <td className="px-1 py-1.5 align-middle">
           <div className="min-w-0">
             <div
-              className="text-[13px] font-semibold text-slate-800 truncate"
+              className=" font-semibold text-slate-800 truncate"
               title={row.studentName}
             >
               {row.studentName}
@@ -414,13 +414,13 @@ const AssignSupervisor = () => {
         </td>
 
     {/* Type */}
-<td className="px-1 py-1.5 align-middle">
+<td className="px-1 py-1.5 align-middle role-span">
   {row.type === "thesis" ? (
-    <Badge color="bg-purple-50 text-purple-700 ring-1 ring-purple-200 rounded-md text-[10px]">
+    <Badge color="bg-purple-50 text-purple-700 ring-1 ring-purple-200 rounded-md sm:text-[10px] text-[7px]">
       Thesis
     </Badge>
   ) : (
-    <Badge color="bg-blue-50 text-blue-700 ring-1 ring-blue-200 rounded-md text-[10px]">
+    <Badge color="bg-blue-50 text-blue-700 ring-1 ring-blue-200 rounded-md sm:text-[10px] text-[7px]">
       Project
     </Badge>
   )}
@@ -430,7 +430,7 @@ const AssignSupervisor = () => {
         {/* Title */}
         <td className="px-1 py-1.5 align-middle">
           <div
-            className="text-[13px] font-medium text-slate-800 truncate"
+            className=" font-medium text-slate-800 truncate"
             title={row.title}
           >
             {row.title}
@@ -438,18 +438,18 @@ const AssignSupervisor = () => {
         </td>
 
  {/* Supervisor */}
-<td className="px-1 py-1.5 align-middle">
+<td className="px-1 py-1.5 align-middle role-span">
   {row.supervisor ? (
-    <Badge color="bg-green-50 text-green-700 ring-1 ring-green-200 rounded-md text-[10px]">
+    <Badge color="bg-green-50 text-green-700 ring-1 ring-green-200 rounded-md sm:text-[10px] text-[7px]">
       <span
-        className="truncate inline-block"
+        className="truncate inline-block "
         title={row.supervisor}
       >
         {row.supervisor}
       </span>
     </Badge>
   ) : (
-    <Badge color="bg-red-50 text-red-700 ring-1 ring-red-200 rounded-md text-[10px]">
+    <Badge color="bg-red-50 text-red-700 ring-1 ring-red-200 rounded-md sm:text-[10px] text-[7px]">
       {row.status === "rejected"
         ? "Rejected"
         : "Not Assigned"}
@@ -459,7 +459,7 @@ const AssignSupervisor = () => {
 
 
         {/* Deadline */}
-        <td className="px-1 py-1.5 text-[13px] text-slate-600 align-middle whitespace-nowrap">
+        <td className="px-1 py-1.5  text-slate-600 align-middle whitespace-nowrap">
           {row.deadline}
         </td>
 
@@ -584,6 +584,9 @@ const AssignSupervisor = () => {
             )}
           </div>
 
+
+        </div>
+<div className="common-pagination">
        {/* Pagination */}
 {filtered.length > 0 && (
   <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
@@ -664,7 +667,6 @@ const AssignSupervisor = () => {
 )}
 
         </div>
-
       </div>
     </>
   );

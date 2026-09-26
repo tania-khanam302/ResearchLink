@@ -355,9 +355,8 @@ const ThesisPage = () => {
         </div>
 
         {/* Search & Filter */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
-          <div className="p-5 sm:p-6">
+        <div className="card admin-card">
+          <div className="thesis-seardc-cntent">
             {/* Section Header */}
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
@@ -379,13 +378,13 @@ const ThesisPage = () => {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {/* Search */}
               <div className="lg:col-span-1">
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                <label className="block mb-2 text-xs sm:text-[18px] font-semibold text-[#17a2b8]">
                   Search
                 </label>
 
                 <input
-                  type="text"
-                  className="input rounded-lg border border-slate-200 focus:border-[#17a2b8] focus:ring-0 focus:outline-none"
+                  type="search"
+                  className="custom-input "
                   placeholder="Search by thesis title or student name..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -394,12 +393,12 @@ const ThesisPage = () => {
 
               {/* Status */}
               <div>
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                <label className="block mb-2 text-xs sm:text-[18px] font-semibold text-[#17a2b8]">
                   Thesis Status
                 </label>
 
                 <select
-                  className="input rounded-lg border border-slate-200 focus:border-[#17a2b8] focus:ring-0 focus:outline-none"
+                  className="custom-input"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                 >
@@ -417,12 +416,12 @@ const ThesisPage = () => {
 
               {/* Supervisor */}
               <div>
-                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
+                <label className="block mb-2 text-xs sm:text-[18px] font-semibold text-[#17a2b8]">
                   Supervisor
                 </label>
 
                 <select
-                  className="input  rounded-lg border border-slate-200 focus:border-[#17a2b8] focus:ring-0 focus:outline-none"
+                  className="custom-input"
                   value={filterSupervisor}
                   onChange={(e) => setFilterSupervisor(e.target.value)}
                 >
@@ -442,7 +441,7 @@ const ThesisPage = () => {
         </div>
 
         {/* thesis table  */}
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="card responsive-card admin-card overflow-hidden">
           {/* Section Header */}
           <div className="flex flex-col gap-3 border-b border-slate-200 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
@@ -466,8 +465,8 @@ const ThesisPage = () => {
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto overflow-y-auto scrollbar-thin">
-            <table className="w-full min-w-[900px] table-fixed">
+          <div className="overflow-x-auto custom-scroll-x">
+            <table className="w-full ">
               <thead className="bg-slate-50">
                 <tr>
                   <th className="w-[25%] px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
