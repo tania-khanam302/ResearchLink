@@ -261,9 +261,9 @@ const ManageCoAdmin = () => {
               Co-Admin List
             </h2>
           </div>
-
-          <div className="overflow-x-auto">
-           <table className="w-full text-left border-collapse text-[13px]">
+          
+<div className="w-full overflow-x-auto overscroll-x-contain">
+  <table className="min-w-[620px] w-full text-left border-collapse text-[13px]">
   <thead className="bg-slate-100">
     <tr className="text-[#138496] text-[12px] font-semibold uppercase">
       <th className="px-2 py-3">Co-Admin Info</th>
