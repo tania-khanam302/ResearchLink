@@ -359,12 +359,12 @@ const ThesisPage = () => {
           <div className="thesis-seardc-cntent">
             {/* Section Header */}
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
+              {/* <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
                 <FileText className="h-5 w-5" />
-              </div>
+              </div> */}
 
               <div>
-                <h2 className="text-lg font-bold text-slate-900">
+                <h2 className="card-title text-md font-semibold text-[#17a2b8]">
                   Find & Filter Theses
                 </h2>
                 <p className="text-sm text-slate-500">
@@ -443,14 +443,14 @@ const ThesisPage = () => {
         {/* thesis table  */}
         <div className="card responsive-card admin-card overflow-hidden">
           {/* Section Header */}
-          <div className="flex flex-col gap-3 border-b border-slate-200 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 border-b border-slate-200  sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
+              {/* <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
                 <FileText className="h-5 w-5" />
-              </div>
+              </div> */}
 
               <div>
-                <h2 className="text-lg font-bold text-slate-900">
+                <h2 className="card-title text-md font-semibold text-[#17a2b8]">
                   All Thesis Records
                 </h2>
                 <p className="text-sm text-slate-500">
