@@ -440,7 +440,7 @@ font-size: 12px;
 @media (max-width: 400px) {
   .responsive-card {
     width: 100%;
-    max-width: 266px;
+    max-width: 323px;
   }
   .responsive-card table{
 font-size: 9px;
