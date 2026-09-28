@@ -45,9 +45,11 @@ export const markAllAsRead = async (userId) => {
 
 
 // delete notification
-export const deleteNotification = async (notificationId, userId) => {
-  return await Notification.findOneAndDelete({
-    _id: notificationId,
-    user: userId,
-  });
+export const deleteNotification = async (notificationId, userId, role) => {
+  const query =
+    role === "Admin"
+      ? { _id: notificationId, type: "request" }
+      : { _id: notificationId, user: userId };
+
+  return await Notification.findOneAndDelete(query);
 };

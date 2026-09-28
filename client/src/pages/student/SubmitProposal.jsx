@@ -1,10 +1,28 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { submitProjectProposal } from "../../store/slices/studentSlice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  submitProjectProposal,
+  fetchProject,
+} from "../../store/slices/studentSlice";
 import { toast } from "react-toastify";
-import { FolderOpen, GraduationCap, FileText, ArrowRight } from "lucide-react";
+import {
+  FolderOpen,
+  GraduationCap,
+  FileText,
+  CheckCircle,
+} from "lucide-react";
 
 const SubmitProposal = () => {
+  const dispatch = useDispatch();
+
+  const { project, thesis, proposal } = useSelector(
+    (state) => state.student
+  );
+
+  useEffect(() => {
+    dispatch(fetchProject());
+  }, [dispatch]);
+
   const [formData, setFormData] = useState({
     type: "",
     title: "",
@@ -13,7 +31,41 @@ const SubmitProposal = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
+
+useEffect(() => {
+  if (thesis) {
+    setFormData({
+      type: "Thesis",
+      title: thesis.title || "",
+      description: thesis.description || "",
+      researchArea: thesis.researchArea || "",
+    });
+    return;
+  }
+
+  if (project) {
+    setFormData({
+      type: "Project",
+      title: project.title || "",
+      description: project.description || "",
+      researchArea: "",
+    });
+    return;
+  }
+
+  if (proposal) {
+    const type = String(proposal.type || "").trim().toLowerCase();
+
+    setFormData({
+      type: type === "thesis" ? "Thesis" : "Project",
+      title: proposal.title || "",
+      description: proposal.description || "",
+      researchArea: proposal.researchArea || "",
+    });
+  }
+}, [thesis, project, proposal]);
+
+
 
   const handleChange = (e) => {
     setFormData((prev) => ({

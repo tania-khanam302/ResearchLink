@@ -213,7 +213,7 @@ const AssignSupervisor = () => {
   const Badge = ({ color, children }) => {
     return (
       <span
-        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${color}`}
+        className={`inline-flex items-center px-2.5 py-0.5 rounded-full  font-medium ${color}`}
       >
         {children}
       </span>
@@ -223,21 +223,32 @@ const AssignSupervisor = () => {
   return (
     <>
       <div className="space-y-6">
-        {/* Assign Supervisor Heading */}
+{/* Assign Supervisor Heading */}
 <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-md">
+
   <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
-  <div className="relative z-10 px-6 py-6 sm:px-8 sm:py-7">
-    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-      <div className="flex items-start gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
-          <Users className="h-6 w-6" />
+
+  <div className="relative z-10 p-4 sm:px-8 sm:py-7">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+      {/* Header Content */}
+      <div className="flex min-w-0 items-start gap-3 sm:items-center sm:gap-4">
+
+        {/* Icon */}
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 sm:h-14 sm:w-14 sm:rounded-2xl">
+          <Users
+            className="h-5 w-5 sm:h-7 sm:w-7"
+            strokeWidth={1.8}
+          />
         </div>
 
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        {/* Title & Description */}
+        <div className="min-w-0">
+          <h1 className="truncate text-xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             Assign Supervisor
           </h1>
-          <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
+
+          <p className="mt-0.5 max-w-2xl text-xs leading-relaxed text-slate-500 sm:mt-1 sm:text-base sm:leading-6">
             Manage supervisor assignments for thesis and project
           </p>
         </div>
@@ -246,10 +257,13 @@ const AssignSupervisor = () => {
     </div>
   </div>
 
-  {/* background elements */}
+  {/* Background Elements */}
   <div className="pointer-events-none absolute -bottom-24 -right-20 h-52 w-52 rounded-full bg-cyan-100/50 blur-3xl" />
+
   <div className="pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full bg-cyan-500/5" />
+
   <div className="pointer-events-none absolute bottom-0 right-48 h-24 w-24 rounded-full bg-indigo-500/5" />
+
 </div>
 
 
@@ -351,61 +365,38 @@ const AssignSupervisor = () => {
 
           {/* Table Wrapper */}
           <div className="w-full overflow-x-auto custom-scroll-x">
-         <table className="w-full  border-collapse ">
-  <thead className="border-b border-slate-200 bg-slate-50">
-    <tr>
-      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500 sm:px-3">
-        Student
-      </th>
-
-      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
-        Type
-      </th>
-
-      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
-        Thesis / Project Title
-      </th>
-
-      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
-        Supervisor
-      </th>
-
-      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
-        Deadline
-      </th>
-
-      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
-        Updated
-      </th>
-
-      <th className="px-1 py-3 text-left  font-bold uppercase tracking-wider text-slate-500">
-        Assign Supervisor
-      </th>
-
-      <th className="px-1 py-3 text-center  font-bold uppercase tracking-wider text-slate-500">
-        Actions
-      </th>
+<table className="w-full border-collapse">
+  <thead className="bg-slate-200 sticky top-0 z-10">
+    <tr className="text-[#138496] font-semibold uppercase text-left">
+      <th className="px-2 py-3">Student</th>
+      <th className="px-2 py-3">Type</th>
+      <th className="px-2 py-3">Thesis / Project Title</th>
+      <th className="px-2 py-3">Supervisor</th>
+      <th className="px-2 py-3">Deadline</th>
+      <th className="px-2 py-3">Updated</th>
+      <th className="px-2 py-3 w-[12%]">Assign Supervisor</th>
+      <th className="px-2 py-3">Actions</th>
     </tr>
   </thead>
 
-  <tbody className="divide-y divide-slate-100">
+  <tbody className="divide-y divide-slate-200">
     {paginatedData.map((row) => (
       <tr
         key={row.workId}
-        className="hover:bg-slate-50 transition-colors duration-150"
+        className="bg-slate-50 hover:bg-white transition-colors duration-150"
       >
         {/* Student */}
         <td className="px-1 py-1.5 align-middle">
           <div className="min-w-0">
             <div
-              className=" font-semibold text-slate-800 truncate"
+              className="font-semibold text-slate-800 truncate"
               title={row.studentName}
             >
               {row.studentName}
             </div>
 
             <div
-              className="text-[12px] text-slate-500 mt-0.5 truncate"
+              className=" text-slate-500 mt-0.5 truncate"
               title={row.studentEmail}
             >
               {row.studentEmail}
@@ -413,60 +404,71 @@ const AssignSupervisor = () => {
           </div>
         </td>
 
-    {/* Type */}
-<td className="px-1 py-1.5 align-middle role-span">
-  {row.type === "thesis" ? (
-    <Badge color="bg-purple-50 text-purple-700 ring-1 ring-purple-200 rounded-md sm:text-[10px] text-[7px]">
-      Thesis
-    </Badge>
-  ) : (
-    <Badge color="bg-blue-50 text-blue-700 ring-1 ring-blue-200 rounded-md sm:text-[10px] text-[7px]">
-      Project
-    </Badge>
-  )}
-</td>
-
+        {/* Type */}
+        <td className="px-1 py-1.5 align-middle">
+          {row.type === "thesis" ? (
+            <Badge color="bg-purple-50 text-purple-700 ring-1 ring-purple-200 rounded-md sm:text-[10px] text-[8px]">
+              Thesis
+            </Badge>
+          ) : (
+            <Badge color="bg-blue-50 text-blue-700 ring-1 ring-blue-200 rounded-md sm:text-[10px] text-[8px]">
+              Project
+            </Badge>
+          )}
+        </td>
 
         {/* Title */}
         <td className="px-1 py-1.5 align-middle">
           <div
-            className=" font-medium text-slate-800 truncate"
+            className="font-medium text-slate-800"
             title={row.title}
           >
-            {row.title}
+            {row.title.split(" ").length > 5
+              ? row.title.split(" ").slice(0, 5).join(" ") + "..."
+              : row.title}
           </div>
         </td>
 
- {/* Supervisor */}
-<td className="px-1 py-1.5 align-middle role-span">
-  {row.supervisor ? (
-    <Badge color="bg-green-50 text-green-700 ring-1 ring-green-200 rounded-md sm:text-[10px] text-[7px]">
-      <span
-        className="truncate inline-block "
-        title={row.supervisor}
-      >
-        {row.supervisor}
-      </span>
-    </Badge>
-  ) : (
-    <Badge color="bg-red-50 text-red-700 ring-1 ring-red-200 rounded-md sm:text-[10px] text-[7px]">
-      {row.status === "rejected"
-        ? "Rejected"
-        : "Not Assigned"}
-    </Badge>
-  )}
-</td>
-
+        {/* Supervisor */}
+        <td className="px-1 py-1.5 align-middle role-span">
+          {row.supervisor ? (
+            <Badge color="bg-green-50 text-green-700 ring-1 ring-green-200 rounded-md sm:text-[10px] text-[8px]">
+              <span
+                className="truncate inline-block"
+                title={row.supervisor}
+              >
+                {row.supervisor}
+              </span>
+            </Badge>
+          ) : (
+            <Badge color="bg-red-50 text-red-700 ring-1 ring-red-200 rounded-md sm:text-[10px] text-[7px]">
+              {row.status === "rejected"
+                ? "Rejected"
+                : "Not Assigned"}
+            </Badge>
+          )}
+        </td>
 
         {/* Deadline */}
-        <td className="px-1 py-1.5  text-slate-600 align-middle whitespace-nowrap">
+        <td className="px-1 py-1.5 text-slate-600 align-middle whitespace-nowrap">
           {row.deadline}
         </td>
 
         {/* Updated */}
-        <td className="px-1 py-1.5 text-[12px] text-slate-500 align-middle">
-          <div className="truncate" title={row.updatedAt}>
-            {row.updatedAt}
+        <td className="px-1 py-1.5 text-slate-500 align-middle">
+          <div>
+            {row.updatedAt ? (
+              <>
+                <div>
+                  {new Date(row.updatedAt).toLocaleDateString()}
+                </div>
+                <div className="text-slate-400">
+                  {new Date(row.updatedAt).toLocaleTimeString()}
+                </div>
+              </>
+            ) : (
+              "-"
+            )}
           </div>
         </td>
 
@@ -474,21 +476,12 @@ const AssignSupervisor = () => {
         <td className="px-1 py-1.5 align-middle">
           <select
             className="
-              w-full
-              rounded-md
-              border border-slate-300
-              bg-white
-              px-2
-              py-1.5
-              text-[12px]
-              text-slate-700
-              outline-none
-              shadow-sm
-              transition
+              w-full rounded-md border border-slate-300
+              bg-white px-2 py-1.5 text-[12px] text-slate-700
+              outline-none shadow-sm transition
               hover:border-[#17a2b8]
               focus:border-[#17a2b8]
-              focus:ring-2
-              focus:ring-[#17a2b8]/20
+              focus:ring-2 focus:ring-[#17a2b8]/20
               disabled:bg-slate-100
               disabled:text-slate-400
               disabled:cursor-not-allowed
@@ -521,17 +514,10 @@ const AssignSupervisor = () => {
         <td className="px-1 py-1.5 align-middle text-center">
           <button
             className="
-              w-[90px]
-              px-0
-              py-1.5
-              rounded-md
-              bg-[#17a2b8]
-              hover:bg-[#138496]
-              text-white
-              text-[12px]
-              font-semibold
-              shadow-sm
-              transition
+              w-[90px] px-0 py-1.5 rounded-md
+              bg-[#17a2b8] hover:bg-[#138496]
+              text-white text-[12px] font-semibold
+              shadow-sm transition
               disabled:opacity-50
               disabled:cursor-not-allowed
             "
@@ -540,7 +526,7 @@ const AssignSupervisor = () => {
                 row.studentId,
                 row.status,
                 row.workId,
-                row.type,
+                row.type
               )
             }
             disabled={
@@ -568,6 +554,7 @@ const AssignSupervisor = () => {
 </table>
 
 
+
             {/* No students found */}
             {filtered.length === 0 && (
               <div className="py-12 text-center bg-white">
@@ -586,10 +573,11 @@ const AssignSupervisor = () => {
 
 
         </div>
+
 <div className="common-pagination">
        {/* Pagination */}
 {filtered.length > 0 && (
-  <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
+  <div className="card admin-pagination responsive-card  ">
 
     <p className="text-xs text-slate-500">
       Showing{" "}

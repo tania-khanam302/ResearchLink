@@ -146,8 +146,12 @@ export const uploadProfilePicture = asyncHandler(async (req, res, next) => {
 
 // ====================== forgotPassword =======================
 export const forgotPassword = asyncHandler(async (req, res, next) => {
+  const email = req.body.email?.trim().toLowerCase();
+  if (!email) {
+    return next(new ErrorHandler("Please provide an email address", 400));
+  }
 
-  const user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({ email });
 
 
   if (!user) {

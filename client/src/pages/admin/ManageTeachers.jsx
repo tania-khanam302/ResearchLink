@@ -332,7 +332,7 @@ const handleEdit = (teacher) => {
             className="w-full max-w-full overflow-auto custom-scroll-x"
           >
             {filteredTeachers && filteredTeachers.length > 0 ? (
-<table className="min-w-auto w-full text-left border-collapse text-[13px]">
+<table className="min-w-auto w-full text-left border-collapse">
   <thead className="bg-slate-200 sticky top-0 z-10">
     <tr className="text-[#138496]  font-semibold uppercase">
       <th className="px-2 py-3 text-left tracking-wide">
@@ -369,28 +369,54 @@ const handleEdit = (teacher) => {
           </div>
         </td>
 
-        {/* Department */}
-        <td className="px-2 py-1 whitespace-nowrap">
-          <div className=" text-slate-900">
-            {teacher.department || "-"}
-          </div>
-        </td>
+     {/* Department */}
+<td className="px-2 py-1 whitespace-nowrap">
+  <div
+    className="text-slate-900"
+    title={teacher.department || "-"}
+  >
+    {teacher.department
+      ? teacher.department.split(" ").length > 4
+        ? teacher.department.split(" ").slice(0, 4).join(" ") + "..."
+        : teacher.department
+      : "-"}
+  </div>
+</td>
 
-        {/* Expertise */}
-        <td className="px-2 py-1 whitespace-nowrap ">
-          {Array.isArray(teacher.expertise)
-            ? teacher.expertise.join(", ")
-            : teacher.expertise}
-        </td>
 
-        {/* Join Date */}
-        <td className="px-2 py-1">
-          <div className=" text-slate-900">
-            {teacher.createdAt
-              ? new Date(teacher.createdAt).toLocaleString()
-              : "-"}
-          </div>
-        </td>
+{/* Expertise */}
+<td className="px-2 py-1">
+  <div className="flex flex-col">
+    {Array.isArray(teacher.expertise)
+      ? teacher.expertise.map((item, index) => (
+          <span key={index}>
+            {item}
+            {index < teacher.expertise.length - 1 ? "," : ""}
+          </span>
+        ))
+      : teacher.expertise || "-"}
+  </div>
+</td>
+
+
+  {/* Join Date */}
+<td className="px-2 py-1">
+  <div className="text-slate-900">
+    {teacher.createdAt ? (
+      <>
+        <div>
+          {new Date(teacher.createdAt).toLocaleDateString()}
+        </div>
+        <div className="text-slate-500">
+          {new Date(teacher.createdAt).toLocaleTimeString()}
+        </div>
+      </>
+    ) : (
+      "-"
+    )}
+  </div>
+</td>
+
 
         {/* Action */}
         <td className="px-2 py-1 whitespace-nowrap  font-medium">
@@ -599,15 +625,14 @@ const handleEdit = (teacher) => {
                       <button
                         type="button"
                         onClick={handleCloseModal}
-                        className="btn-danger text-white px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
-                        // className="px-4 py-2 border rounded text-slate-600"
+                        className="btn-danger text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Cancel
                       </button>
 
                       <button
                         type="submit"
-                        className="btn-secondary bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
+                        className="bg-[#138496] btn-danger hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Update Teacher
                       </button>
@@ -641,13 +666,13 @@ const handleEdit = (teacher) => {
                     <div className="flex justify-center space-x-3">
                       <button
                         onClick={cancelDelete}
-                        className="btn-secondary text-white px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
+                        className=" bg-[#138496] btn-danger hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={confirmDelete}
-                        className="py-2 bg-red-500 text-white hover:bg-red-600 px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
+                        className="btn-danger text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Delete
                       </button>

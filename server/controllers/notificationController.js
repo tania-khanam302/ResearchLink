@@ -85,7 +85,11 @@ export const deleteNotification = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const userId = req.user.id;
 
-  const notification = await notificationService.deleteNotification(id, userId);
+  const notification = await notificationService.deleteNotification(
+    id,
+    userId,
+    req.user.role,
+  );
   if (!notification) {
     return next(new ErrorHandler("Notification not found", 404));
   }

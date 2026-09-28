@@ -158,14 +158,14 @@ const AddCoAdmin = () => {
                 <button
                   type="button"
                   onClick={() => dispatch(toggleCoAdminModal())}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 font-medium h-11 rounded-md shadow-md transition"
+                  className="btn-danger text-white px-4 font-medium h-10 rounded-lg flex items-center space-x-2 mt-0 md:mt-0 shadow-md"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-11 rounded-md shadow-md transition"
+                  className="bg-[#138496] btn-danger hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                 >
                   Add Co-Admin
                 </button>

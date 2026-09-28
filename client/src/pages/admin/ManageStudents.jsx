@@ -29,7 +29,7 @@ const ManageStudents = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [studentToDelete, setStudentToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 5;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -367,18 +367,23 @@ const ManageStudents = () => {
           </div>
         </td>
 
-        {/* Department & Year */}
-        <td className="px-2 py-1 whitespace-nowrap">
-          <div className=" text-slate-900">
-            {student.department || "-"}
-          </div>
+      {/* Department & Year */}
+<td className="px-2 py-1 whitespace-nowrap">
+  <div className="text-slate-900" title={student.department || "-"}>
+    {student.department
+      ? student.department.split(" ").length > 4
+        ? student.department.split(" ").slice(0, 4).join(" ") + "..."
+        : student.department
+      : "-"}
+  </div>
 
-          <div className=" text-slate-500">
-            {student.createdAt
-              ? new Date(student.createdAt).getFullYear()
-              : "-"}
-          </div>
-        </td>
+  <div className="text-slate-500">
+    {student.createdAt
+      ? new Date(student.createdAt).getFullYear()
+      : "-"}
+  </div>
+</td>
+
 
         {/* Supervisor */}
         <td className="px-2 py-1 text-center role-span">
@@ -398,7 +403,7 @@ const ManageStudents = () => {
         </td>
 
         {/* Type */}
-        <td className="px-2 py-1 text-center">
+        <td className="px-2 py-1 text-center  role-span">
           <span
             className={`inline-flex items-center px-2 py-0.5 rounded-md font-medium ${
               student.type === "Thesis"
@@ -410,12 +415,20 @@ const ManageStudents = () => {
           </span>
         </td>
 
-        {/* Thesis / Project Title */}
-        <td className="px-2 py-1">
-          <div className=" text-slate-900">
-            {student.projectTitle}
-          </div>
-        </td>
+   {/* Thesis / Project Title */}
+<td className="px-2 py-1">
+  <div
+    className="text-slate-900"
+    title={student.projectTitle}
+  >
+    {student.projectTitle
+      ? student.projectTitle.split(" ").length > 5
+        ? student.projectTitle.split(" ").slice(0, 5).join(" ") + "..."
+        : student.projectTitle
+      : "-"}
+  </div>
+</td>
+
 
         {/* Action */}
         <td className="px-2 py-1 whitespace-nowrap  font-medium">
@@ -514,7 +527,6 @@ const ManageStudents = () => {
                         <option value="Select Department">
                           Select Department
                         </option>
-                                       <option value="">Select Department</option>
                   <option>Computer Science & Engineering</option>
                   <option>Electrical & Electronic Engineering</option>
                   <option>Civil Engineering</option>
@@ -548,14 +560,14 @@ const ManageStudents = () => {
                       <button
                         type="button"
                         onClick={handleCloseModal}
-                        className="btn-danger text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
+                        className="btn-danger text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Cancel
                       </button>
 
                       <button
                         type="submit"
-                        className="btn-secondary bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
+                        className="bg-[#138496] btn-danger hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Update Student
                       </button>
@@ -589,13 +601,13 @@ const ManageStudents = () => {
                     <div className="flex justify-center space-x-3">
                       <button
                         onClick={cancelDelete}
-                        className="btn-secondary text-white px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
+                        className="bg-[#138496] btn-danger hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={confirmDelete}
-                        className="py-2 bg-red-500 text-white hover:bg-red-600 px-4 font-medium h-11 rounded-md flex items-center space-x-2 mt-4 md:mt-0 shadow-md"
+                        className="btn-danger text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Delete
                       </button>

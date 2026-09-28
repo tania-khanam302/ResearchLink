@@ -282,44 +282,55 @@ const ThesisPage = () => {
   return (
     <>
       <div className="space-y-4">
-        {/* thesis header */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
-          <div className="relative px-6 py-6 sm:px-8 sm:py-7">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
-                  <FileText className="h-7 w-7" strokeWidth={1.8} />
-                </div>
+     {/* Thesis Header */}
+<div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-md sm:rounded-2xl">
+  <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
 
-                <div>
-                  <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-                    All Theses
-                  </h1>
-                  <p className="mt-1 text-sm leading-6 text-slate-500 sm:text-base">
-                    View and manage all students thesis across the platform.
-                  </p>
-                </div>
-              </div>
+  <div className="relative z-10 p-4 sm:px-8 sm:py-7">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
-              {/* Download Reports */}
-              <button
-                onClick={() => setReportsOpen(true)}
-                className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#17a2b8] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#138fa3] hover:shadow-md active:scale-[0.98]"
-              >
-                <FileDown className="h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5" />
-                <span>Download Reports</span>
-              </button>
-            </div>
-          </div>
+      {/* Header Content */}
+      <div className="flex min-w-0 items-start gap-3 sm:items-center sm:gap-4">
 
-          {/* Decorative Elements */}
-          <div className="pointer-events-none absolute -bottom-24 -right-20 h-52 w-52 rounded-full bg-cyan-100/50 blur-3xl" />
-
-          <div className="pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full bg-cyan-500/5" />
-
-          <div className="pointer-events-none absolute bottom-0 right-48 h-24 w-24 rounded-full bg-indigo-500/5" />
+        {/* Icon */}
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100 sm:h-14 sm:w-14 sm:rounded-2xl">
+          <FileText
+            className="h-5 w-5 sm:h-7 sm:w-7"
+            strokeWidth={1.8}
+          />
         </div>
+
+        {/* Title & Description */}
+        <div className="min-w-0">
+          <h1 className="truncate text-xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            All Theses
+          </h1>
+
+          <p className="mt-0.5 text-xs leading-relaxed text-slate-500 sm:mt-1 sm:text-base sm:leading-6">
+            View and manage all students thesis across the platform.
+          </p>
+        </div>
+      </div>
+
+      {/* Download Reports */}
+      <button
+        onClick={() => setReportsOpen(true)}
+        className="main-btn"
+      >
+        <FileDown className="h-4 w-4 sm:h-5 sm:w-5" />
+        <span>Download Reports</span>
+      </button>
+
+    </div>
+  </div>
+
+  {/* Decorative Elements */}
+  <div className="pointer-events-none absolute -bottom-24 -right-20 h-52 w-52 rounded-full bg-cyan-100/50 blur-3xl" />
+
+  <div className="pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full bg-cyan-500/5" />
+
+  <div className="pointer-events-none absolute bottom-0 right-48 h-24 w-24 rounded-full bg-indigo-500/5" />
+</div>
 
         {/* error */}
         {error && (
@@ -359,10 +370,7 @@ const ThesisPage = () => {
           <div className="thesis-seardc-cntent">
             {/* Section Header */}
             <div className="mb-5 flex items-center gap-3">
-              {/* <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
-                <FileText className="h-5 w-5" />
-              </div> */}
-
+           
               <div>
                 <h2 className="card-title text-md font-semibold text-[#17a2b8]">
                   Find & Filter Theses
@@ -437,207 +445,242 @@ const ThesisPage = () => {
             </div>
           </div>
 
-          <div className="pointer-events-none absolute -bottom-16 -right-16 h-32 w-32 rounded-full bg-cyan-500/5" />
+          {/* <div className="pointer-events-none absolute -bottom-16 -right-16 h-32 w-32 rounded-full bg-cyan-500/5" /> */}
         </div>
 
         {/* thesis table  */}
         <div className="card responsive-card admin-card overflow-hidden">
-          {/* Section Header */}
-          <div className="flex flex-col gap-3 border-b border-slate-200  sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-3">
-              {/* <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
-                <FileText className="h-5 w-5" />
-              </div> */}
+       
 
+
+
+            {/* All Thesis Records Header */}
+          <div className=" flex flex-col gap-3  px-0 pb-5 border-b border-slate-200 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <h2 className="card-title text-md font-semibold text-[#17a2b8]">
-                  All Thesis Records
+                <h2 className="text-xl font-bold text-[#17a2b8]">
+                 All Thesis Records
                 </h2>
-                <p className="text-sm text-slate-500">
+                <p className="mt-1 text-sm text-slate-500">
                   Manage, review and monitor all submitted theses.
                 </p>
               </div>
             </div>
-
-            <div className="inline-flex w-fit items-center rounded-lg bg-cyan-50 px-3 py-1.5 text-sm font-semibold text-[#17a2b8] ring-1 ring-cyan-100">
+             <div className="inline-flex w-fit items-center rounded-lg bg-cyan-50 px-3 py-1.5 text-sm font-semibold text-[#17a2b8] ring-1 ring-cyan-100">
               {filteredTheses.length} Theses
             </div>
           </div>
 
+
           {/* Table */}
           <div className="overflow-x-auto custom-scroll-x">
-            <table className="w-full ">
-              <thead className="bg-slate-50">
-                <tr>
-                  <th className="w-[25%] px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    Thesis Details
-                  </th>
+           <table className="w-full border-collapse">
+<thead className="bg-slate-200 sticky top-0 z-10">
+  <tr className="text-[#138496] font-semibold uppercase text-left">
+    <th className="px-2 py-3">
+      Thesis Details
+    </th>
 
-                  <th className="px-3 py-5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    Student
-                  </th>
+    <th className="px-2 py-3">
+      Student
+    </th>
 
-                  <th className="px-3 py-5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    Supervisor
-                  </th>
+    <th className="px-2 py-3">
+      Supervisor
+    </th>
 
-                  <th className="px-3 py-5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    Deadline
-                  </th>
+    <th className="px-2 py-3">
+      Deadline
+    </th>
 
-                  <th className="px-3 py-5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    Status
-                  </th>
+    <th className="px-2 py-3">
+      Status
+    </th>
 
-                  <th className="px-3 py-5 text-left text-xs font-semibold uppercase tracking-wider text-[#17a2b8]">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
+    <th className="px-2 py-3">
+      Actions
+    </th>
+  </tr>
+</thead>
 
-              <tbody className="divide-y divide-slate-100 bg-white">
-                {loading ? (
-                  <tr>
-                    <td
-                      colSpan="6"
-                      className="py-10 text-center text-sm text-slate-500"
-                    >
-                      Loading theses...
-                    </td>
-                  </tr>
-                ) : (
-                  paginatedTheses.map((thesis) => (
-                    <tr
-                      key={thesis._id}
-                      className="transition-colors hover:bg-cyan-50/30"
-                    >
-                      {/* Thesis Details */}
-                      <td className="w-[25%] px-3 py-4">
-                        <div>
-                          <div className="text-sm font-semibold text-slate-900">
-                            {thesis.title}
-                          </div>
 
-                          <div className="mt-1 max-w-xs truncate text-sm text-slate-500">
-                            {thesis.description}
-                          </div>
+  <tbody className="divide-y divide-slate-200">
+    {loading ? (
+      <tr className="bg-slate-50">
+        <td
+          colSpan="6"
+          className="py-10 text-center text-sm text-slate-500"
+        >
+          Loading theses...
+        </td>
+      </tr>
+    ) : (
+      paginatedTheses.map((thesis) => (
+        <tr
+          key={thesis._id}
+          className="bg-slate-50 transition-colors hover:bg-white"
+        >
+  {/* Thesis Details */}
+<td className="px-3 py-4">
+  <div>
+    <div
+      className=" font-semibold text-slate-900"
+      title={thesis.title}
+    >
+      {thesis.title
+        ? thesis.title.split(" ").length > 3
+          ? thesis.title.split(" ").slice(0, 3).join(" ") + "..."
+          : thesis.title
+        : "N/A"}
+    </div>
 
-                          <div className="mt-1.5 text-xs font-medium text-purple-600">
-                            Research Area: {thesis.researchArea || "N/A"}
-                          </div>
-                        </div>
-                      </td>
+    <div
+      className="mt-1   text-slate-500"
+      title={thesis.description}
+    >
+      {thesis.description
+        ? thesis.description.split(" ").length > 3
+          ? thesis.description.split(" ").slice(0, 3).join(" ") + "..."
+          : thesis.description
+        : "N/A"}
+    </div>
 
-                      {/* Student */}
-                      <td className="whitespace-nowrap px-3 py-4">
-                        <div className="text-sm font-semibold text-slate-900">
-                          {thesis.student?.name || "N/A"}
-                        </div>
+    <div
+      className="mt-1.5  font-medium text-purple-600"
+      title={thesis.researchArea}
+    >
+      Research Area:{" "}
+      {thesis.researchArea
+        ? thesis.researchArea.split(" ").length > 3
+          ? thesis.researchArea.split(" ").slice(0, 3).join(" ") + "..."
+          : thesis.researchArea
+        : "N/A"}
+    </div>
+  </div>
+</td>
 
-                        <div className="mt-1 text-xs text-slate-500">
-                          Last Updated:{" "}
-                          {thesis.updatedAt
-                            ? new Date(thesis.updatedAt).toLocaleDateString()
-                            : "N/A"}
-                        </div>
-                      </td>
 
-                      {/* Supervisor */}
-                      <td className="whitespace-nowrap px-3 py-4">
-                        {thesis.supervisor?.name ? (
-                          <div>
-                            <span className="inline-flex items-center rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 ring-1 ring-green-100">
-                              {thesis.supervisor.name}
-                            </span>
+   {/* Student */}
+<td className="px-3 py-4">
+  <div className=" font-semibold text-slate-900">
+    {thesis.student?.name || "N/A"}
+  </div>
 
-                            {thesis.coSupervisor?.name && (
-                              <div className="mt-1 text-xs text-slate-500">
-                                Co: {thesis.coSupervisor.name}
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-sm text-slate-500">
-                            Unassigned
-                          </span>
-                        )}
-                      </td>
+  <div className="mt-1  text-slate-500">
+    {thesis.updatedAt
+      ? new Date(thesis.updatedAt).toLocaleDateString()
+      : "N/A"}
+  </div>
+</td>
 
-                      {/* Deadline */}
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-700">
-                        {thesis.deadline
-                          ? new Date(thesis.deadline).toLocaleDateString()
-                          : "N/A"}
-                      </td>
 
-                      {/* Status */}
-                      <td className="whitespace-nowrap px-3 py-4">
-                        <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${getStatusColor(
-                            thesis.status,
-                          )}`}
-                        >
-                          {thesis.status}
-                        </span>
-                      </td>
+          {/* Supervisor */}
+          <td className="whitespace-nowrap px-3 py-4 role-span">
+            {thesis.supervisor?.name ? (
+              <div>
+                <span className="inline-flex items-center rounded-full bg-green-50 px-2.5 py-1 font-medium text-green-700 ring-1 ring-green-100">
+                  {thesis.supervisor.name}
+                </span>
 
-                      {/* Actions */}
-                      <td className="px-3 py-4">
-                        <div className="flex flex-wrap gap-2">
-                          {/* View */}
-                          <button
-                            onClick={() => {
-                              setCurrentThesis(thesis);
-                              setShowViewModal(true);
-                            }}
-                            className="inline-flex items-center justify-center rounded-lg bg-[#17a2b8] px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#138496] hover:shadow-md active:scale-[0.98]"
-                          >
-                            View
-                          </button>
-
-                          {/* Approve */}
-                          {thesis.status === "pending" && (
-                            <>
-                              <button
-                                className="inline-flex items-center justify-center rounded-lg bg-green-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-green-800 hover:shadow-md active:scale-[0.98]"
-                                onClick={() =>
-                                  handleStatusChange(thesis._id, "approved")
-                                }
-                              >
-                                Approve
-                              </button>
-
-                              {/* Reject */}
-                              <button
-                                className="btn-danger px-3.5 py-2 text-xs"
-                                onClick={() =>
-                                  handleStatusChange(thesis._id, "rejected")
-                                }
-                              >
-                                Reject
-                              </button>
-                            </>
-                          )}
-
-                          {/* Delete */}
-                          <button
-                            className="btn-danger px-3.5 py-2 text-xs "
-                            onClick={() => handleDeleteThesis(thesis._id)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                {thesis.coSupervisor?.name && (
+                  <div className="mt-1   text-slate-500">
+                    Co: {thesis.coSupervisor.name}
+                  </div>
                 )}
-              </tbody>
-            </table>
+              </div>
+            ) : (
+              <span className="  text-slate-500">
+                Unassigned
+              </span>
+            )}
+          </td>
+
+          {/* Deadline */}
+          <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-700">
+            {thesis.deadline
+              ? new Date(thesis.deadline).toLocaleDateString()
+              : "N/A"}
+          </td>
+
+          {/* Status */}
+          <td className="whitespace-nowrap px-3 py-4">
+            <span
+              className={`inline-flex items-center rounded-full px-2.5 py-1 font-semibold capitalize ${getStatusColor(
+                thesis.status
+              )}`}
+            >
+              {thesis.status}
+            </span>
+          </td>
+
+          {/* Actions */}
+          <td className="px-3 py-4">
+            <div className="flex flex-wrap gap-2 table-action">
+              {/* View */}
+              <button
+                onClick={() => {
+                  setCurrentThesis(thesis);
+                  setShowViewModal(true);
+                }}
+                className="inline-flex items-center justify-center rounded-lg bg-[#17a2b8] px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#138496] hover:shadow-md active:scale-[0.98]"
+              >
+                View
+              </button>
+
+              {/* Approve */}
+              {thesis.status === "pending" && (
+                <>
+                  <button
+                    className="inline-flex items-center justify-center rounded-lg bg-green-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:bg-green-800 hover:shadow-md active:scale-[0.98]"
+                    onClick={() =>
+                      handleStatusChange(thesis._id, "approved")
+                    }
+                  >
+                    Approve
+                  </button>
+
+                  {/* Reject */}
+                  <button
+                    className="btn-danger px-3.5 py-2 text-xs"
+                    onClick={() =>
+                      handleStatusChange(thesis._id, "rejected")
+                    }
+                  >
+                    Reject
+                  </button>
+                </>
+              )}
+
+              {/* Delete */}
+              <button
+                className="btn-danger px-3.5 py-2 text-xs"
+                onClick={() => handleDeleteThesis(thesis._id)}
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      ))
+    )}
+  </tbody>
+</table>
+
           </div>
 
+
+          {/* No theses found matching the criteria. */}
+          {!loading && filteredTheses.length === 0 && (
+            <div className="border-t border-slate-100 py-10 text-center text-sm text-slate-500">
+              No theses found matching the criteria.
+            </div>
+          )}
+        </div>
+
+        <div className="common-pagination">
 {/* Pagination */}
 {!loading && filteredTheses.length > 0 && (
-  <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/50 px-4 py-2 sm:flex-row sm:items-center sm:justify-between">
+  <div className="card admin-pagination responsive-card  ">
 
     <p className="text-xs text-slate-500">
       Showing{" "}
@@ -718,13 +761,7 @@ const ThesisPage = () => {
 )}
 
 
-          {/* No theses found matching the criteria. */}
-          {!loading && filteredTheses.length === 0 && (
-            <div className="border-t border-slate-100 py-10 text-center text-sm text-slate-500">
-              No theses found matching the criteria.
-            </div>
-          )}
-        </div>
+</div>
 
         {/* showViewModal*/}
         {showViewModal && currentThesis && (
@@ -929,7 +966,6 @@ const ThesisPage = () => {
               className="relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
 
               <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
                 <div className="flex items-center gap-3">

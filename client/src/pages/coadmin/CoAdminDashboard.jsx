@@ -330,117 +330,201 @@ const CoAdminDashboard = () => {
       className: "bg-green-600 hover:bg-green-800 text-white",
       icon: PlusIcon,
     },
-    {
-      label: "View Reports",
-      onClick: () => setIsReportModalOpen(true),
-      className: "border border-cyan-500 text-cyan-600 hover:bg-cyan-50",
-      icon: FileText,
-    },
+    // {
+    //   label: "View Reports",
+    //   onClick: () => setIsReportModalOpen(true),
+    //   className: "border border-cyan-500 text-cyan-600 hover:bg-cyan-50",
+    //   icon: FileText,
+    // },
   ];
 
   return (
     <>
       <div className="space-y-6">
-        {/* Co-Admin Dashboard Header  */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
-          <div className="relative px-6 py-6 sm:px-8 sm:py-7">
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
-                  <FolderKanban className="h-6 w-6" />
+     {/* Co-Admin Dashboard Header */}
+<div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-md sm:rounded-2xl">
+  <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
+
+  <div className="relative p-4 sm:px-8 sm:py-7">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      {/* Left Content */}
+      <div className="flex min-w-0 items-start gap-3 sm:gap-4">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 sm:h-12 sm:w-12">
+          <FolderKanban className="h-5 w-5 sm:h-6 sm:w-6" />
+        </div>
+
+        <div className="min-w-0 flex-1">
+          {/* Breadcrumb */}
+          <div className="mb-1 flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-cyan-600 sm:text-xs sm:tracking-[0.15em]">
+              Academic Management
+            </span>
+
+            <span className="hidden h-1 w-1 rounded-full bg-slate-300 xs:block" />
+
+            <span className="text-[10px] text-slate-400 sm:text-xs">
+              Co-Admin Panel
+            </span>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Co-Admin Dashboard
+          </h1>
+
+          {/* Description */}
+          <p className="mt-1 max-w-2xl text-xs leading-relaxed text-slate-500 sm:mt-1.5 sm:text-base sm:leading-6">
+            Monitor students, supervisors, theses, projects and academic
+            activities from one place.
+          </p>
+        </div>
+      </div>
+
+      {/* Status */}
+      <div className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 sm:px-4 sm:py-3 lg:w-auto">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100 sm:h-9 sm:w-9">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] sm:h-2.5 sm:w-2.5" />
+        </div>
+
+        <div className="min-w-0">
+          <p className="mb-0.5 text-[10px] font-semibold uppercase leading-none tracking-wider text-slate-400 sm:text-[11px]">
+            System Status
+          </p>
+
+          <p className="text-xs font-semibold leading-none text-slate-700 sm:text-sm">
+            All Systems Operational
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Background Gradients */}
+  <div className="pointer-events-none absolute -bottom-20 -right-20 h-48 w-48 rounded-full bg-cyan-100/50 blur-3xl" />
+
+  <div className="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-cyan-500/5" />
+
+  <div className="pointer-events-none absolute -bottom-20 right-20 h-32 w-32 rounded-full bg-indigo-500/5" />
+</div>
+
+{/* Co-admin stats */}
+<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+  {stats.map((item, index) => {
+    const Icon = item.icon;
+
+    return (
+      <div
+        key={index}
+        className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md sm:p-5"
+      >
+        {/* Left Color Bar */}
+        <div
+          className={`absolute left-0 top-0 h-full w-1 ${item.bar}`}
+        />
+
+        <div className="flex items-center justify-between gap-2">
+          {/* Content */}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs font-medium text-slate-500 sm:text-sm">
+              {item.title}
+            </p>
+
+            <p className="mt-1 truncate text-2xl font-bold tracking-tight text-slate-900 sm:mt-2 sm:text-3xl">
+              {item.value}
+            </p>
+          </div>
+
+          {/* Icon */}
+          <div
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:h-12 sm:w-12 ${item.iconBg}`}
+          >
+            <Icon className={`h-5 w-5 sm:h-6 sm:w-6 ${item.iconColor}`} />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-3 flex min-w-0 items-center gap-2 sm:mt-4">
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+
+          <span className="truncate text-[11px] font-medium text-slate-400 sm:text-xs">
+            Current overview
+          </span>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
+        {/* Thesis and Project */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+           {/* Thesis */}
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div className="border-b border-slate-100 px-6 py-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50">
+                  <FileText className="h-5 w-5 text-indigo-600" />
                 </div>
+
                 <div>
-                  <div className="mb-1 flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-[0.15em] text-cyan-600">
-                      Academic Management
-                    </span>
-                    <span className="h-1 w-1 rounded-full bg-slate-300" />
-                    <span className="text-xs text-slate-400">
-                      Co-Admin Panel
-                    </span>
-                  </div>
-                  <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-                    Co-Admin Dashboard
-                  </h1>
-                  <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
-                    Monitor students, supervisors, theses, projects and academic
-                    activities from one place.
-                  </p>
-                </div>
-              </div>
+                  <h3 className="text-base font-bold text-slate-900">
+                    Thesis Overview
+                  </h3>
 
-              {/* Status */}
-
-              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100">
-                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                </div>
-
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                    System Status
-                  </p>
-
-                  <p className="text-sm font-semibold text-slate-700">
-                    All Systems Operational
+                  <p className="text-xs text-slate-400">
+                    Current thesis status
                   </p>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="pointer-events-none absolute -right-20 -bottom-20 h-48 w-48 rounded-full bg-cyan-100/50 blur-3xl" />
+            <div className="space-y-5 p-6">
+              <div>
+                <div className="mb-2 flex justify-between">
+                  <span className="text-sm text-slate-600">
+                    Completed Theses
+                  </span>
 
-          <div className="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-cyan-500/5" />
-        </div>
-
-        {/* Co-admin stats  */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {stats.map((item, index) => {
-            const Icon = item.icon;
-
-            return (
-              <div
-                key={index}
-                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
-              >
-                <div
-                  className={`absolute left-0 top-0 h-full w-1 ${item.bar}`}
-                />
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-slate-500">
-                      {item.title}
-                    </p>
-
-                    <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-                      {item.value}
-                    </p>
-                  </div>
-
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl ${item.iconBg}`}
-                  >
-                    <Icon className={`h-6 w-6 ${item.iconColor}`} />
-                  </div>
-                </div>
-
-                <div className="mt-4 flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-
-                  <span className="text-xs font-medium text-slate-400">
-                    Current overview
+                  <span className="font-bold text-green-600">
+                    {completedTheses}
                   </span>
                 </div>
-              </div>
-            );
-          })}
-        </div>
 
-        {/* Thesis and Project */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className="h-full rounded-full bg-green-500"
+                    style={{
+                      width:
+                        theses.length > 0
+                          ? `${(completedTheses / theses.length) * 100}%`
+                          : "0%",
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="mb-2 flex justify-between">
+                  <span className="text-sm text-slate-600">Pending Theses</span>
+
+                  <span className="font-bold text-yellow-600">
+                    {pendingTheses}
+                  </span>
+                </div>
+
+                <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className="h-full rounded-full bg-yellow-500"
+                    style={{
+                      width:
+                        theses.length > 0
+                          ? `${(pendingTheses / theses.length) * 100}%`
+                          : "0%",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
           {/* Project */}
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="border-b border-slate-100 px-6 py-5">
@@ -512,193 +596,242 @@ const CoAdminDashboard = () => {
             </div>
           </div>
 
-          {/* Thesis */}
+         
+        </div>
+
+{/* Thesis / Project Distribution */}
+<div className="grid grid-cols-1 gap-6">
+  <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    {/* Header */}
+    <div className="border-b border-slate-100 px-4 py-4 sm:px-6 sm:py-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        {/* Title */}
+        <div className="flex min-w-0 items-start gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-50 sm:h-10 sm:w-10">
+            <FileText className="h-4.5 w-4.5 text-indigo-600 sm:h-5 sm:w-5" />
+          </div>
+
+          <div className="min-w-0">
+            <h3 className="break-words text-sm font-bold leading-5 text-slate-900 sm:text-base">
+              Thesis / Project Distribution
+            </h3>
+
+            <p className="mt-1 text-[11px] leading-4 text-slate-400 sm:text-xs">
+              Academic work assigned to each supervisor
+            </p>
+          </div>
+        </div>
+
+        {/* Legend - Right */}
+        <div className="flex shrink-0 items-center gap-4 text-[11px] font-medium sm:gap-5 sm:text-xs">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-green-600" />
+            <span className="text-slate-500">Project</span>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-yellow-600" />
+            <span className="text-slate-500">Thesis</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Chart */}
+    <div className="w-full min-w-0 p-3 sm:p-5">
+      {supervisorBucket.length === 0 ? (
+        <div className="flex h-[260px] items-center justify-center rounded-xl bg-slate-50 px-4 text-center text-sm text-slate-400 sm:h-[300px]">
+          No supervisor data available
+        </div>
+      ) : (
+        <div className="w-full min-w-0 overflow-hidden">
+          <ResponsiveContainer width="100%" height={260} minWidth={0}>
+            <BarChart
+              data={supervisorBucket}
+              margin={{
+                top: 10,
+                right: 5,
+                bottom: 35,
+                left: 0,
+              }}
+              barCategoryGap="2%"
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#E2E8F0"
+                vertical={false}
+              />
+
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                interval={0}
+                height={15}
+                tick={({ x, y, payload }) => {
+                  const value = payload.value;
+
+                  if (value === "Not Assigned") {
+                    return (
+                      <text
+                        x={x}
+                        y={y + 10}
+                        textAnchor="middle"
+                        fill="#64748B"
+                        fontSize={12}
+                      >
+                        <tspan x={x} dy="0">
+                          Not
+                        </tspan>
+                        <tspan x={x} dy="13">
+                          Assigned
+                        </tspan>
+                      </text>
+                    );
+                  }
+
+                  const shortName =
+                    value?.length > 12
+                      ? `${value.substring(0, 12)}...`
+                      : value;
+
+                  return (
+                    <text
+                      x={x}
+                      y={y + 10}
+                      textAnchor="middle"
+                      fill="#64748B"
+                      fontSize={12}
+                    >
+                      {shortName}
+                    </text>
+                  );
+                }}
+              />
+
+              <YAxis
+                allowDecimals={false}
+                width={28}
+                axisLine={false}
+                tickLine={false}
+                tick={{
+                  fontSize: 12,
+                  fill: "#64748B",
+                }}
+              />
+
+              <Tooltip
+                cursor={{
+                  fill: "rgba(99, 102, 241, 0.04)",
+                }}
+                contentStyle={{
+                  borderRadius: 10,
+                  border: "1px solid #E2E8F0",
+                  boxShadow: "0 8px 20px rgba(15,23,42,0.08)",
+                  fontSize: 12,
+                  maxWidth: "220px",
+                }}
+                labelFormatter={(label) => `Supervisor: ${label}`}
+                formatter={(value, name) => {
+                  if (name === "Project") {
+                    return [value, "Project"];
+                  }
+
+                  if (name === "Thesis") {
+                    return [value, "Thesis"];
+                  }
+
+                  return [value, name];
+                }}
+              />
+
+              <Bar
+                dataKey="projectCount"
+                name="Project"
+                stackId="academic"
+                fill="#16a34a"
+                radius={[0, 0, 0, 0]}
+  maxBarSize={120}
+              />
+
+              <Bar
+                dataKey="thesisCount"
+                name="Thesis"
+                stackId="academic"
+                fill="#ca8a04"
+                radius={[8, 8, 0, 0]}
+  maxBarSize={120}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
+
+        {/* Recent Thesis and Project */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          
+          {/* Theses */}
+
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="border-b border-slate-100 px-6 py-5">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50">
                   <FileText className="h-5 w-5 text-indigo-600" />
                 </div>
 
                 <div>
                   <h3 className="text-base font-bold text-slate-900">
-                    Thesis Overview
+                    Recent Theses
                   </h3>
 
                   <p className="text-xs text-slate-400">
-                    Current thesis status
+                    Latest academic theses
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-5 p-6">
-              <div>
-                <div className="mb-2 flex justify-between">
-                  <span className="text-sm text-slate-600">
-                    Completed Theses
-                  </span>
-
-                  <span className="font-bold text-green-600">
-                    {completedTheses}
-                  </span>
-                </div>
-
-                <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-                  <div
-                    className="h-full rounded-full bg-green-500"
-                    style={{
-                      width:
-                        theses.length > 0
-                          ? `${(completedTheses / theses.length) * 100}%`
-                          : "0%",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="mb-2 flex justify-between">
-                  <span className="text-sm text-slate-600">Pending Theses</span>
-
-                  <span className="font-bold text-yellow-600">
-                    {pendingTheses}
-                  </span>
-                </div>
-
-                <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-                  <div
-                    className="h-full rounded-full bg-yellow-500"
-                    style={{
-                      width:
-                        theses.length > 0
-                          ? `${(pendingTheses / theses.length) * 100}%`
-                          : "0%",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Thesis / Project Distribution */}
-        <div className="grid grid-cols-1 gap-6">
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-slate-100 px-6 py-5">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50">
-                    <FileText className="h-5 w-5 text-indigo-600" />
-                  </div>
-
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900">
-                      Thesis / Project Distribution
-                    </h3>
-
-                    <p className="mt-0.5 text-xs text-slate-400">
-                      Academic work assigned to each supervisor
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 text-xs font-medium">
-                  <div className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-blue-600" />
-                    <span className="text-slate-500">Project</span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-violet-600" />
-                    <span className="text-slate-500">Thesis</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-5">
-              {supervisorBucket.length === 0 ? (
-                <div className="flex h-[300px] items-center justify-center rounded-xl bg-slate-50 text-sm text-slate-400">
-                  No supervisor data available
+            <div className="max-h-[300px] overflow-y-auto">
+              {recentTheses.length === 0 ? (
+                <div className="p-6 text-center text-sm text-slate-400">
+                  No theses found
                 </div>
               ) : (
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart
-                      data={supervisorBucket}
-                      margin={{
-                        top: 15,
-                        right: 10,
-                        bottom: 10,
-                        left: 0,
-                      }}
-                      barCategoryGap="25%"
+                recentTheses.map((thesis) => (
+                  <div
+                    key={thesis._id}
+                    className="flex items-center justify-between border-b border-slate-100 px-6 py-4 last:border-b-0 hover:bg-slate-50"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-slate-800">
+                        {thesis.title || "Untitled Thesis"}
+                      </p>
+
+                      <p className="mt-1 text-xs text-slate-400">
+                        {thesis.student?.name ||
+                          thesis.studentName ||
+                          "No Student"}
+                      </p>
+                    </div>
+
+                    <span
+                      className={`ml-3 shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold ${
+                        thesis.status?.toLowerCase() === "completed"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
                     >
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="#E2E8F0"
-                        vertical={false}
-                      />
-
-                      <XAxis
-                        dataKey="name"
-                        tick={{
-                          fontSize: 12,
-                          fill: "#64748B",
-                        }}
-                        axisLine={false}
-                        tickLine={false}
-                        interval={0}
-                        height={45}
-                      />
-
-                      <YAxis
-                        allowDecimals={false}
-                        tick={{
-                          fontSize: 12,
-                          fill: "#64748B",
-                        }}
-                        axisLine={false}
-                        tickLine={false}
-                      />
-
-                      <Tooltip
-                        cursor={{
-                          fill: "rgba(99, 102, 241, 0.04)",
-                        }}
-                        contentStyle={{
-                          borderRadius: 12,
-                          border: "1px solid #E2E8F0",
-                          boxShadow: "0 8px 20px rgba(15,23,42,0.08)",
-                        }}
-                        labelFormatter={(label) => `Supervisor: ${label}`}
-                      />
-
-                      <Bar
-                        dataKey="projectCount"
-                        name="Project"
-                        stackId="academic"
-                        fill="#2563EB"
-                      />
-
-                      <Bar
-                        dataKey="thesisCount"
-                        name="Thesis"
-                        stackId="academic"
-                        fill="#7C3AED"
-                        radius={[8, 8, 0, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
+                      {thesis.status || "Pending"}
+                    </span>
+                  </div>
+                ))
               )}
             </div>
           </div>
-        </div>
-
-        {/* Recent Thesis and Project */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Projects */}
 
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -758,64 +891,6 @@ const CoAdminDashboard = () => {
             </div>
           </div>
 
-          {/* Theses */}
-
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-slate-100 px-6 py-5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50">
-                  <FileText className="h-5 w-5 text-indigo-600" />
-                </div>
-
-                <div>
-                  <h3 className="text-base font-bold text-slate-900">
-                    Recent Theses
-                  </h3>
-
-                  <p className="text-xs text-slate-400">
-                    Latest academic theses
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="max-h-[300px] overflow-y-auto">
-              {recentTheses.length === 0 ? (
-                <div className="p-6 text-center text-sm text-slate-400">
-                  No theses found
-                </div>
-              ) : (
-                recentTheses.map((thesis) => (
-                  <div
-                    key={thesis._id}
-                    className="flex items-center justify-between border-b border-slate-100 px-6 py-4 last:border-b-0 hover:bg-slate-50"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-slate-800">
-                        {thesis.title || "Untitled Thesis"}
-                      </p>
-
-                      <p className="mt-1 text-xs text-slate-400">
-                        {thesis.student?.name ||
-                          thesis.studentName ||
-                          "No Student"}
-                      </p>
-                    </div>
-
-                    <span
-                      className={`ml-3 shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold ${
-                        thesis.status?.toLowerCase() === "completed"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}
-                    >
-                      {thesis.status || "Pending"}
-                    </span>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
         </div>
 
         {/* Quick Actions */}
@@ -839,7 +914,7 @@ const CoAdminDashboard = () => {
                   <button
                     key={index}
                     onClick={button.onClick}
-                    className={`${button.className} flex h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition`}
+                    className={`${button.className} flex h-7 sm:h-10 items-center justify-center gap-1 sm:gap-2 rounded-md sm:rounded-lg px-2 sm:px-4 text-[10px] sm:text-sm font-medium transition`}
                   >
                     <Icon className="h-4 w-4" />
                     <span>{button.label}</span>
@@ -851,7 +926,7 @@ const CoAdminDashboard = () => {
         </div>
 
         {/* Report modal */}
-        {isReportModalOpen && (
+        {/* {isReportModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 !mt-0 !pt-0">
             <div className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl">
               <div className="border-b border-slate-200 bg-blue-50 px-5 py-4">
@@ -938,7 +1013,7 @@ const CoAdminDashboard = () => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* modal */}
         {isCreateStudentModalOpen && <AddStudent />}

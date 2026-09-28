@@ -250,9 +250,9 @@ const ManageCoAdmin = () => {
           </div>
 
           <div className="overflow-x-auto custom-scroll-x">
-           <table className="w-full text-left border-collapse ">
-  <thead className="bg-slate-100">
-    <tr className="text-[#138496]  font-semibold uppercase">
+<table className="w-full text-left border-collapse bg-slate-50">
+  <thead className="bg-slate-200 sticky top-0 z-10">
+    <tr className="text-[#138496] font-semibold uppercase">
       <th className="px-2 py-3">Co-Admin Info</th>
       <th className="px-2 py-3">Department</th>
       <th className="px-2 py-3">Role</th>
@@ -260,10 +260,12 @@ const ManageCoAdmin = () => {
     </tr>
   </thead>
 
-  <tbody className="bg-white divide-y divide-slate-200">
+  <tbody className="divide-y divide-slate-200">
     {paginatedAdmins.map((admin) => (
-      <tr key={admin._id} className="hover:bg-slate-50">
-
+      <tr
+        key={admin._id}
+        className="bg-slate-50 hover:bg-white"
+      >
         {/* Co-Admin Info */}
         <td className="px-2 py-1">
           <div>
@@ -284,7 +286,7 @@ const ManageCoAdmin = () => {
 
         {/* Role */}
         <td className="px-2 py-1 role-span">
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md  font-medium bg-blue-100 text-blue-800">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md font-medium bg-blue-100 text-blue-800">
             Co-Admin
           </span>
         </td>
@@ -305,7 +307,6 @@ const ManageCoAdmin = () => {
             Delete
           </button>
         </td>
-
       </tr>
     ))}
   </tbody>
@@ -473,14 +474,14 @@ const ManageCoAdmin = () => {
                       <button
                         type="button"
                         onClick={() => setEditingAdmin(null)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 font-medium h-11 rounded-md shadow-md"
+                        className="btn-danger text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Cancel
                       </button>
 
                       <button
                         type="submit"
-                        className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-11 rounded-md shadow-md"
+                        className="bg-[#138496] btn-danger hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Update Co-Admin
                       </button>
@@ -524,14 +525,14 @@ const ManageCoAdmin = () => {
                           setShowDeleteModal(false);
                           setAdminToDelete(null);
                         }}
-                        className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-11 rounded-md shadow-md"
+                        className="bg-[#138496] btn-danger hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Cancel
                       </button>
 
                       <button
                         onClick={confirmDelete}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 font-medium h-11 rounded-md shadow-md"
+                        className="btn-danger text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
                       >
                         Delete
                       </button>

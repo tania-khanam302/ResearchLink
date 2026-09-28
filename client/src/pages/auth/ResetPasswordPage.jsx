@@ -74,133 +74,145 @@ const ResetPasswordPage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full">
-          {/* Header */}
-          <div className="text-center mb-4">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-[#17a2b8] rounded-full mb-2">
-              <KeyRound className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-slate-800">
-              Reset Password
-            </h1>
-            <p className="text-[#17a2b8] mt-2">
-              Enter your new password below.
-            </p>
-          </div>
+     <div className="common-bg">
+  <div className="min-h-screen common-bg-wrapper">
+    <div className="login-common-container">
 
-          {/* Reset Password Form */}
-          <div className="bg-white p-7 rounded-lg border shadow-[0px_0px_40px_rgba(0,0,0,0.35)]">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* new password*/}
-              {/* <div>
-                <label className="label text-base font-medium text-slate-700 mb-1 mt-1">
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`input focus:ring-1 focus:ring-[#17a2b8] ${errors.password ? "input-error" : ""}`}
-                  placeholder="Enter new password"
-                />
-                {errors.password && (
-                  <p className="text-sm text-red-600 mt-1">{errors.password}</p>
-                )}
-              </div> */}
-
-              <label className="label text-base font-medium text-slate-700 mb-1 mt-1">
-                New Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`input placeholder-gray-400 w-full focus:ring-1 focus:ring-[#17a2b8] pr-10 ${
-                    errors.password ? "input-error" : ""
-                  }`}
-                  placeholder="Enter new password "
-                />
-
-                {errors.password && (
-                  <p className="text-sm text-red-600 mt-1">{errors.password}</p>
-                )}
-
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 "
-                >
-                  {showPassword ? <EyeOff size={18} className="text-[#17a2b8]" /> : <Eye size={18} className="text-gray-400" />}
-                </button>
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label className="label text-base font-medium text-slate-700 mb-1 mt-1">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <input
-                    // type="password"
-                    type={showConfirmPassword ? "text" : "password"}
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    className={`input placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#17a2b8] ${errors.password ? "input-error" : ""}`}
-                    // placeholder="Enter your password"
-                    placeholder="Enter your confirm password"
-                  />
-                  {errors.confirmPassword && (
-                    <p className="text-red-600 text-sm mt-1">
-                      {errors.password}
-                    </p>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2"
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff size={18} className="text-[#17a2b8]" />
-                    ) : (
-                      <Eye size={18} className="text-gray-400" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Reset Password button*/}
-              <button
-                type="submit"
-                style={{
-                  fontFamily: "Arial, sans-serif",
-                }}
-                disabled={isUpdatingPassword}
-                className="w-full py-2 rounded-lg text-white tracking-[1px] text-[16px] transition-all bg-[#17a2b8] hover:bg-[#138496]"
-              >
-                {isUpdatingPassword ? "Reseting..." : "Reset Password"}
-              </button>
-            </form>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-slate-600">
-                Remember your password?{" "}
-                <Link
-                  to={"/login"}
-                  className="text-[#17a2b8] hover:text-blue-500 font-medium"
-                >
-                  Sign in
-                </Link>
-              </p>
-            </div>
-          </div>
+      {/* Header */}
+      <div className="login-common-header">
+        <div className="login-common-icon">
+          <KeyRound className="w-6 h-6 text-[#17a2b8]" />
         </div>
+
+        <h1>Reset Password</h1>
+
+        <p className="sub-title">
+          Enter a new password for your account.
+        </p>
       </div>
+
+      {/* Reset Password Form */}
+      <div className="login-common-card">
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          {/* New Password */}
+          <div>
+            <label className="label">
+              New Password
+            </label>
+
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className={`custom-input pr-10 ${
+                  errors.password ? "input-error" : ""
+                }`}
+                placeholder="Enter new password"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="password-toggle"
+              >
+                {showPassword ? (
+                  <EyeOff
+                    size={18}
+                    className="text-[#17a2b8]"
+                  />
+                ) : (
+                  <Eye
+                    size={18}
+                    className="text-gray-400"
+                  />
+                )}
+              </button>
+            </div>
+
+            {errors.password && (
+              <p className="input-error-text">
+                {errors.password}
+              </p>
+            )}
+          </div>
+
+          {/* Confirm Password */}
+          <div>
+            <label className="label">
+              Confirm Password
+            </label>
+
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={`custom-input pr-10 ${
+                  errors.confirmPassword ? "input-error" : ""
+                }`}
+                placeholder="Enter your confirm password"
+              />
+
+              <button
+                type="button"
+                onClick={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
+                className="password-toggle"
+              >
+                {showConfirmPassword ? (
+                  <EyeOff
+                    size={18}
+                    className="text-[#17a2b8]"
+                  />
+                ) : (
+                  <Eye
+                    size={18}
+                    className="text-gray-400"
+                  />
+                )}
+              </button>
+            </div>
+
+            {errors.confirmPassword && (
+              <p className="input-error-text">
+                {errors.confirmPassword}
+              </p>
+            )}
+          </div>
+
+          {/* Reset Password Button */}
+          <button
+            type="submit"
+            disabled={isUpdatingPassword}
+            className="submit-btn"
+          >
+            {isUpdatingPassword
+              ? "Resetting..."
+              : "Reset Password"}
+          </button>
+        </form>
+
+        {/* Login Link */}
+        <div className="login-link">
+          <p>
+            Remember your password?{" "}
+            <Link to="/login">
+              Sign in
+            </Link>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
     </>
   );
 };

@@ -35,6 +35,24 @@ export const sendEmail = async ({ to, subject, message }) => {
     };
 
     const info = await transporter.sendMail(mailOptions);
+    const acceptedRecipients = (info.accepted || []).map((recipient) =>
+      String(recipient).toLowerCase(),
+    );
+    const requestedRecipients = (Array.isArray(to) ? to : [to]).map((recipient) =>
+      String(recipient).toLowerCase(),
+    );
+
+    console.info("SMTP delivery result", {
+      messageId: info.messageId,
+      acceptedCount: acceptedRecipients.length,
+      rejectedCount: info.rejected?.length || 0,
+      response: info.response,
+    });
+
+    if (!requestedRecipients.some((recipient) => acceptedRecipients.includes(recipient))) {
+      throw new Error("SMTP server did not accept the recipient");
+    }
+
     return info;
   } catch (error) {
     throw new Error(error.message || "Cannot send E-mail");

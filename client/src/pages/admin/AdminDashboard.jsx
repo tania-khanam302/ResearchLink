@@ -21,6 +21,7 @@ import {
   Folder,
   Plus,
   PlusIcon,
+  Trash2,
   User,
   View,
   X,
@@ -32,7 +33,10 @@ import {
 } from "../../store/slices/adminSlice";
 import { downloadProjectFile } from "./../../store/slices/projectSlice";
 import { downloadThesisFile } from "../../store/slices/thesisSlice";
-import { getNotifications } from "./../../store/slices/notificationSlice";
+import {
+  deleteNotification,
+  getNotifications,
+} from "./../../store/slices/notificationSlice";
 import {
   toggleStudentModal,
   toggleTeacherModal,
@@ -49,6 +53,15 @@ const AdminDashboard = () => {
   const dispatch = useDispatch();
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportSearch, setReportSearch] = useState("");
+
+  const handleDeleteNotification = async (notificationId) => {
+    try {
+      await dispatch(deleteNotification(notificationId)).unwrap();
+      toast.success("Activity deleted");
+    } catch {
+      toast.error("Failed to delete activity");
+    }
+  };
 
   useEffect(() => {
     dispatch(getDashboardStats());
@@ -197,7 +210,7 @@ const AdminDashboard = () => {
   }, [projects, theses]);
 
   const latestNotifications = useMemo(
-    () => (notifications || []).slice(0, 6),
+    () => (notifications || []).slice(0, 5),
     [notifications],
   );
 
@@ -446,6 +459,75 @@ const AdminDashboard = () => {
 
         {/*  project / thesis status */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {/* Thesis Status */}
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div className="border-b border-slate-100 px-6 py-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50">
+                  <FileTextIcon className="h-5 w-5 text-indigo-600" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">
+                    Thesis Overview
+                  </h3>
+
+                  <p className="text-xs text-slate-400">
+                    Current thesis status
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-5 p-6">
+              {/* Completed Theses */}
+              <div>
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-sm font-medium text-slate-600">
+                    Completed Theses
+                  </span>
+                  <span className="font-bold text-green-600">
+                    {completedTheses}
+                  </span>
+                </div>
+
+                <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className="h-full rounded-full bg-green-500 transition-all duration-500"
+                    style={{
+                      width:
+                        theses?.length > 0
+                          ? `${(completedTheses / theses.length) * 100}%`
+                          : "0%",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Pending Theses */}
+              <div>
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-sm font-medium text-slate-600">
+                    Pending Theses
+                  </span>
+                  <span className="font-bold text-yellow-600">
+                    {pendingTheses}
+                  </span>
+                </div>
+
+                <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className="h-full rounded-full bg-yellow-500 transition-all duration-500"
+                    style={{
+                      width:
+                        theses?.length > 0
+                          ? `${(pendingTheses / theses.length) * 100}%`
+                          : "0%",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
           {/* Project Status */}
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="border-b border-slate-100 px-6 py-5">
@@ -515,75 +597,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Thesis Status */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-slate-100 px-6 py-5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50">
-                  <FileTextIcon className="h-5 w-5 text-indigo-600" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-slate-900">
-                    Thesis Overview
-                  </h3>
-
-                  <p className="text-xs text-slate-400">
-                    Current thesis status
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-5 p-6">
-              {/* Completed Theses */}
-              <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-medium text-slate-600">
-                    Completed Theses
-                  </span>
-                  <span className="font-bold text-green-600">
-                    {completedTheses}
-                  </span>
-                </div>
-
-                <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-                  <div
-                    className="h-full rounded-full bg-green-500 transition-all duration-500"
-                    style={{
-                      width:
-                        theses?.length > 0
-                          ? `${(completedTheses / theses.length) * 100}%`
-                          : "0%",
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Pending Theses */}
-              <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm font-medium text-slate-600">
-                    Pending Theses
-                  </span>
-                  <span className="font-bold text-yellow-600">
-                    {pendingTheses}
-                  </span>
-                </div>
-
-                <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-                  <div
-                    className="h-full rounded-full bg-yellow-500 transition-all duration-500"
-                    style={{
-                      width:
-                        theses?.length > 0
-                          ? `${(pendingTheses / theses.length) * 100}%`
-                          : "0%",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+        
         </div>
 
         {/* charts and activity */}
@@ -655,7 +669,7 @@ const AdminDashboard = () => {
                         axisLine={false}
                         tickLine={false}
                         interval={0}
-                        height={55}
+                        height={15}
                         tick={({ x, y, payload }) => {
                           const value = payload.value;
 
@@ -739,7 +753,7 @@ const AdminDashboard = () => {
                         stackId="a"
                         fill="#16a34a"
                         radius={[0, 0, 0, 0]}
-                        maxBarSize={42}
+                        maxBarSize={52}
                       />
 
                       <Bar
@@ -748,7 +762,7 @@ const AdminDashboard = () => {
                         stackId="a"
                         fill="#ca8a04"
                         radius={[7, 7, 0, 0]}
-                        maxBarSize={42}
+                        maxBarSize={52}
                       />
                     </BarChart>
                   </ResponsiveContainer>
@@ -823,19 +837,17 @@ const AdminDashboard = () => {
                         {n.type}
                       </span>
 
-                      <span
-                        className={`rounded-md px-2 py-1 text-[10px] font-semibold uppercase tracking-wide ${
-                          n.priority === "high"
-                            ? "bg-red-50 text-red-600"
-                            : n.priority === "medium"
-                              ? "bg-yellow-50 text-yellow-600"
-                              : "bg-slate-100 text-slate-500"
-                        }`}
-                      >
-                        {n.priority}
-                      </span>
                     </div>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteNotification(n._id)}
+                    className="self-start rounded-md p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                    aria-label="Delete activity"
+                    title="Delete activity"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
                 </div>
               ))}
 
@@ -851,6 +863,61 @@ const AdminDashboard = () => {
 
         {/* recent projects and theses */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+             {/* Recent Theses */}
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div className="border-b border-slate-100 px-6 py-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50">
+                  <FileTextIcon className="h-5 w-5 text-indigo-600" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">
+                    Recent Theses
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Latest academic theses
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* No theses found */}
+            <div className="max-h-[300px] overflow-y-auto">
+              {recentTheses.length === 0 ? (
+                <div className="p-6 text-center text-sm text-slate-400">
+                  No theses found
+                </div>
+              ) : (
+                recentTheses.map((thesis) => (
+                  <div
+                    key={thesis._id}
+                    className="flex items-center justify-between border-b border-slate-100 px-6 py-4 last:border-b-0 hover:bg-slate-50"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-slate-800">
+                        {thesis.title || "Untitled Thesis"}
+                      </p>
+                      <p className="mt-1 text-xs text-slate-400">
+                        {thesis.student?.name ||
+                          thesis.studentName ||
+                          "No Student"}
+                      </p>
+                    </div>
+
+                    <span
+                      className={`ml-3 shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold ${
+                        thesis.status?.toLowerCase() === "completed"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
+                    >
+                      {thesis.status || "Pending"}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
           {/* Recent Projects */}
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="border-b border-slate-100 px-6 py-5">
@@ -908,61 +975,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Recent Theses */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-slate-100 px-6 py-5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50">
-                  <FileTextIcon className="h-5 w-5 text-indigo-600" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-slate-900">
-                    Recent Theses
-                  </h3>
-                  <p className="text-xs text-slate-400">
-                    Latest academic theses
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* No theses found */}
-            <div className="max-h-[300px] overflow-y-auto">
-              {recentTheses.length === 0 ? (
-                <div className="p-6 text-center text-sm text-slate-400">
-                  No theses found
-                </div>
-              ) : (
-                recentTheses.map((thesis) => (
-                  <div
-                    key={thesis._id}
-                    className="flex items-center justify-between border-b border-slate-100 px-6 py-4 last:border-b-0 hover:bg-slate-50"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-slate-800">
-                        {thesis.title || "Untitled Thesis"}
-                      </p>
-                      <p className="mt-1 text-xs text-slate-400">
-                        {thesis.student?.name ||
-                          thesis.studentName ||
-                          "No Student"}
-                      </p>
-                    </div>
-
-                    <span
-                      className={`ml-3 shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold ${
-                        thesis.status?.toLowerCase() === "completed"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}
-                    >
-                      {thesis.status || "Pending"}
-                    </span>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
+       
         </div>
 
         {/* Quick Actions */}

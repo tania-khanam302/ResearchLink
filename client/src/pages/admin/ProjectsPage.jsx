@@ -186,16 +186,16 @@ const ProjectsPage = () => {
   return (
     <>
       <div className="space-y-4">
-    {/* All Projects Header */}
-<div className="relative overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+{/* All Projects Header */}
+<div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white shadow-md sm:rounded-2xl">
 
   <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
 
-  <div className="relative p-4 sm:px-8 sm:py-7">
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+  <div className="relative z-10 p-4 sm:px-8 sm:py-7">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
       {/* Header Content */}
-      <div className="flex items-start gap-3 sm:items-center sm:gap-4">
+      <div className="flex min-w-0 items-start gap-3 sm:items-center sm:gap-4">
 
         {/* Icon */}
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100 sm:h-14 sm:w-14 sm:rounded-2xl">
@@ -207,7 +207,6 @@ const ProjectsPage = () => {
 
         {/* Title & Description */}
         <div className="min-w-0">
-
           <h1 className="truncate text-xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             All Projects
           </h1>
@@ -215,16 +214,15 @@ const ProjectsPage = () => {
           <p className="mt-0.5 text-xs leading-relaxed text-slate-500 sm:mt-1 sm:text-base sm:leading-6">
             View and manage all students projects across the platform.
           </p>
-
         </div>
       </div>
 
       {/* Download Reports Button */}
       <button
         onClick={() => setReportsOpen(true)}
-        className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#17a2b8] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#138fa3] hover:shadow-md active:scale-[0.98]"
+        className="main-btn"
       >
-        <FileDown className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-200 group-hover:-translate-y-0.5" />
+        <FileDown className="h-4 w-4 sm:h-5 sm:w-5" />
         <span>Download Reports</span>
       </button>
 
@@ -271,12 +269,10 @@ const ProjectsPage = () => {
         <div className="card admin-card">
           <div className="search-project-content">
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
-                <Folder className="h-5 w-5" />
-              </div>
+              
               <div>
-                <h2 className="text-lg font-bold text-slate-900">
-                  Search Projects
+                <h2 className="card-title text-md font-semibold text-[#17a2b8]">
+                  Find & Filter Projects
                 </h2>
                 <p className="text-sm text-slate-500">
                   Search and filter projects by title, student, status, or
@@ -284,6 +280,8 @@ const ProjectsPage = () => {
                 </p>
               </div>
             </div>
+
+          
 
             <div className="grid grid-cols-1 mt-[20px] gap-4 md:grid-cols-2 lg:grid-cols-3">
               <div>
@@ -346,27 +344,23 @@ const ProjectsPage = () => {
             </div>
           </div>
 
-          <div className="pointer-events-none absolute -bottom-16 -right-16 h-32 w-32 rounded-full bg-cyan-500/5" />
         </div>
 
         {/* All Projects Records*/}
         <div className="card responsive-card admin-card overflow-hidden">
-          <div className="flex flex-col gap-3 border-b border-slate-200 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">
-                <Folder className="h-5 w-5" />
-              </div>
+          {/* All Projects Records Header */}
+          <div className=" flex flex-col gap-3  px-0 pb-5 border-b border-slate-200 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <h2 className="text-lg font-bold text-slate-900">
-                   All Projects Records
+                <h2 className="text-xl font-bold text-[#17a2b8]">
+                  All Projects Records
                 </h2>
-                <p className="text-sm text-slate-500">
+                <p className="mt-1 text-sm text-slate-500">
                   View and manage all students projects across the platform.
                 </p>
               </div>
             </div>
-
-            <div className="inline-flex w-fit items-center rounded-lg bg-cyan-50 px-3 py-1.5 text-sm font-semibold text-[#17a2b8] ring-1 ring-cyan-100">
+             <div className="inline-flex w-fit items-center rounded-lg bg-cyan-50 px-3 py-1.5 text-[12px] font-semibold text-[#17a2b8] ring-1 ring-cyan-100">
               {filteredProjects.length} Projects
             </div>
           </div>
@@ -408,39 +402,47 @@ const ProjectsPage = () => {
                     key={project._id}
                     className="transition-colors hover:bg-cyan-50/30"
                   >
-                    {/* Project Details */}
-                    <td className="w-[25%] px-2 py-1">
-                      <div>
-                        <div className="font-semibold text-slate-900">
-                          {project.title}
-                        </div>
+                   {/* Project Details */}
+<td className="w-[25%] px-2 py-1">
+  <div>
+    <div className="font-semibold text-slate-900">
+      {project.title}
+    </div>
 
-                        <div className="mt-1 max-w-xs truncate text-slate-500">
-                          {project.description}
-                        </div>
+    <div className="mt-1 max-w-xs truncate text-slate-500">
+      {project.description
+        ? project.description.split(" ").length > 5
+          ? `${project.description.split(" ").slice(0, 5).join(" ")}...`
+          : project.description
+        : "N/A"}
+    </div>
 
-                        <div className="mt-1.5 font-medium text-purple-600">
-                          Due:{" "}
-                          {project.deadline
-                            ? project.deadline.split("T")[0]
-                            : "N/A"}
-                        </div>
-                      </div>
-                    </td>
+    <div className="mt-1.5 font-medium text-purple-600">
+      Due:{" "}
+      {project.deadline
+        ? project.deadline.split("T")[0]
+        : "N/A"}
+    </div>
+  </div>
+</td>
 
-                    {/* Student */}
-                    <td className="whitespace-nowrap px-2 py-1">
-                      <div className="font-semibold text-slate-900">
-                        {project.student?.name || "N/A"}
-                      </div>
 
-                      <div className="mt-1 text-slate-500">
-                        Last Updated:{" "}
-                        {project.updatedAt
-                          ? new Date(project.updatedAt).toLocaleDateString()
-                          : "N/A"}
-                      </div>
-                    </td>
+                  {/* Student */}
+<td className="whitespace-nowrap px-2 py-1">
+  <div className="font-semibold text-slate-900">
+    {project.student?.name || "N/A"}
+  </div>
+
+  <div className="mt-1 text-slate-500">
+    <div>Last Updated:</div>
+    <div>
+      {project.updatedAt
+        ? new Date(project.updatedAt).toLocaleDateString()
+        : "N/A"}
+    </div>
+  </div>
+</td>
+
 
                     {/* Supervisor */}
                     <td className="whitespace-nowrap px-2 py-1 role-span">
@@ -475,7 +477,7 @@ const ProjectsPage = () => {
 
                     {/* Actions */}
                     <td className="px-2 py-1">
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 table-action">
                         <button
                           onClick={async () => {
                             const res = await dispatch(getProject(project._id));
@@ -805,8 +807,7 @@ const ProjectsPage = () => {
               className="relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="h-1 w-full bg-gradient-to-r from-cyan-500 via-teal-500 to-indigo-500" />
-
+           
               <div className="flex items-center justify-between border-b border-slate-200 px-6 py-5">
                 <div className="flex items-center gap-3">
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-50 text-[#17a2b8] ring-1 ring-cyan-100">

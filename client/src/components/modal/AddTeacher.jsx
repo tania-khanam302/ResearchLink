@@ -283,7 +283,7 @@ const AddTeacher = () => {
 
           <button
             type="submit"
-            className="bg-[#138496] hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
+            className="bg-[#138496] btn-danger hover:bg-[#17a2b8] text-white px-4 font-medium h-10 rounded-md flex items-center space-x-2 shadow-md"
           >
             Add Teacher
           </button>
